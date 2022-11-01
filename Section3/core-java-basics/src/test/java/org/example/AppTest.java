@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AppTest {
 
@@ -22,5 +23,15 @@ public class AppTest {
     Object[] expected = {(byte) 5, (short) 6, 10, (long) 200, (float) 23.1, 45.687, 'g', true, "foo"};
     Object[] results = {a, b, c, d, e, f, g, h, i};
     assertArrayEquals(expected, results);
+  }
+
+  @Test
+  @DisplayName("strings take precedence in concatenation")
+  public void testStringConcatenation() {
+    int x = 5;
+    String y = "Foo Bars";
+    String expected = "5 Foo Bars";
+    String results = x + " " + y;
+    assertEquals(expected, results);
   }
 }
