@@ -159,4 +159,16 @@ public class AppTest {
 
     assertArrayEquals(expected, results);
   }
+
+  @Test
+  @DisplayName("common string methods")
+  public void testCommonStringMethods() {
+    String s = "foo bar fizz buzz";
+    assertArrayEquals(expectedAry, s.split("\\s+"));
+    s = " foobar ";
+    assertEquals("foobar ", s.stripLeading());
+    assertEquals(" foobar", s.stripTrailing());
+    assertEquals("foobar", s.trim());
+    assertEquals('b', s.charAt(4));
+  }
 }
