@@ -145,4 +145,18 @@ public class AppTest {
 
     assertArrayEquals(expected, results);
   }
+
+  @Test
+  @DisplayName("creating strings")
+  public void testCreateStrings() {
+    // == compares object references, equals compares content
+    String s1 = "foobar";
+    String s2 = "foobar";
+    String s3 = new String("foobar");
+    String s4 = new String("foobar");
+    boolean[] expected = {true, true, false, true, false, true};
+    boolean[] results = {s1 == s2, s1.equals(s2), s2 == s3, s2.equals(s3), s3 == s4, s3.equals(s4)};
+
+    assertArrayEquals(expected, results);
+  }
 }
