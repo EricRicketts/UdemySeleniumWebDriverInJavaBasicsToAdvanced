@@ -133,4 +133,16 @@ public class AppTest {
 
     assertArrayEquals(expected, list.toArray());
   }
+
+  @Test
+  @DisplayName("get and set an ArrayList")
+  public void testGetAndSetAnArrayList() {
+    String[] expected = {"bar", "fizzbuzz"};
+    String[] results = new String[2];
+    results[0] = list.get(1);
+    list.set(1, "fizzbuzz");
+    results[1] = list.get(1);
+
+    assertArrayEquals(expected, results);
+  }
 }
