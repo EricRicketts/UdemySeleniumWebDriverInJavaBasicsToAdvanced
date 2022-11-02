@@ -10,6 +10,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import model.DataDemonstration;
+
 public class AppTest {
 
   private ArrayList<String> list;
@@ -170,5 +172,20 @@ public class AppTest {
     assertEquals(" foobar", s.stripTrailing());
     assertEquals("foobar", s.trim());
     assertEquals('b', s.charAt(4));
+  }
+
+  @Test
+  @DisplayName("instance and class methods")
+  public void testInstanceAndClassMethods() {
+    DataDemonstration dd = new DataDemonstration();
+    Object[] expected = {0, 1, "Hello", "Goodbye"};
+    Object[] results = new Object[4];
+    results[0] = dd.getData();
+    dd.setData(1);
+    results[1] = dd.getData();
+    results[2] = dd.sayHello();
+    results[3] = DataDemonstration.sayGoodBye();
+
+    assertArrayEquals(expected, results);
   }
 }
