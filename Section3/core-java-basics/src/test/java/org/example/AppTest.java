@@ -4,6 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -104,5 +106,16 @@ public class AppTest {
     }
     String expected = String.join(" ", expectedAry);
     assertEquals(expected, results);
+  }
+
+  @Test
+  @DisplayName("basics of ArrayList add to ArrayList")
+  public void testBasicsOfArrayListAddToArrayList() {
+    ArrayList<String> list = new ArrayList<String>(List.of("foo", "bar", "fizz", "buzz"));
+    String[] expected = {"foo", "bar", "fizz", "buzz", "foobar", "fizzbuzz"};
+    list.add("foobar");
+    list.add("fizzbuzz");
+
+    assertArrayEquals(expected, list.toArray());
   }
 }
