@@ -1,9 +1,9 @@
 package org.example;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AppTest {
+
+  private ArrayList<String> list;
+  private String[] expectedAry;
+  @BeforeEach
+  public void setUp() {
+    list = new ArrayList<>(List.of("foo", "bar", "fizz", "buzz"));
+    expectedAry = new String[]{"foo", "bar", "fizz", "buzz"};
+  }
 
   @Test
   @DisplayName("Java requires one must declare a variable as a specific type")
@@ -63,7 +71,6 @@ public class AppTest {
   @Test
   @DisplayName("iterate through array with enhanced for loop")
   public void testEnhancedForLoop() {
-    String[] expectedAry = {"foo", "bar", "fizz", "buzz"};
     String results = "";
     for (String s: expectedAry) {
       results += " " + s;
@@ -77,7 +84,6 @@ public class AppTest {
   @Test
   @DisplayName("iterate over an array with a conditional")
   public void testIterateOverArrayWithConditional() {
-    String[] expectedAry = {"foo", "bar", "fizz", "buzz"};
     String results = "";
     for (int i = 0; i < expectedAry.length; i++) {
       if (i % 2 == 0) {
@@ -91,7 +97,6 @@ public class AppTest {
   @Test
   @DisplayName("conditionals")
   public void testConditionals() {
-    String[] expectedAry = {"foo", "bar", "fizz", "buzz"};
     String results = "";
     for (String s: expectedAry) {
       if (s.equals("foo")) {
@@ -111,10 +116,20 @@ public class AppTest {
   @Test
   @DisplayName("basics of ArrayList add to ArrayList")
   public void testBasicsOfArrayListAddToArrayList() {
-    ArrayList<String> list = new ArrayList<String>(List.of("foo", "bar", "fizz", "buzz"));
     String[] expected = {"foo", "bar", "fizz", "buzz", "foobar", "fizzbuzz"};
     list.add("foobar");
     list.add("fizzbuzz");
+
+    assertArrayEquals(expected, list.toArray());
+  }
+
+  @Test
+  @DisplayName("basics of ArrayList remove from ArrayList")
+  public void testBasicsOfArrayListRemoveFromArrayList() {
+    String[] expected = {"foo", "bar", "fizz", "buzz", "fizzbuzz"};
+    list.add("foobar");
+    list.add("fizzbuzz");
+    list.remove(4);
 
     assertArrayEquals(expected, list.toArray());
   }
