@@ -58,38 +58,4 @@ public class MainPageTest {
 
     assertEquals("* Incorrect username or password", errorParagraph.getText());
   }
-/*
-
-  @Test
-  public void search() {
-    mainPage.searchButton.click();
-
-    WebElement searchField = driver.findElement(By.cssSelector("[data-test='search-input']"));
-    searchField.sendKeys("Selenium");
-
-    WebElement submitButton = driver.findElement(By.cssSelector("button[data-test='full-search-button']"));
-    submitButton.click();
-
-    WebElement searchPageField = driver.findElement(By.cssSelector("input[data-test='search-input']"));
-    assertEquals("Selenium", searchPageField.getAttribute("value"));
-  }
-
-  @Test
-  public void toolsMenu() {
-    mainPage.toolsMenu.click();
-
-    WebElement menuPopup = driver.findElement(By.cssSelector("div[data-test='main-submenu']"));
-    assertTrue(menuPopup.isDisplayed());
-  }
-
-  @Test
-  public void navigationToAllTools() {
-    mainPage.seeAllToolsButton.click();
-
-    WebElement productsList = driver.findElement(By.id("products-page"));
-    assertTrue(productsList.isDisplayed());
-    assertEquals("All Developer Tools and Products by JetBrains", driver.getTitle());
-  }
-
-*/
 }
