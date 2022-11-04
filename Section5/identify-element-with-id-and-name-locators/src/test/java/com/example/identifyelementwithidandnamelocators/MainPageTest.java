@@ -8,6 +8,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
@@ -32,12 +34,29 @@ public class MainPageTest {
   }
 
   @Test
-  @DisplayName("search for the name input field")
-  public void testSearchForNameInputField() {
-    String expected = "EricRicketts";
+  @DisplayName("fill out input user name and password an submit")
+  public void testFillOutInputUsernameAndPasswordAndSubmit() {
+    Duration duration = Duration.ofSeconds(10);
+    String expectedUserName = "EricRicketts";
+    String expectedPassword = "foo123bar@#$";
+
     WebElement inputForUserName = mainPage.inputUserName;
+    WebElement inputForPassword = mainPage.inputPassword;
+    WebElement signInButton = mainPage.signInButton;
+
     inputForUserName.sendKeys("EricRicketts");
-    assertEquals(expected, inputForUserName.getAttribute("value"));
+    inputForPassword.sendKeys("foo123bar@#$");
+
+    assertEquals(expectedUserName, inputForUserName.getAttribute("value"));
+    assertEquals(expectedPassword, inputForPassword.getAttribute("value"));
+
+    signInButton.click();
+
+    WebDriverWait wait = new WebDriverWait(driver, duration);
+    WebElement errorParagraph = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.errorParagraph));
+
+    assertEquals("* Incorrect username or password", errorParagraph.getText());
   }
 /*
 

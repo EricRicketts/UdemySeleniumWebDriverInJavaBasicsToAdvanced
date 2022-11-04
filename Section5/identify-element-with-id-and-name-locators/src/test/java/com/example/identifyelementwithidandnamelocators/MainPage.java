@@ -12,6 +12,15 @@ public class MainPage {
   @FindBy(how = How.ID, using = "inputUsername")
   public WebElement inputUserName;
 
+  @FindBy(how = How.NAME, using = "inputPassword")
+  public WebElement inputPassword;
+
+  @FindBy(how = How.CSS, using = "button.submit.signInBtn")
+  public WebElement signInButton;
+
+  @FindBy(how = How.CSS, using = "p.error")
+  public WebElement errorParagraph;
+
 /*
 
   @FindBy(css = "a.wt-button_mode_primary")
