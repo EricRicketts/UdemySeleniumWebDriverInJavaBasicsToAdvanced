@@ -34,7 +34,10 @@ public class MainPageTest {
   @Test
   @DisplayName("search for the name input field")
   public void testSearchForNameInputField() {
-
+    String expected = "EricRicketts";
+    WebElement inputForUserName = mainPage.inputUserName;
+    inputForUserName.sendKeys("EricRicketts");
+    assertEquals(expected, inputForUserName.getAttribute("value"));
   }
 /*
 
