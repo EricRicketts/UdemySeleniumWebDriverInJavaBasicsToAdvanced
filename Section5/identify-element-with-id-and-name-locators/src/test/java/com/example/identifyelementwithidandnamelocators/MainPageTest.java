@@ -18,6 +18,9 @@ public class MainPageTest {
   private WebDriver driver;
   private MainPage mainPage;
 
+  private String expectedUsername, expectedPassword;
+
+  private WebElement inputForUserName, inputForPassword, signInButton;
   @BeforeEach
   public void setUp() {
     driver = new ChromeDriver();
@@ -26,6 +29,8 @@ public class MainPageTest {
     driver.get(url);
 
     mainPage = new MainPage(driver);
+    expectedUsername = "EricRicketts";
+    expectedPassword = "foo123bar@#$";
   }
 
   @AfterEach
@@ -34,20 +39,24 @@ public class MainPageTest {
   }
 
   @Test
-  @DisplayName("fill out input user name and password an submit")
-  public void testFillOutInputUsernameAndPasswordAndSubmit() {
+  @DisplayName("fill out input user name and password and submit using Selenium locators only")
+  public void testFillOutUsernameAndPasswordAndSubmitWithLocators() {
+    inputForUserName = 
+  }
+
+  @Test
+  @DisplayName("fill out input user name and password an submit using the defined annotations")
+  public void testFillOutInputUsernameAndPasswordAndSubmitUsingAnnotations() {
     Duration duration = Duration.ofSeconds(10);
-    String expectedUserName = "EricRicketts";
-    String expectedPassword = "foo123bar@#$";
 
-    WebElement inputForUserName = mainPage.inputUserName;
-    WebElement inputForPassword = mainPage.inputPassword;
-    WebElement signInButton = mainPage.signInButton;
+    inputForUserName = mainPage.inputUserName;
+    inputForPassword = mainPage.inputPassword;
+    signInButton = mainPage.signInButton;
 
-    inputForUserName.sendKeys("EricRicketts");
-    inputForPassword.sendKeys("foo123bar@#$");
+    inputForUserName.sendKeys(expectedUsername);
+    inputForPassword.sendKeys(expectedPassword);
 
-    assertEquals(expectedUserName, inputForUserName.getAttribute("value"));
+    assertEquals(expectedUsername, inputForUserName.getAttribute("value"));
     assertEquals(expectedPassword, inputForPassword.getAttribute("value"));
 
     signInButton.click();
