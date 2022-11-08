@@ -14,15 +14,27 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class MainPageTest {
-  private static final String url = "https://rahulshettyacademy.com/locatorspractice/";
+
+  private final String webDriversFolderPC = "C:\\Program Files\\WebDrivers\\";
+  private final String chromeDriverWindows = "chromedriver.exe";
+  private final String chromeDriverProperty = "webdriver.chrome.driver";
+  private final String url = "https://rahulshettyacademy.com/locatorspractice/";
   private WebDriver driver;
   private MainPage mainPage;
 
   private String expectedUsername, expectedPassword;
 
   private WebElement inputForUserName, inputForPassword, signInButton;
+  private Duration duration;
+
+  private void setDriverLocationAndDriverSystemPropert() {
+    String os = System.getProperty("os.name");
+  }
   @BeforeEach
   public void setUp() {
+    String os = System.getProperty("os.name");
+    duration = Duration.ofSeconds(10);
+    System.setProperty(chromeDriverProperty, webDriversFolderPC + chromeDriverWindows);
     driver = new ChromeDriver();
     driver.manage().window().maximize();
     driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
@@ -41,14 +53,28 @@ public class MainPageTest {
   @Test
   @DisplayName("fill out input user name and password and submit using Selenium locators only")
   public void testFillOutUsernameAndPasswordAndSubmitWithLocators() {
-    inputForUserName = 
+    inputForUserName = driver.findElement(By.id("inputUsername"));
+    inputForPassword = driver.findElement(By.name("inputPassword"));
+    signInButton = driver.findElement(By.cssSelector("button.submit.signInBtn"));
+
+    inputForUserName.sendKeys(expectedUsername);
+    inputForPassword.sendKeys(expectedPassword);
+
+    assertEquals(expectedUsername, inputForUserName.getAttribute("value"));
+    assertEquals(expectedPassword, inputForPassword.getAttribute("value"));
+
+    signInButton.click();
+
+    WebDriverWait wait = new WebDriverWait(driver, duration);
+    WebElement errorParagraph = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.errorParagraph));
+
+    assertEquals("* Incorrect username or password", errorParagraph.getText());
   }
 
   @Test
   @DisplayName("fill out input user name and password an submit using the defined annotations")
   public void testFillOutInputUsernameAndPasswordAndSubmitUsingAnnotations() {
-    Duration duration = Duration.ofSeconds(10);
-
     inputForUserName = mainPage.inputUserName;
     inputForPassword = mainPage.inputPassword;
     signInButton = mainPage.signInButton;
