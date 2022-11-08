@@ -41,7 +41,7 @@ public class MainPageTest {
   @Test
   @DisplayName("fill out input user name and password and submit using Selenium locators only")
   public void testFillOutUsernameAndPasswordAndSubmitWithLocators() {
-    inputForUserName = 
+    inputForUserName =
   }
 
   @Test
