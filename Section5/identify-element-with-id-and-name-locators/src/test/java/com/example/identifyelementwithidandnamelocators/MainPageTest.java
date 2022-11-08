@@ -80,7 +80,8 @@ public class MainPageTest {
 
     WebDriverWait wait = new WebDriverWait(driver, duration);
     WebElement errorParagraph = wait.until(
-        ExpectedConditions.visibilityOf(mainPage.errorParagraph));
+        ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("p.error")))
+    );
 
     assertEquals("* Incorrect username or password", errorParagraph.getText());
   }
