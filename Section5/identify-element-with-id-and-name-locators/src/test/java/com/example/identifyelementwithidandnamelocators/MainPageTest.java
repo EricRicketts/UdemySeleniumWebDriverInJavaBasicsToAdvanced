@@ -12,12 +12,17 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainPageTest {
 
   private final String webDriversFolderPC = "C:\\Program Files\\WebDrivers\\";
   private final String chromeDriverWindows = "chromedriver.exe";
   private final String chromeDriverProperty = "webdriver.chrome.driver";
+
+  private final String getWebDriversFolderMac = "/usr/local/bin/";
+  private final String chromeDriverMac = "chromedriver";
   private final String url = "https://rahulshettyacademy.com/locatorspractice/";
   private WebDriver driver;
   private MainPage mainPage;
@@ -28,13 +33,21 @@ public class MainPageTest {
   private Duration duration;
 
   private void setDriverLocationAndDriverSystemProperty() {
+    String windowsOSPattern = "Windows";
+    Pattern regex = Pattern.compile(windowsOSPattern);
     String os = System.getProperty("os.name");
+    Matcher matchWindows = regex.matcher(os);
+
+    if (matchWindows.find()) {
+      System.setProperty(chromeDriverProperty, webDriversFolderPC + chromeDriverWindows);
+    } else {
+      System.setProperty(chromeDriverProperty, getWebDriversFolderMac + chromeDriverMac);
+    }
   }
   @BeforeEach
   public void setUp() {
-    String os = System.getProperty("os.name");
     duration = Duration.ofSeconds(10);
-    System.setProperty(chromeDriverProperty, webDriversFolderPC + chromeDriverWindows);
+    setDriverLocationAndDriverSystemProperty();
     driver = new ChromeDriver();
     driver.manage().window().maximize();
     driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
