@@ -50,7 +50,12 @@ public class MainPageTest {
     setDriverLocationAndDriverSystemProperty();
     driver = new ChromeDriver();
     driver.manage().window().maximize();
-    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+    /*
+      driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+      It is best not to use implicit waits, explicit waits are more specific to a given situation
+      and better defined in general.  But the above code is provided as an example on how to code
+      implicit waits
+     */
     driver.get(url);
 
     mainPage = new MainPage(driver);
@@ -80,7 +85,7 @@ public class MainPageTest {
 
     WebDriverWait wait = new WebDriverWait(driver, duration);
     WebElement errorParagraph = wait.until(
-        ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("p.error")))
+        ExpectedConditions.presenceOfElementLocated(By.cssSelector("p.error"))
     );
 
     assertEquals("* Incorrect username or password", errorParagraph.getText());
@@ -103,7 +108,7 @@ public class MainPageTest {
 
     WebDriverWait wait = new WebDriverWait(driver, duration);
     WebElement errorParagraph = wait.until(
-        ExpectedConditions.visibilityOf(mainPage.errorParagraph));
+        ExpectedConditions.presenceOfElementLocated(By.cssSelector("p.error")));
 
     assertEquals("* Incorrect username or password", errorParagraph.getText());
   }
