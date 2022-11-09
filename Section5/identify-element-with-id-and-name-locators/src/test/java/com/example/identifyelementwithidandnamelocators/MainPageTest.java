@@ -30,6 +30,7 @@ public class MainPageTest {
   private String expectedUsername, expectedPassword;
 
   private WebElement inputForUserName, inputForPassword, signInButton;
+  private WebElement forgotPasswordLink;
   private Duration duration;
 
   private void setDriverLocationAndDriverSystemProperty() {
@@ -74,6 +75,8 @@ public class MainPageTest {
     inputForUserName = driver.findElement(By.id("inputUsername"));
     inputForPassword = driver.findElement(By.name("inputPassword"));
     signInButton = driver.findElement(By.cssSelector("button.submit.signInBtn"));
+    forgotPasswordLink = driver.findElement(By.linkText("Forgot your password?"));
+
 
     inputForUserName.sendKeys(expectedUsername);
     inputForPassword.sendKeys(expectedPassword);
@@ -89,8 +92,20 @@ public class MainPageTest {
     );
 
     assertEquals("* Incorrect username or password", errorParagraph.getText());
+
+    forgotPasswordLink.click();
+
+    WebElement resetPasswordName = wait.until(
+        ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@placeholder='Name']"))
+    );
+
+    WebElement resetPasswordEmail = wait.until(
+        ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@placeholder='Email']"))
+    );
+
   }
 
+  @Disabled
   @Test
   @DisplayName("fill out input user name and password an submit using the defined annotations")
   public void testFillOutInputUsernameAndPasswordAndSubmitUsingAnnotations() {
