@@ -27,7 +27,7 @@ public class MainPageTest {
   private WebDriver driver;
   private MainPage mainPage;
 
-  private String expectedUsername, expectedPassword;
+  private String expectedUsername, expectedEmail, expectedPassword;
 
   private WebElement inputForUserName, inputForPassword, signInButton;
   private WebElement forgotPasswordLink;
@@ -61,6 +61,7 @@ public class MainPageTest {
 
     mainPage = new MainPage(driver);
     expectedUsername = "EricRicketts";
+    expectedEmail = "eric_ricketts@icloud.com";
     expectedPassword = "foo123bar@#$";
   }
 
@@ -102,6 +103,12 @@ public class MainPageTest {
     WebElement resetPasswordEmail = wait.until(
         ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[placeholder='Email']"))
     );
+
+    resetPasswordName.sendKeys(expectedUsername);
+    resetPasswordEmail.sendKeys(expectedEmail);
+
+    assertEquals(expectedUsername, resetPasswordName.getAttribute("value"));
+    assertEquals(expectedEmail, resetPasswordEmail.getAttribute("value"));
 
   }
 
