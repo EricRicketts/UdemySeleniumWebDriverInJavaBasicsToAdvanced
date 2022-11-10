@@ -131,7 +131,7 @@ public class MainPageTest {
     resetPasswordEmailXpathArray.clear();
   }
 
-  @Disabled
+//  @Disabled
   @Test
   @DisplayName("fill out input user name and password an submit using the defined annotations")
   public void testFillOutInputUsernameAndPasswordAndSubmitUsingAnnotations() {
@@ -170,5 +170,24 @@ public class MainPageTest {
     assertEquals(expectedUsername, resetPasswordName.getAttribute("value"));
     assertEquals(expectedEmail, resetPasswordEmail.getAttribute("value"));
 
+    resetPasswordName.clear();
+    resetPasswordEmail.clear();
+
+    WebElement resetPasswordNameXpathArray = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.getForgotPasswordNameXpathArray)
+    );
+
+    WebElement resetPasswordEmailXpathArray = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.getForgotPasswordEmailXpathArray)
+    );
+
+    resetPasswordNameXpathArray.sendKeys(expectedUsername);
+    resetPasswordEmailXpathArray.sendKeys(expectedEmail);
+
+    assertEquals(expectedUsername, resetPasswordNameXpathArray.getAttribute("value"));
+    assertEquals(expectedEmail, resetPasswordEmailXpathArray.getAttribute("value"));
+
+    resetPasswordNameXpathArray.clear();
+    resetPasswordEmailXpathArray.clear();
   }
 }
