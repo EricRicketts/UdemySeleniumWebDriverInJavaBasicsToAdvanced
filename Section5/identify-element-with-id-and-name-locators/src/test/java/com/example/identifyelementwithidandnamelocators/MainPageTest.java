@@ -100,7 +100,7 @@ public class MainPageTest {
     );
 
     WebElement resetPasswordEmail = wait.until(
-        ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@placeholder='Email']"))
+        ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[placeholder='Email']"))
     );
 
   }

@@ -21,6 +21,15 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "p.error")
   public WebElement errorParagraph;
 
+  @FindBy(how = How.LINK_TEXT, using = "Forgot your password?")
+  public WebElement forgotYourPasswordLink;
+
+  @FindBy(how = How.XPATH, using = "//input[@placeholder='Name']")
+  public WebElement forgotPasswordName;
+
+  @FindBy(how = How.CSS, using = "input[placeholder='Email']")
+  public WebElement forgotPasswordEmail;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }
