@@ -112,13 +112,14 @@ public class MainPageTest {
 
   }
 
-  @Disabled
+//  @Disabled
   @Test
   @DisplayName("fill out input user name and password an submit using the defined annotations")
   public void testFillOutInputUsernameAndPasswordAndSubmitUsingAnnotations() {
     inputForUserName = mainPage.inputUserName;
     inputForPassword = mainPage.inputPassword;
     signInButton = mainPage.signInButton;
+    forgotPasswordLink = mainPage.forgotPasswordLink;
 
     inputForUserName.sendKeys(expectedUsername);
     inputForPassword.sendKeys(expectedPassword);
@@ -130,8 +131,25 @@ public class MainPageTest {
 
     WebDriverWait wait = new WebDriverWait(driver, duration);
     WebElement errorParagraph = wait.until(
-        ExpectedConditions.presenceOfElementLocated(By.cssSelector("p.error")));
+        ExpectedConditions.visibilityOf(mainPage.errorParagraph));
 
     assertEquals("* Incorrect username or password", errorParagraph.getText());
+
+    forgotPasswordLink.click();
+
+    WebElement resetPasswordName = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.forgotPasswordName)
+    );
+
+    WebElement resetPasswordEmail = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.forgotPasswordEmail)
+    );
+
+    resetPasswordName.sendKeys(expectedUsername);
+    resetPasswordEmail.sendKeys(expectedEmail);
+
+    assertEquals(expectedUsername, resetPasswordName.getAttribute("value"));
+    assertEquals(expectedEmail, resetPasswordEmail.getAttribute("value"));
+
   }
 }

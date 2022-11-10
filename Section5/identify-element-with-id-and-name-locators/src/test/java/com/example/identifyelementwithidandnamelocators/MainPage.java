@@ -22,7 +22,7 @@ public class MainPage {
   public WebElement errorParagraph;
 
   @FindBy(how = How.LINK_TEXT, using = "Forgot your password?")
-  public WebElement forgotYourPasswordLink;
+  public WebElement forgotPasswordLink;
 
   @FindBy(how = How.XPATH, using = "//input[@placeholder='Name']")
   public WebElement forgotPasswordName;
