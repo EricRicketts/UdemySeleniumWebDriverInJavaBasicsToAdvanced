@@ -27,7 +27,8 @@ public class MainPageTest {
   private WebDriver driver;
   private MainPage mainPage;
 
-  private String expectedUsername, expectedEmail, expectedPassword, expectedH2Text;
+  private String expectedUsername, expectedEmail, expectedPassword,
+      expectedH2Text, expectedPhoneNumber;
 
   private WebElement inputForUserName, inputForPassword, signInButton;
   private WebElement forgotPasswordLink;
@@ -64,6 +65,7 @@ public class MainPageTest {
     expectedEmail = "eric_ricketts@icloud.com";
     expectedPassword = "foo123bar@#$";
     expectedH2Text = "Forgot password";
+    expectedPhoneNumber = "919-449-5529";
   }
 
   @AfterEach
@@ -157,6 +159,13 @@ public class MainPageTest {
     );
 
     assertEquals(expectedH2Text, resetPasswordH2.getText());
+
+    WebElement resetPasswordPhoneNumber = wait.until(
+        ExpectedConditions.presenceOfElementLocated(By.xpath("//form/input[3]"))
+    );
+
+    resetPasswordPhoneNumber.sendKeys(expectedPhoneNumber);
+    assertEquals(expectedPhoneNumber, resetPasswordPhoneNumber.getAttribute("value"));
   }
 
 //  @Disabled
