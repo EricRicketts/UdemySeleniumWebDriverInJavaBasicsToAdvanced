@@ -42,6 +42,9 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "input[type='text']:nth-child(3)")
   public WebElement getForgotPasswordEmailCssArray;
 
+  @FindBy(how = How.XPATH, using = "//form/h2")
+  public WebElement getForgotPasswordH2;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }

@@ -234,5 +234,10 @@ public class MainPageTest {
 
     resetPasswordNameCssArray.clear();
     resetPasswordEmailCssArray.clear();
+
+    WebElement resetPasswordH2 = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.getForgotPasswordH2));
+
+    assertEquals(expectedH2Text, resetPasswordH2.getText());
   }
 }
