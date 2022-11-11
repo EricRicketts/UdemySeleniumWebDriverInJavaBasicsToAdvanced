@@ -57,6 +57,9 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "button.reset-pwd-btn")
   public WebElement resetLoginButton;
 
+  @FindBy(how = How.XPATH, using = "//form/p[@class='infoMsg']")
+  public WebElement getForgotPasswordInformationalMessage;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }

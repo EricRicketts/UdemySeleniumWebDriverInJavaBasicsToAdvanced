@@ -289,5 +289,13 @@ public class MainPageTest {
     assertEquals(expectedUsername, resetPasswordNameXpathTags.getAttribute("value"));
     assertEquals(expectedEmail, resetPasswordEmailXpathTags.getAttribute("value"));
     assertEquals(expectedPhoneNumber, resetPasswordPhoneNumberXpathTags.getAttribute("value"));
+
+    mainPage.resetLoginButton.click();
+
+    WebElement resetPasswordInformationalMessage = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.getForgotPasswordInformationalMessage)
+    );
+
+    assertEquals(expectedInfoMsgText, resetPasswordInformationalMessage.getText());
   }
 }
