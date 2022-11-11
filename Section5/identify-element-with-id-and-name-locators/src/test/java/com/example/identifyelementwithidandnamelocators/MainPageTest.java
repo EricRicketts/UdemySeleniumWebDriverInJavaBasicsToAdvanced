@@ -27,7 +27,7 @@ public class MainPageTest {
   private WebDriver driver;
   private MainPage mainPage;
 
-  private String expectedUsername, expectedEmail, expectedPassword;
+  private String expectedUsername, expectedEmail, expectedPassword, expectedH2Text;
 
   private WebElement inputForUserName, inputForPassword, signInButton;
   private WebElement forgotPasswordLink;
@@ -63,6 +63,7 @@ public class MainPageTest {
     expectedUsername = "EricRicketts";
     expectedEmail = "eric_ricketts@icloud.com";
     expectedPassword = "foo123bar@#$";
+    expectedH2Text = "Forgot password";
   }
 
   @AfterEach
@@ -70,6 +71,10 @@ public class MainPageTest {
     driver.quit();
   }
 
+  /*
+    Note unique selectors are the preferred choice for locating an element, used arrayed selectors
+    as a last resort.  They are shown here for instructional purposes.
+  */
   @Test
   @DisplayName("fill out input user name and password and submit using Selenium locators only")
   public void testFillOutUsernameAndPasswordAndSubmitWithLocators() {
@@ -146,6 +151,12 @@ public class MainPageTest {
 
     resetPasswordNameCssArray.clear();
     resetPasswordEmailCssArray.clear();
+
+    WebElement resetPasswordH2 = wait.until(
+        ExpectedConditions.presenceOfElementLocated(By.xpath("//form/h2"))
+    );
+
+    assertEquals(expectedH2Text, resetPasswordH2.getText());
   }
 
 //  @Disabled
