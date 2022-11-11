@@ -28,7 +28,7 @@ public class MainPageTest {
   private MainPage mainPage;
 
   private String expectedUsername, expectedEmail, expectedPassword,
-      expectedH2Text, expectedPhoneNumber;
+      expectedH2Text, expectedPhoneNumber, expectedInfoMsgText;
 
   private WebElement inputForUserName, inputForPassword, signInButton;
   private WebElement forgotPasswordLink;
@@ -66,6 +66,7 @@ public class MainPageTest {
     expectedPassword = "foo123bar@#$";
     expectedH2Text = "Forgot password";
     expectedPhoneNumber = "919-449-5529";
+    expectedInfoMsgText = "Please use temporary password \'rahulshettyacademy\' to Login.";
   }
 
   @AfterEach
@@ -155,21 +156,21 @@ public class MainPageTest {
     resetPasswordEmailCssArray.clear();
 
     WebElement resetPasswordH2 = wait.until(
-        ExpectedConditions.presenceOfElementLocated(By.xpath("//form/h2"))
+        ExpectedConditions.presenceOfElementLocated(By.cssSelector("form > h2"))
     );
 
     assertEquals(expectedH2Text, resetPasswordH2.getText());
 
     WebElement resetPasswordNameXpathTags = wait.until(
-        ExpectedConditions.presenceOfElementLocated(By.xpath("//form/input[1]"))
+        ExpectedConditions.presenceOfElementLocated(By.cssSelector("form > input:nth-child(2)"))
     );
 
     WebElement resetPasswordEmailXpathTags = wait.until(
-        ExpectedConditions.presenceOfElementLocated(By.xpath("//form/input[2]"))
+        ExpectedConditions.presenceOfElementLocated(By.cssSelector("form > input:nth-child(3)"))
     );
 
     WebElement resetPasswordPhoneNumberXpathTags = wait.until(
-        ExpectedConditions.presenceOfElementLocated(By.xpath("//form/input[3]"))
+        ExpectedConditions.presenceOfElementLocated(By.cssSelector("form > input:nth-child(4)"))
     );
 
     resetPasswordNameXpathTags.sendKeys(expectedUsername);
@@ -179,9 +180,16 @@ public class MainPageTest {
     assertEquals(expectedUsername, resetPasswordNameXpathTags.getAttribute("value"));
     assertEquals(expectedEmail, resetPasswordEmailXpathTags.getAttribute("value"));
     assertEquals(expectedPhoneNumber, resetPasswordPhoneNumberXpathTags.getAttribute("value"));
+
+    driver.findElement(By.cssSelector("button.reset-pwd-btn")).click();
+
+    WebElement resetPasswordInformationalMessage = wait.until(
+        ExpectedConditions.presenceOfElementLocated(By.cssSelector("p.infoMsg"))
+    );
+
+    assertEquals(expectedInfoMsgText, resetPasswordInformationalMessage.getText());
   }
 
-//  @Disabled
   @Test
   @DisplayName("fill out input user name and password an submit using the defined annotations")
   public void testFillOutInputUsernameAndPasswordAndSubmitUsingAnnotations() {
