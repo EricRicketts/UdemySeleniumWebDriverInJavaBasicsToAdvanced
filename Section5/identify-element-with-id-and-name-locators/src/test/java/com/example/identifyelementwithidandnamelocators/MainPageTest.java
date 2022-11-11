@@ -261,5 +261,25 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.getForgotPasswordH2));
 
     assertEquals(expectedH2Text, resetPasswordH2.getText());
+
+    WebElement resetPasswordNameXpathTags = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.getForgotPasswordNameXpathTags)
+    );
+
+    WebElement resetPasswordEmailXpathTags = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.getForgotPasswordEmailPathTags)
+    );
+
+    WebElement resetPasswordPhoneNumberXpathTags = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.getForgotPasswordPhoneNumberXpathTags)
+    );
+
+    resetPasswordNameXpathTags.sendKeys(expectedUsername);
+    resetPasswordEmailXpathTags.sendKeys(expectedEmail);
+    resetPasswordPhoneNumberXpathTags.sendKeys(expectedPhoneNumber);
+
+    assertEquals(expectedUsername, resetPasswordNameXpathTags.getAttribute("value"));
+    assertEquals(expectedEmail, resetPasswordEmailXpathTags.getAttribute("value"));
+    assertEquals(expectedPhoneNumber, resetPasswordPhoneNumberXpathTags.getAttribute("value"));
   }
 }

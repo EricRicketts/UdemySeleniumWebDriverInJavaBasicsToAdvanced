@@ -45,6 +45,15 @@ public class MainPage {
   @FindBy(how = How.XPATH, using = "//form/h2")
   public WebElement getForgotPasswordH2;
 
+  @FindBy(how = How.XPATH, using = "//form/input[1]")
+  public WebElement getForgotPasswordNameXpathTags;
+
+  @FindBy(how = How.XPATH, using = "//form/input[2]")
+  public WebElement getForgotPasswordEmailPathTags;
+
+  @FindBy(how = How.XPATH, using = "//form/input[3]")
+  public WebElement getForgotPasswordPhoneNumberXpathTags;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }
