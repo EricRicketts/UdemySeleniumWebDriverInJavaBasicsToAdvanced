@@ -160,12 +160,25 @@ public class MainPageTest {
 
     assertEquals(expectedH2Text, resetPasswordH2.getText());
 
-    WebElement resetPasswordPhoneNumber = wait.until(
+    WebElement resetPasswordNameXpathTags = wait.until(
+        ExpectedConditions.presenceOfElementLocated(By.xpath("//form/input[1]"))
+    );
+
+    WebElement resetPasswordEmailXpathTags = wait.until(
+        ExpectedConditions.presenceOfElementLocated(By.xpath("//form/input[2]"))
+    );
+
+    WebElement resetPasswordPhoneNumberXpathTags = wait.until(
         ExpectedConditions.presenceOfElementLocated(By.xpath("//form/input[3]"))
     );
 
-    resetPasswordPhoneNumber.sendKeys(expectedPhoneNumber);
-    assertEquals(expectedPhoneNumber, resetPasswordPhoneNumber.getAttribute("value"));
+    resetPasswordNameXpathTags.sendKeys(expectedUsername);
+    resetPasswordEmailXpathTags.sendKeys(expectedEmail);
+    resetPasswordPhoneNumberXpathTags.sendKeys(expectedPhoneNumber);
+
+    assertEquals(expectedUsername, resetPasswordNameXpathTags.getAttribute("value"));
+    assertEquals(expectedEmail, resetPasswordEmailXpathTags.getAttribute("value"));
+    assertEquals(expectedPhoneNumber, resetPasswordPhoneNumberXpathTags.getAttribute("value"));
   }
 
 //  @Disabled
