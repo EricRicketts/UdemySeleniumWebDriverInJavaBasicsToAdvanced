@@ -54,6 +54,9 @@ public class MainPage {
   @FindBy(how = How.XPATH, using = "//form/input[3]")
   public WebElement getForgotPasswordPhoneNumberXpathTags;
 
+  @FindBy(how = How.CSS, using = "button.reset-pwd-btn")
+  public WebElement resetLoginButton;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }
