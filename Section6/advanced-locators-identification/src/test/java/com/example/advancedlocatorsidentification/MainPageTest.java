@@ -197,16 +197,19 @@ public class MainPageTest {
 
     inputForUserName = wait.until(ExpectedConditions.visibilityOf(mainPage.inputUserName));
     inputForPassword = wait.until(ExpectedConditions.visibilityOf(mainPage.getInputPasswordByCssRegex));
+    WebElement signInButtonXpathRegex = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.signInButtonXpathRegex)
+    );
 
     inputForUserName.sendKeys(expectedUsername);
     inputForPassword.sendKeys(correctPassword);
 
-    signInButton.click();
+    signInButtonXpathRegex.click();
 
     WebElement successfulLoginHeading = wait.until(
         ExpectedConditions.visibilityOf(mainPage.successfulLoginHeading)
     );
 
-    assertEquals("Hello EricRicketts,", mainPage.successfulLoginHeading.getText());
+    assertEquals("Hello EricRicketts,", successfulLoginHeading.getText());
   }
 }
