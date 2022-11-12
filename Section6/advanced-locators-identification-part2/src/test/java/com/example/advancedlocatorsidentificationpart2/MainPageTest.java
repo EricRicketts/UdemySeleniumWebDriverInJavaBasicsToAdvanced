@@ -1,12 +1,10 @@
 package com.example.advancedlocatorsidentificationpart2;
 
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-import static org.testng.Assert.*;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -52,7 +50,7 @@ public class MainPageTest {
 
   @BeforeMethod
   public void setUp() {
-    Duration duration = Duration.ofSeconds(10);
+    duration = Duration.ofSeconds(10);
     setDriverLocationAndDriverSystemProperty();
     driver = new ChromeDriver();
     driver.manage().window().maximize();
@@ -71,6 +69,8 @@ public class MainPageTest {
   @Test
   public void testLoginAndLogOut() {
     String successfulLoginText = "You are successfully logged in.";
+    String usernamePlaceholder = "Username";
+
     WebElement usernameInput = wait.until(
         ExpectedConditions.visibilityOf(mainPage.usernameInput)
     );
@@ -103,5 +103,6 @@ public class MainPageTest {
 
     logoutButton.click();
 
+    Assert.assertTrue(usernameInput.isDisplayed());
   }
 }
