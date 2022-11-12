@@ -71,6 +71,9 @@ public class MainPage {
   @FindBy(how = How.XPATH, using = "//div[@class='login-container']/h2")
   public WebElement successfulLoginHeading;
 
+  @FindBy(how = How.XPATH, using = "//div[@class='login-container']/p")
+  public WebElement successfulLoginMessage;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }

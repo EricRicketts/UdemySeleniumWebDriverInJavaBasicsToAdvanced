@@ -27,6 +27,8 @@ public class MainPageTest {
 
   private final String correctPassword = "rahulshettyacademy";
 
+  private final String successfulLoginMessageText = "You are successfully logged in.";
+
   private WebDriver driver;
   private MainPage mainPage;
 
@@ -210,6 +212,11 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.successfulLoginHeading)
     );
 
+    WebElement successfulLoginMessage = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.successfulLoginMessage)
+    );
+
     assertEquals("Hello EricRicketts,", successfulLoginHeading.getText());
+    assertEquals(successfulLoginMessageText, successfulLoginMessage.getText());
   }
 }
