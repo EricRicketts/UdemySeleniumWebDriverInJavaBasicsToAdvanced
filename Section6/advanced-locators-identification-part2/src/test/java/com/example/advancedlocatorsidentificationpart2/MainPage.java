@@ -23,6 +23,9 @@ public class MainPage {
   @FindBy(how = How.XPATH, using = "//button[@class='logout-btn']")
   WebElement logoutButton;
 
+  @FindBy(how = How.TAG_NAME, using = "h2")
+  WebElement loginHeading;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }

@@ -70,6 +70,7 @@ public class MainPageTest {
   public void testLoginAndLogOut() {
     String successfulLoginText = "You are successfully logged in.";
     String usernamePlaceholder = "Username";
+    String expectedLoginHeading = "Hello EricRicketts,";
 
     WebElement usernameInput = wait.until(
         ExpectedConditions.visibilityOf(mainPage.usernameInput)
@@ -99,10 +100,16 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.logoutButton)
     );
 
+    WebElement loginHeading = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.loginHeading)
+    );
+
     Assert.assertEquals(successfulLoginParagraph.getText(), successfulLoginText);
+    Assert.assertEquals(loginHeading.getText(), expectedLoginHeading);
 
     logoutButton.click();
 
     Assert.assertTrue(usernameInput.isDisplayed());
+    Assert.assertEquals(usernameInput.getAttribute("placeholder"), usernamePlaceholder);
   }
 }
