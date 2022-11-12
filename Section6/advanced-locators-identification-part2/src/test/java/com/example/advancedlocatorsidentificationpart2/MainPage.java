@@ -20,7 +20,7 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "div.login-container p")
   WebElement successfulLoginParagraph;
 
-  @FindBy(how = How.XPATH, using = "//button[@class='logout-btn']")
+  @FindBy(how = How.XPATH, using = "//button[text()='Log Out']")
   WebElement logoutButton;
 
   @FindBy(how = How.TAG_NAME, using = "h2")
