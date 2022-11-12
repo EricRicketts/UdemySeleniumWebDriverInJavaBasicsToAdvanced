@@ -14,6 +14,9 @@ public class MainPage {
   @FindBy(how = How.NAME, using = "inputPassword")
   public WebElement inputPassword;
 
+  @FindBy(how = How.CSS, using = "input[type*=pass]")
+  public WebElement getInputPasswordByCssRegex;
+
   @FindBy(how = How.CSS, using = "button.submit.signInBtn")
   public WebElement signInButton;
 
@@ -58,6 +61,12 @@ public class MainPage {
 
   @FindBy(how = How.XPATH, using = "//form/p[@class='infoMsg']")
   public WebElement getForgotPasswordInformationalMessage;
+
+  @FindBy(how = How.CSS, using = "button.go-to-login-btn")
+  public WebElement goToLoginButton;
+
+  @FindBy(how = How.XPATH, using = "//div[@class='login-container']/h2")
+  public WebElement successfulLoginHeading;
 
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);

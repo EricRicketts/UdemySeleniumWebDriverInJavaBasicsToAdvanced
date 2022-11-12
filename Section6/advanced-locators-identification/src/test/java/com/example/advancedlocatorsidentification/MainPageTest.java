@@ -24,6 +24,9 @@ public class MainPageTest {
   private final String getWebDriversFolderMac = "/usr/local/bin/";
   private final String chromeDriverMac = "chromedriver";
   private final String url = "https://rahulshettyacademy.com/locatorspractice/";
+
+  private final String correctPassword = "rahulshettyacademy";
+
   private WebDriver driver;
   private MainPage mainPage;
 
@@ -102,6 +105,9 @@ public class MainPageTest {
     assertEquals("* Incorrect username or password", errorParagraph.getText());
 
     forgotPasswordLink.click();
+    // if we wanted to for a manual wait for 1 second we could use java: Thread.sleep(1000);
+    // the units are in milliseconds, so the wait would be 1 second.  Obviously, explicit waits
+    // with conditions are better, as shown below
 
     WebElement resetPasswordName = wait.until(
         ExpectedConditions.visibilityOf(mainPage.forgotPasswordName)
@@ -186,5 +192,21 @@ public class MainPageTest {
     );
 
     assertEquals(expectedInfoMsgText, resetPasswordInformationalMessage.getText());
+
+    mainPage.goToLoginButton.click();
+
+    inputForUserName = wait.until(ExpectedConditions.visibilityOf(mainPage.inputUserName));
+    inputForPassword = wait.until(ExpectedConditions.visibilityOf(mainPage.getInputPasswordByCssRegex));
+
+    inputForUserName.sendKeys(expectedUsername);
+    inputForPassword.sendKeys(correctPassword);
+
+    signInButton.click();
+
+    WebElement successfulLoginHeading = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.successfulLoginHeading)
+    );
+
+    assertEquals("Hello EricRicketts,", mainPage.successfulLoginHeading.getText());
   }
 }
