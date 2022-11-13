@@ -35,6 +35,9 @@ public class MainPage {
   @FindBy(how = How.CLASS_NAME, using = "infoMsg")
   WebElement informationMessage;
 
+  @FindBy(how = How.CSS, using = "button.go-to-login-btn")
+  WebElement goToLoginButton;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }

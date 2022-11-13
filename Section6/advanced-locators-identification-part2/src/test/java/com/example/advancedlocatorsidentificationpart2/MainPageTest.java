@@ -116,6 +116,8 @@ public class MainPageTest {
   @Test
   public void getPassword() {
     String informationMessageText = "Please use temporary password 'rahulshettyacademy' to Login.";
+    String successfulLoginText = "You are successfully logged in.";
+    String password;
 
     WebElement forgotPasswordLink = wait.until(
         ExpectedConditions.visibilityOf(mainPage.forgotPasswordLink)
@@ -134,5 +136,29 @@ public class MainPageTest {
     );
 
     Assert.assertEquals(informationMessage.getText(), informationMessageText);
+
+    String regexString = "(?<=')[a-z]+(?=')";
+    Pattern pattern = Pattern.compile(regexString);
+    Matcher matcher = pattern.matcher(informationMessage.getText());
+    boolean matcherFound = matcher.find();
+    if (matcherFound) {
+      password = matcher.group();
+    } else {
+      password = "foobar";
+    }
+
+    mainPage.goToLoginButton.click();
+
+    Assert.assertTrue(mainPage.passwordInput.isDisplayed());
+
+    mainPage.usernameInput.sendKeys(username);
+    mainPage.passwordInput.sendKeys(password);
+    mainPage.signInButton.click();
+
+    WebElement successfulLoginParagraph = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.successfulLoginParagraph)
+    );
+
+    Assert.assertEquals(successfulLoginParagraph.getText(), successfulLoginText);
   }
 }
