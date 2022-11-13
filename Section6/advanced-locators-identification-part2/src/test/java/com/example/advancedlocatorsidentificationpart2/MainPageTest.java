@@ -27,6 +27,29 @@ public class MainPageTest {
 
   private Duration duration;
 
+  private String extractPasswordUsingSplit(WebDriver driver) {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    WebElement forgotPasswordLink = wait.until(
+        ExpectedConditions.presenceOfElementLocated(By.linkText("Forgot your password?"))
+    );
+    forgotPasswordLink.click();
+
+    WebElement resetLoginButton = wait.until(
+        ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("button.reset-pwd-btn")))
+    );
+
+    resetLoginButton.click();
+
+    WebElement informationalMessage = wait.until(
+        ExpectedConditions.presenceOfElementLocated(By.cssSelector("p.infoMsg"))
+    );
+
+    String passwordText = informationalMessage.getText();
+
+    String[] passwordTextArrayOfWords = passwordText.split("\'");
+
+    return passwordTextArrayOfWords[1];
+  }
   private void setDriverLocationAndDriverSystemProperty() {
     String windowsOSPattern = "Windows";
     String webDriversFolderPC = "C:\\Program Files\\WebDrivers\\";
@@ -114,7 +137,7 @@ public class MainPageTest {
   }
 
   @Test
-  public void getPassword() {
+  public void testGetPassword() {
     String informationMessageText = "Please use temporary password 'rahulshettyacademy' to Login.";
     String successfulLoginText = "You are successfully logged in.";
     String password;
@@ -160,5 +183,39 @@ public class MainPageTest {
     );
 
     Assert.assertEquals(successfulLoginParagraph.getText(), successfulLoginText);
+  }
+
+  @Test
+  public void testGetPasswordMethod() {
+    String successfulLoginText = "You are successfully logged in.";
+    String password = extractPasswordUsingSplit(driver);
+
+    WebElement goToLoginButton = wait.until(
+        ExpectedConditions.presenceOfElementLocated(By.cssSelector("button.go-to-login-btn"))
+    );
+
+    goToLoginButton.click();
+
+    WebElement usernameInput = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.usernameInput)
+    );
+
+    WebElement passwordInput = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.passwordInput)
+    );
+
+    WebElement signInButton = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.signInButton)
+    );
+
+    usernameInput.sendKeys(username);
+    passwordInput.sendKeys(password);
+    signInButton.click();
+
+    WebElement informationalMessage = wait.until(
+        ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.login-container > p"))
+    );
+
+    Assert.assertEquals(informationalMessage.getText(), successfulLoginText);
   }
 }
