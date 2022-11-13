@@ -17,6 +17,9 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "button[class*='submit signIn']")
   WebElement signInButton;
 
+  @FindBy(how = How.LINK_TEXT, using = "Forgot your password?")
+  WebElement forgotPasswordLink;
+
   @FindBy(how = How.CSS, using = "div.login-container p")
   WebElement successfulLoginParagraph;
 
@@ -25,6 +28,12 @@ public class MainPage {
 
   @FindBy(how = How.TAG_NAME, using = "h2")
   WebElement loginHeading;
+
+  @FindBy(how = How.CLASS_NAME, using = "reset-pwd-btn")
+  WebElement resetPasswordButton;
+
+  @FindBy(how = How.CLASS_NAME, using = "infoMsg")
+  WebElement informationMessage;
 
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);

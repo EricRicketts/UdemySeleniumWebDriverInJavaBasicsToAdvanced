@@ -112,4 +112,27 @@ public class MainPageTest {
     Assert.assertTrue(usernameInput.isDisplayed());
     Assert.assertEquals(usernameInput.getAttribute("placeholder"), usernamePlaceholder);
   }
+
+  @Test
+  public void getPassword() {
+    String informationMessageText = "Please use temporary password 'rahulshettyacademy' to Login.";
+
+    WebElement forgotPasswordLink = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.forgotPasswordLink)
+    );
+
+    forgotPasswordLink.click();
+
+    WebElement resetPasswordButton = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.resetPasswordButton)
+    );
+
+    resetPasswordButton.click();
+
+    WebElement informationMessage = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.informationMessage)
+    );
+
+    Assert.assertEquals(informationMessage.getText(), informationMessageText);
+  }
 }
