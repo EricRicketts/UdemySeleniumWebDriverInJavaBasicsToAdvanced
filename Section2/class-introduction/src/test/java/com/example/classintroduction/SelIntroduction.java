@@ -5,6 +5,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SelIntroduction {
 
@@ -28,5 +29,6 @@ public class SelIntroduction {
 //    WebDriver driver = new EdgeDriver();
 //    WebDriver driver = new SafariDriver();
     driver.get("https://rahulshettyacademy.com");
+    driver.close();
   }
 }
