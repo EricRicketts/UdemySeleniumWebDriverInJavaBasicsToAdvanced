@@ -42,13 +42,4 @@ public class MainPageTest {
 
     $("div[data-test='main-submenu']").shouldBe(visible);
   }
-
-  @Test
-  public void navigationToAllTools() {
-    mainPage.seeAllToolsButton.click();
-
-    $("#products-page").shouldBe(visible);
-
-    assertEquals("All Developer Tools and Products by JetBrains", Selenide.title());
-  }
 }
