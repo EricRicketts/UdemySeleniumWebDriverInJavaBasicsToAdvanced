@@ -27,6 +27,3 @@ hs_err_pid*
 *.mvn
 *mvnw.*
 *mvnw
-
-# misc directories
-*allure-results/
