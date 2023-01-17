@@ -8,6 +8,8 @@ public class WebDriverMethods {
     System.setProperty("webdriver.chrome.driver", "C:\\Program Files\\WebDrivers\\chromedriver.exe");
     WebDriver driver = new ChromeDriver();
     driver.get("https://rahulshettyacademy.com");
+    String title = driver.getTitle();
+    System.out.println(title);
     driver.close();
   }
 }
