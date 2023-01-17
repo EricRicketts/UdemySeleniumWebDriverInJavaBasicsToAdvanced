@@ -9,7 +9,9 @@ public class WebDriverMethods {
     WebDriver driver = new ChromeDriver();
     driver.get("https://rahulshettyacademy.com");
     String title = driver.getTitle();
+    String currentUrl = driver.getCurrentUrl();
     System.out.println(title);
-    driver.close();
+    System.out.println(currentUrl);
+    driver.close(); // note driver.quit() is used to close all browser windows associated with automation
   }
 }
