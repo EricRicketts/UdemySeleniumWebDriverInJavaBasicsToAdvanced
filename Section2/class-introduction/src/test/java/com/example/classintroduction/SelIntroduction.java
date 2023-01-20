@@ -15,7 +15,7 @@ public class SelIntroduction {
 // effort
 //    System.setProperty("webdriver.chrome.driver", "C:\\Program Files\\WebDrivers\\chromedriver.exe");
 //    System.setProperty("webdriver.edge.driver", "C:\\Program Files\\WebDrivers\\msedgedriver.exe");
-    System.setProperty("webdriver.gecko.driver", "C:\\Program Files\\WebDrivers\\geckodriver.exe");
+//    System.setProperty("webdriver.gecko.driver", "C:\\Program Files\\WebDrivers\\geckodriver.exe");
 
 
 //    Mac webdrivers
@@ -25,8 +25,8 @@ public class SelIntroduction {
 //    System.setProperty("webdriver.safari.driver", "/usr/bin/safaridriver");
 
 //    WebDriver driver = new ChromeDriver();
-    WebDriver driver = new FirefoxDriver();
-//    WebDriver driver = new EdgeDriver();
+//    WebDriver driver = new FirefoxDriver();
+    WebDriver driver = new EdgeDriver();
 //    WebDriver driver = new SafariDriver();
     driver.get("https://rahulshettyacademy.com");
     driver.close();
