@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import model.DataDemonstration;
 
@@ -166,6 +165,12 @@ public class AppTest {
         results.add(prefixes[index] + " " + list.get(index));
     }
     assertArrayEquals(expected, results.toArray());
+  }
+
+  @Test
+  @DisplayName("ArrayList contains method")
+  public void testArrayListContains() {
+    assertTrue(list.contains("buzz"));
   }
 
   @Test
