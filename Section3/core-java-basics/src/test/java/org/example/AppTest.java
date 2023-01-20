@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -171,6 +172,14 @@ public class AppTest {
   @DisplayName("ArrayList contains method")
   public void testArrayListContains() {
     assertTrue(list.contains("buzz"));
+  }
+
+  @Test
+  @DisplayName("ArrayList convert Array to List")
+  public void testConvertArrayToList() {
+    String[] resultArray = {"foo", "bar", "fizz", "buzz"};
+    List<String> resultList = Arrays.asList(resultArray);
+    assertArrayEquals(list.toArray(), resultList.toArray());
   }
 
   @Test
