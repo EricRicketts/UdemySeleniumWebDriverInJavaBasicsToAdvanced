@@ -186,8 +186,13 @@ public class AppTest {
   @DisplayName("creating strings")
   public void testCreateStrings() {
     // == compares object references, equals compares content
+    // in the case of the String literal declaration below, only
+    // one string is allocated in memory.
     String s1 = "foobar";
     String s2 = "foobar";
+
+    // in the case of creating a new String object, two different objects
+    // are created so two memory allocations are created
     String s3 = new String("foobar");
     String s4 = new String("foobar");
     boolean[] expected = {true, true, false, true, false, true};
@@ -205,6 +210,18 @@ public class AppTest {
     assertEquals(" foobar", s.stripTrailing());
     assertEquals("foobar", s.trim());
     assertEquals('b', s.charAt(4));
+  }
+
+  @Test
+  @DisplayName("reverse a string")
+  public void testReverseAString() {
+    String a = "abcdef";
+    String expected = "fedcba";
+    String result = "";
+    for (int index = a.length() - 1; index > -1; index -= 1) {
+      result += a.charAt(index);
+    }
+    assertEquals(expected, result);
   }
 
   @Test
