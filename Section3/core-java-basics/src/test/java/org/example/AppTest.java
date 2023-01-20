@@ -50,6 +50,18 @@ public class AppTest {
   }
 
   @Test
+  @DisplayName("arrays can be initialized to a size")
+  public void testArraysInitializedToASize() {
+    int[] expected = {1, 2, 3, 4, 5};
+    int[] result = new int[5]; // initialize array to a size of 5 values
+    for (int index : new int[]{0, 1, 2, 3, 4}) {
+      result[index] = index + 1;
+    }
+
+    assertArrayEquals(expected, result);
+  }
+
+  @Test
   @DisplayName("arrays can hold more than one value")
   public void testArraysCanHoldMoreThanOneValue() {
     int[] ary;
