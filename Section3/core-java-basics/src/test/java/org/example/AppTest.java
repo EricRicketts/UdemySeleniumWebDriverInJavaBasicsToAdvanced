@@ -54,10 +54,10 @@ public class AppTest {
   public void testArraysInitializedToASize() {
     int[] expected = {1, 2, 3, 4, 5};
     int[] result = new int[5]; // initialize array to a size of 5 values
+    // iterate over the array with an enhanced for loop
     for (int index : new int[]{0, 1, 2, 3, 4}) {
       result[index] = index + 1;
     }
-
     assertArrayEquals(expected, result);
   }
 
@@ -78,7 +78,6 @@ public class AppTest {
     for (int i = 0; i < expected.length; i++) {
       results[i] = i;
     }
-
     assertArrayEquals(expected, results);
   }
 
@@ -86,12 +85,12 @@ public class AppTest {
   @DisplayName("iterate through array with enhanced for loop")
   public void testEnhancedForLoop() {
     String results = "";
+    // enhanced for loop iterating over an array of Strings
     for (String s: expectedAry) {
       results += " " + s;
     }
     results = results.stripLeading();
     String expected = String.join(" ", expectedAry);
-
     assertEquals(expected, results);
   }
 
@@ -133,7 +132,6 @@ public class AppTest {
     String[] expected = {"foo", "bar", "fizz", "buzz", "foobar", "fizzbuzz"};
     list.add("foobar");
     list.add("fizzbuzz");
-
     assertArrayEquals(expected, list.toArray());
   }
 
@@ -144,7 +142,6 @@ public class AppTest {
     list.add("foobar");
     list.add("fizzbuzz");
     list.remove(4);
-
     assertArrayEquals(expected, list.toArray());
   }
 
@@ -156,8 +153,19 @@ public class AppTest {
     results[0] = list.get(1);
     list.set(1, "fizzbuzz");
     results[1] = list.get(1);
-
     assertArrayEquals(expected, results);
+  }
+
+  @Test
+  @DisplayName("size of arraylist")
+  public void testSizeOfArrayList() {
+    ArrayList<String> results = new ArrayList<>();
+    String[] expected = { "ab foo", "cd bar", "ef fizz", "gh buzz"};
+    String[] prefixes = {"ab", "cd", "ef", "gh"};
+    for (int index = 0; index < list.size(); index += 1) {
+        results.add(prefixes[index] + " " + list.get(index));
+    }
+    assertArrayEquals(expected, results.toArray());
   }
 
   @Test
@@ -170,7 +178,6 @@ public class AppTest {
     String s4 = new String("foobar");
     boolean[] expected = {true, true, false, true, false, true};
     boolean[] results = {s1 == s2, s1.equals(s2), s2 == s3, s2.equals(s3), s3 == s4, s3.equals(s4)};
-
     assertArrayEquals(expected, results);
   }
 
@@ -197,7 +204,6 @@ public class AppTest {
     results[1] = dd.getData();
     results[2] = dd.sayHello();
     results[3] = DataDemonstration.sayGoodBye();
-
     assertArrayEquals(expected, results);
   }
 }
