@@ -6,9 +6,41 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 
-// page_url = https://www.jetbrains.com/
+/*
+  I intend to put a lot of comments on these two classes for two reasons: first, to help me better understand how these
+  Selenium annotations and methods work and secondly, to help me understand what I was doing when I visit the
+  code a long time from now.
+ */
 public class MainPage {
+  /*
+    This is some very important information on the @FindBy Annotation.  Quoting from an article, the @FindBy
+    annotation is used to find one or more WebElements using a single criteria.  I personally like to make use of
+    the more explicit implementation.  Some examples below:
 
+    @FindBy(how = How.CLASS_NAME, using = "foo")
+    public List<WebElement> elementsWithClassNameFoo
+
+    @FindBy(how = How.ID, using = "bar")
+    public WebElement elementWithIdBar
+
+    Here are the abbreviated versions:
+
+    @FindBy(className = "foo")
+    public List<WebElement> elementsWithClassNameFoo
+
+    @FindBy(id = "bar")
+    public WebElement elementWithIdBar
+
+   So in each case above Java returns either a public attribute (field) List of WebElements or a single WebElement
+   In the case of MainPage, @FindBy is used extensively to declare a number of public fields.  The notable distinction
+   about these public fields is that they are initialized by a search through the PageObject.  Since they are class
+   fields they can be referred directly in the class or as a attribute on an instance of the class which is what we
+   see occurring in MainPageTest.
+
+   In each case above @FindBy defines how to find the element list or single element (by class name or by id) and
+   the annotation also defines what object is returned after finding the element, either a List<WebElement> or a single
+   WebElement.
+   */
   @FindBy(how = How.ID, using = "inputUsername")
   public WebElement inputUserName;
 
@@ -60,6 +92,11 @@ public class MainPage {
   @FindBy(how = How.XPATH, using = "//form/p[@class='infoMsg']")
   public WebElement getForgotPasswordInformationalMessage;
 
+  /*
+  Below is the constructor for the MainPage class it takes as a single argument a WebDriver, which is highly
+  likely to have the web page url included.  The constructor calls a static method on the PageFactory class, passing
+  in the WebDriver argument and the current object being instantiated (this).
+   */
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }

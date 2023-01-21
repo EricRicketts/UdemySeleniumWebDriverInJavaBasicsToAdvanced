@@ -49,6 +49,8 @@ public class MainPageTest {
   @BeforeEach
   public void setUp() {
     duration = Duration.ofSeconds(10);
+    // if the drivers are located in system PATH variable this method call is not needed
+    // as any system will search the PATH variable locations in the search for a webdriver
     setDriverLocationAndDriverSystemProperty();
     driver = new ChromeDriver();
     driver.manage().window().maximize();
@@ -60,6 +62,9 @@ public class MainPageTest {
      */
     driver.get(url);
 
+    // just in case you return to the code and have not looked at Java in a while
+    // the MainPage and MainPageTest classes are in the same package so there is no
+    // need for an import of MainPage
     mainPage = new MainPage(driver);
     expectedUsername = "EricRicketts";
     expectedEmail = "eric_ricketts@icloud.com";
@@ -193,16 +198,14 @@ public class MainPageTest {
   @Test
   @DisplayName("fill out input user name and password an submit using the defined annotations")
   public void testFillOutInputUsernameAndPasswordAndSubmitUsingAnnotations() {
-    inputForUserName = mainPage.inputUserName;
-    inputForPassword = mainPage.inputPassword;
     signInButton = mainPage.signInButton;
     forgotPasswordLink = mainPage.forgotPasswordLink;
 
-    inputForUserName.sendKeys(expectedUsername);
-    inputForPassword.sendKeys(expectedPassword);
+    mainPage.inputUserName.sendKeys(expectedUsername);
+    mainPage.inputPassword.sendKeys(expectedPassword);
 
-    assertEquals(expectedUsername, inputForUserName.getAttribute("value"));
-    assertEquals(expectedPassword, inputForPassword.getAttribute("value"));
+    assertEquals(expectedUsername, mainPage.inputUserName.getAttribute("value"));
+    assertEquals(expectedPassword, mainPage.inputPassword.getAttribute("value"));
 
     signInButton.click();
 
