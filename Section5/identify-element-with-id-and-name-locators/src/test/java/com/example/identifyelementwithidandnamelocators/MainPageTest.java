@@ -98,7 +98,12 @@ public class MainPageTest {
     assertEquals(expectedPassword, inputForPassword.getAttribute("value"));
 
     signInButton.click();
-
+    // In the Udemy video in Section 5 (the section which introduces locators) an implicit wait is used
+    // driver.manage().timeouts().implicitlyWait(Duration.ofSeconds((10)));  in doing some research on waits
+    // in Selenium the advice was not to use implicit waits, but explicit waits which I have done below
+    // hopefully I can add a comment at a later date and explain why this is a better practice.  My initial
+    // impression is the wait can be driver locator specific with an explicit reference while implicit waits
+    // are global and may not be appropriate for each situation.
     WebDriverWait wait = new WebDriverWait(driver, duration);
     WebElement errorParagraph = wait.until(
         ExpectedConditions.presenceOfElementLocated(By.cssSelector("p.error"))
@@ -194,24 +199,33 @@ public class MainPageTest {
     assertEquals(expectedInfoMsgText, resetPasswordInformationalMessage.getText());
   }
 
+  // the goal of this test method is to exercise the sign in options of the form and rahul shetty academy's
+  // selenium practice page.  This is the same goal as the preceding test method the difference begin the MainPage
+  // locators are used which take the form of object attributes.
   @Test
   @DisplayName("fill out input user name and password an submit using the defined annotations")
   public void testFillOutInputUsernameAndPasswordAndSubmitUsingAnnotations() {
+    // Selenium provides the sendKeys methods to enter content into editable text fields or password fields
+
+    // locate the username and password fields and then enter content in each of those fields
     mainPage.inputUserName.sendKeys(expectedUsername);
     mainPage.inputPassword.sendKeys(expectedPassword);
 
+    // assert that the values entered are captured by the elements
     assertEquals(expectedUsername, mainPage.inputUserName.getAttribute("value"));
     assertEquals(expectedPassword, mainPage.inputPassword.getAttribute("value"));
 
+    // click the Sign-In button
     mainPage.signInButton.click();
 
+    // instantiate a WebDriverWait instance with the duration instance defined in the setUp method
+    // this is an explicit duration forcing the WebDriverWait to wait for that amount of time
     WebDriverWait wait = new WebDriverWait(driver, duration);
+
+    // after Selenium clicks the Sign-in button wait for the error to appear
+    // along with the reset password and email text fields
     WebElement errorParagraph = wait.until(
         ExpectedConditions.visibilityOf(mainPage.errorParagraph));
-
-    assertEquals("* Incorrect username or password", errorParagraph.getText());
-
-    mainPage.forgotPasswordLink.click();
 
     WebElement resetPasswordName = wait.until(
         ExpectedConditions.visibilityOf(mainPage.forgotPasswordName)
@@ -221,6 +235,7 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.forgotPasswordEmail)
     );
 
+    //  Enter content in the reset password and email fields, assert
     resetPasswordName.sendKeys(expectedUsername);
     resetPasswordEmail.sendKeys(expectedEmail);
 

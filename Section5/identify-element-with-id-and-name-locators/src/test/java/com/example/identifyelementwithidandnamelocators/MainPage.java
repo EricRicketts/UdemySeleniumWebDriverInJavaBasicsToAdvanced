@@ -34,7 +34,7 @@ public class MainPage {
    So in each case above Java returns either a public attribute (field) List of WebElements or a single WebElement
    In the case of MainPage, @FindBy is used extensively to declare a number of public fields.  The notable distinction
    about these public fields is that they are initialized by a search through the PageObject.  Since they are class
-   fields they can be referred directly in the class or as a attribute on an instance of the class which is what we
+   fields they can be referred directly in the class or as an attribute on an instance of the class which is what we
    see occurring in MainPageTest.
 
    In each case above @FindBy defines how to find the element list or single element (by class name or by id) and
