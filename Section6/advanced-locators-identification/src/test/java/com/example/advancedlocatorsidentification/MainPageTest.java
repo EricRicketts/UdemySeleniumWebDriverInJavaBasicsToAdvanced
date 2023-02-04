@@ -86,7 +86,7 @@ public class MainPageTest {
 
   @Test
   @DisplayName("fill out input user name and password an submit using the defined annotations")
-  public void testFillOutInputUsernameAndPasswordAndSubmitUsingAnnotations() {
+  public void testFillOutInputUsernameAndPasswordAndSubmitUsingAnnotations() throws InterruptedException {
     // we are attempting to log in, but we do not know the correct password
     // so, we should get an error message
     mainPage.inputUserName.sendKeys(expectedUsername);
@@ -226,14 +226,20 @@ public class MainPageTest {
     // get the username, password (by css regex), and sign in buttons (by xpath regex)
     inputForUserName = wait.until(ExpectedConditions.visibilityOf(mainPage.inputUserName));
     inputForPassword = wait.until(ExpectedConditions.visibilityOf(mainPage.getInputPasswordByCssRegex));
-    WebElement signInButtonXpathRegex = wait.until(
-        ExpectedConditions.visibilityOf(mainPage.signInButtonXpathRegex)
-    );
 
     // fill out the username and password fields
     inputForUserName.sendKeys(expectedUsername);
     inputForPassword.sendKeys(correctPassword);
-/*
+
+    WebElement signInButtonXpathRegex = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.signInButtonXpathRegex)
+    );
+
+    // had to put in an explicit wait because Selenium was clicking the wrong element, error message shown below
+    // org.openqa.selenium.ElementClickInterceptedException: element click intercepted: Element <button class="submit signInBtn" type="submit">...</button>
+    // is not clickable at point (1128, 610). Other element would receive the click: <div class="overlay-panel overlay-right">...</div>
+
+    Thread.sleep(1000);
     signInButtonXpathRegex.click();
 
     WebElement successfulLoginHeading = wait.until(
@@ -246,7 +252,5 @@ public class MainPageTest {
 
     assertEquals("Hello EricRicketts,", successfulLoginHeading.getText());
     assertEquals(successfulLoginMessageText, successfulLoginMessage.getText());
-
- */
   }
 }

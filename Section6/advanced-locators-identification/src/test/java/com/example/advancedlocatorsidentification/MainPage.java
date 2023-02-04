@@ -20,7 +20,7 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "button.submit.signInBtn")
   public WebElement signInButton;
 
-  @FindBy(how = How.XPATH, using = "//button[contains(@class,'submit signIn')]")
+  @FindBy(how = How.XPATH, using = "//button[contains(@class,'submit signInBtn')]")
   public WebElement signInButtonXpathRegex;
 
   @FindBy(how = How.CSS, using = "p.error")
