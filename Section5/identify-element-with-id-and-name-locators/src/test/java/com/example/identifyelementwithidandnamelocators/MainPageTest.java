@@ -28,7 +28,7 @@ public class MainPageTest {
   private MainPage mainPage;
 
   private String expectedUsername, expectedEmail, expectedPassword,
-      expectedH2Text, expectedPhoneNumber, expectedInfoMsgText;
+      expectedH2Text, expectedPhoneNumber, expectedInfoMsgText, expectedIncorrectUserNameOrPassword;
 
   private WebElement inputForUserName, inputForPassword, signInButton;
   private WebElement forgotPasswordLink;
@@ -72,6 +72,7 @@ public class MainPageTest {
     expectedH2Text = "Forgot password";
     expectedPhoneNumber = "919-449-5529";
     expectedInfoMsgText = "Please use temporary password \'rahulshettyacademy\' to Login.";
+    expectedIncorrectUserNameOrPassword = "* Incorrect username or password";
   }
 
   @AfterEach
@@ -121,7 +122,7 @@ public class MainPageTest {
     );
 
     // assert on the text content of the error paragraph
-    assertEquals("* Incorrect username or password", errorParagraph.getText());
+    assertEquals(expectedIncorrectUserNameOrPassword, errorParagraph.getText());
 
     // now that we realize we do not have the correct password, click on the
     // forgot password link
@@ -266,6 +267,13 @@ public class MainPageTest {
     WebElement errorParagraph = wait.until(
         ExpectedConditions.visibilityOf(mainPage.errorParagraph));
 
+    assertEquals(expectedIncorrectUserNameOrPassword, errorParagraph.getText());
+
+    // click the forgot password link
+    mainPage.forgotPasswordLink.click();
+
+    // get the name and email fields using placeholder values
+    // name by xpath email by css
     WebElement resetPasswordName = wait.until(
         ExpectedConditions.visibilityOf(mainPage.forgotPasswordName)
     );
