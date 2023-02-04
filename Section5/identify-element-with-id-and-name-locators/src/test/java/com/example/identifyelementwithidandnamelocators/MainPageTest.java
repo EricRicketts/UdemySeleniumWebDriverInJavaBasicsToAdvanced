@@ -86,19 +86,26 @@ public class MainPageTest {
   @Test
   @DisplayName("fill out input user name and password and submit using Selenium locators only")
   public void testFillOutUsernameAndPasswordAndSubmitWithLocators() {
-    // In this method
+    // In this method, we are going to use the selectors as demonstrated in the video
+    // just for extra practice.  In future tests more than likely I will be using the @FindBy
+    // annotation as this makes the code more self-explanatory and more compact
+
+    // we have the id, name, cssSelector, and linkText locators working here
+    // to find the elements
     inputForUserName = driver.findElement(By.id("inputUsername"));
     inputForPassword = driver.findElement(By.name("inputPassword"));
     signInButton = driver.findElement(By.cssSelector("button.submit.signInBtn"));
     forgotPasswordLink = driver.findElement(By.linkText("Forgot your password?"));
 
-    // now that we have the web elements 
+    // now that we have the web elements we fill out the input fields
     inputForUserName.sendKeys(expectedUsername);
     inputForPassword.sendKeys(expectedPassword);
 
+    // assert the name and password elements have captured the entries
     assertEquals(expectedUsername, inputForUserName.getAttribute("value"));
     assertEquals(expectedPassword, inputForPassword.getAttribute("value"));
 
+    // click the sign-in button
     signInButton.click();
     // In the Udemy video in Section 5 (the section which introduces locators) an implicit wait is used
     // driver.manage().timeouts().implicitlyWait(Duration.ofSeconds((10)));  in doing some research on waits
@@ -107,31 +114,44 @@ public class MainPageTest {
     // impression is the wait can be driver locator specific with an explicit reference while implicit waits
     // are global and may not be appropriate for each situation.
     WebDriverWait wait = new WebDriverWait(driver, duration);
+
+    // after a wait period the error paragraph should display
     WebElement errorParagraph = wait.until(
         ExpectedConditions.presenceOfElementLocated(By.cssSelector("p.error"))
     );
 
+    // assert on the text content of the error paragraph
     assertEquals("* Incorrect username or password", errorParagraph.getText());
 
+    // now that we realize we do not have the correct password, click on the
+    // forgot password link
     forgotPasswordLink.click();
 
+    // transition to the other screen and find the name element, remember the wait object
+    // is an instance of the WebDriverWait class, use xpath and placeholder attribute
     WebElement resetPasswordName = wait.until(
         ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@placeholder='Name']"))
     );
 
+    // wait until the email input present then capture the element
+    // use css placeholder attribute
     WebElement resetPasswordEmail = wait.until(
         ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[placeholder='Email']"))
     );
 
+    // enter name and email
     resetPasswordName.sendKeys(expectedUsername);
     resetPasswordEmail.sendKeys(expectedEmail);
 
+    // assert on name and email elements that they have captured the entered values
     assertEquals(expectedUsername, resetPasswordName.getAttribute("value"));
     assertEquals(expectedEmail, resetPasswordEmail.getAttribute("value"));
 
+    // clear name and email
     resetPasswordName.clear();
     resetPasswordEmail.clear();
 
+    // select name and email elements using xpath array notation
     WebElement resetPasswordNameXpathArray = wait.until(
         ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='text'][1]"))
     );
@@ -140,15 +160,19 @@ public class MainPageTest {
         ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='text'][2]"))
     );
 
+    // enter data for the name and email elements
     resetPasswordNameXpathArray.sendKeys(expectedUsername);
     resetPasswordEmailXpathArray.sendKeys(expectedEmail);
 
+    // assert on the values captured by the name and email elements
     assertEquals(expectedUsername, resetPasswordNameXpathArray.getAttribute("value"));
     assertEquals(expectedEmail, resetPasswordEmailXpathArray.getAttribute("value"));
 
+    // clear the name and email fields
     resetPasswordNameXpathArray.clear();
     resetPasswordEmailXpathArray.clear();
 
+    // capture the name and email fields using nth-child css selectors
     WebElement resetPasswordNameCssArray = wait.until(
         ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[type='text']:nth-child(2)"))
     );
@@ -157,21 +181,29 @@ public class MainPageTest {
         ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[type='text']:nth-child(3)"))
     );
 
+    // enter the text into each of the elements
     resetPasswordNameCssArray.sendKeys(expectedUsername);
     resetPasswordEmailCssArray.sendKeys(expectedEmail);
 
+    // assert on the entered text for each of the name and email elements
     assertEquals(expectedUsername, resetPasswordNameCssArray.getAttribute("value"));
     assertEquals(expectedEmail, resetPasswordEmailCssArray.getAttribute("value"));
 
+
+    // clear the name and email elements
     resetPasswordNameCssArray.clear();
     resetPasswordEmailCssArray.clear();
 
+    // select the h2 paragraph which has the Forgot password text
     WebElement resetPasswordH2 = wait.until(
         ExpectedConditions.presenceOfElementLocated(By.cssSelector("form > h2"))
     );
 
+    // assert on the text of the h2 element
     assertEquals(expectedH2Text, resetPasswordH2.getText());
 
+    // though labeled xpath tags these locators are css hierarchical tags for name, password
+    // and phone number
     WebElement resetPasswordNameXpathTags = wait.until(
         ExpectedConditions.presenceOfElementLocated(By.cssSelector("form > input:nth-child(2)"))
     );
@@ -184,20 +216,25 @@ public class MainPageTest {
         ExpectedConditions.presenceOfElementLocated(By.cssSelector("form > input:nth-child(4)"))
     );
 
+    // fill out the name, password, and phone number fields
     resetPasswordNameXpathTags.sendKeys(expectedUsername);
     resetPasswordEmailXpathTags.sendKeys(expectedEmail);
     resetPasswordPhoneNumberXpathTags.sendKeys(expectedPhoneNumber);
 
+    // assert the values captured by the name, email, and phone number fields
     assertEquals(expectedUsername, resetPasswordNameXpathTags.getAttribute("value"));
     assertEquals(expectedEmail, resetPasswordEmailXpathTags.getAttribute("value"));
     assertEquals(expectedPhoneNumber, resetPasswordPhoneNumberXpathTags.getAttribute("value"));
 
+    // click the password reset button
     driver.findElement(By.cssSelector("button.reset-pwd-btn")).click();
 
+    // find the informational paragraph on the new password
     WebElement resetPasswordInformationalMessage = wait.until(
         ExpectedConditions.presenceOfElementLocated(By.cssSelector("p.infoMsg"))
     );
 
+    // assert on the text of the informational message
     assertEquals(expectedInfoMsgText, resetPasswordInformationalMessage.getText());
   }
 
