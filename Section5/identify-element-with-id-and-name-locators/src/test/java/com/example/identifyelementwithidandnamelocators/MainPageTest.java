@@ -241,12 +241,15 @@ public class MainPageTest {
     resetPasswordName.sendKeys(expectedUsername);
     resetPasswordEmail.sendKeys(expectedEmail);
 
+    // assert that the entered text was captured by the name and email elements
     assertEquals(expectedUsername, resetPasswordName.getAttribute("value"));
     assertEquals(expectedEmail, resetPasswordEmail.getAttribute("value"));
 
+    // clear the name and email fields
     resetPasswordName.clear();
     resetPasswordEmail.clear();
 
+    // select the name and email elements again by xpath array
     WebElement resetPasswordNameXpathArray = wait.until(
         ExpectedConditions.visibilityOf(mainPage.getForgotPasswordNameXpathArray)
     );
@@ -255,15 +258,19 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.getForgotPasswordEmailXpathArray)
     );
 
+    // populate the name and email fields
     resetPasswordNameXpathArray.sendKeys(expectedUsername);
     resetPasswordEmailXpathArray.sendKeys(expectedEmail);
 
+    // assert on the content of the name and email fields
     assertEquals(expectedUsername, resetPasswordNameXpathArray.getAttribute("value"));
     assertEquals(expectedEmail, resetPasswordEmailXpathArray.getAttribute("value"));
 
+    // clear the name and email fields
     resetPasswordNameXpathArray.clear();
     resetPasswordEmailXpathArray.clear();
 
+    // select the name and email fields by css array
     WebElement resetPasswordNameCssArray = wait.until(
         ExpectedConditions.visibilityOf(mainPage.getForgotPasswordNameCssArray)
     );
@@ -272,20 +279,26 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.getForgotPasswordEmailCssArray)
     );
 
+    // populate the name and email fields
     resetPasswordNameCssArray.sendKeys(expectedUsername);
     resetPasswordEmailCssArray.sendKeys(expectedEmail);
 
+    // assert on the text content of the name and email fields
     assertEquals(expectedUsername, resetPasswordNameCssArray.getAttribute("value"));
     assertEquals(expectedEmail, resetPasswordEmailCssArray.getAttribute("value"));
 
+    // clear the fields
     resetPasswordNameCssArray.clear();
     resetPasswordEmailCssArray.clear();
 
+    // select the h2 element which contains the Forgot password title
     WebElement resetPasswordH2 = wait.until(
         ExpectedConditions.visibilityOf(mainPage.getForgotPasswordH2));
 
+    // assert on h2 title text content
     assertEquals(expectedH2Text, resetPasswordH2.getText());
 
+    // using xpath tags select the name, email, and phone number elements
     WebElement resetPasswordNameXpathTags = wait.until(
         ExpectedConditions.visibilityOf(mainPage.getForgotPasswordNameXpathTags)
     );
@@ -298,20 +311,26 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.getForgotPasswordPhoneNumberXpathTags)
     );
 
+    // fill out the name, email, and phone number elements
     resetPasswordNameXpathTags.sendKeys(expectedUsername);
     resetPasswordEmailXpathTags.sendKeys(expectedEmail);
     resetPasswordPhoneNumberXpathTags.sendKeys(expectedPhoneNumber);
 
+    // assert on the content of the name, email, and phone number elements
     assertEquals(expectedUsername, resetPasswordNameXpathTags.getAttribute("value"));
     assertEquals(expectedEmail, resetPasswordEmailXpathTags.getAttribute("value"));
     assertEquals(expectedPhoneNumber, resetPasswordPhoneNumberXpathTags.getAttribute("value"));
 
+    // click the rest login button
     mainPage.resetLoginButton.click();
 
+    // select the paragraph which contains the informational message about the password reset
     WebElement resetPasswordInformationalMessage = wait.until(
         ExpectedConditions.visibilityOf(mainPage.getForgotPasswordInformationalMessage)
     );
 
+    // assert on the paragraph text content which contains the information message
+    // about the password reset
     assertEquals(expectedInfoMsgText, resetPasswordInformationalMessage.getText());
   }
 }
