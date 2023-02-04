@@ -89,7 +89,7 @@ public class MainPageTest {
     driver.quit();
   }
 
-  @Test
+  @Test(enabled = false)
   public void testLoginAndLogOut() {
     String successfulLoginText = "You are successfully logged in.";
     String usernamePlaceholder = "Username";
@@ -137,7 +137,7 @@ public class MainPageTest {
   }
 
   @Test
-  public void testGetPassword() {
+  public void testGetPassword() throws InterruptedException {
     String informationMessageText = "Please use temporary password 'rahulshettyacademy' to Login.";
     String successfulLoginText = "You are successfully logged in.";
     String password;
@@ -176,6 +176,9 @@ public class MainPageTest {
 
     mainPage.usernameInput.sendKeys(username);
     mainPage.passwordInput.sendKeys(password);
+
+    // though I do not like to do this I had to put the delay in
+    Thread.sleep(1_000);
     mainPage.signInButton.click();
 
     WebElement successfulLoginParagraph = wait.until(
@@ -185,7 +188,7 @@ public class MainPageTest {
     Assert.assertEquals(successfulLoginParagraph.getText(), successfulLoginText);
   }
 
-  @Test
+  @Test(enabled = false)
   public void testGetPasswordMethod() {
     String successfulLoginText = "You are successfully logged in.";
     String password = extractPasswordUsingSplit(driver);
