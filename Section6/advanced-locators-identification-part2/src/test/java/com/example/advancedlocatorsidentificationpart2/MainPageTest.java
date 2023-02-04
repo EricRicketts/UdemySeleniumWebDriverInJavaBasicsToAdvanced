@@ -89,7 +89,7 @@ public class MainPageTest {
     driver.quit();
   }
 
-  @Test(enabled = false)
+  @Test
   public void testLoginAndLogOut() {
     String successfulLoginText = "You are successfully logged in.";
     String usernamePlaceholder = "Username";
@@ -188,8 +188,8 @@ public class MainPageTest {
     Assert.assertEquals(successfulLoginParagraph.getText(), successfulLoginText);
   }
 
-  @Test(enabled = false)
-  public void testGetPasswordMethod() {
+  @Test
+  public void testGetPasswordMethod() throws InterruptedException {
     String successfulLoginText = "You are successfully logged in.";
     String password = extractPasswordUsingSplit(driver);
 
@@ -213,6 +213,10 @@ public class MainPageTest {
 
     usernameInput.sendKeys(username);
     passwordInput.sendKeys(password);
+
+    // as with the testGetPassword method I had to add in a delay
+    // it would be unambiguous which element would be selected
+    Thread.sleep(1000);
     signInButton.click();
 
     WebElement informationalMessage = wait.until(
