@@ -40,6 +40,9 @@ public class MainPage {
    In each case above @FindBy defines how to find the element list or single element (by class name or by id) and
    the annotation also defines what object is returned after finding the element, either a List<WebElement> or a single
    WebElement.
+
+   In my opinion there is no need to document each of the @FindBy annotations as the arguments to each annotation
+   and the object or List returned are self-explanatory.
    */
   @FindBy(how = How.ID, using = "inputUsername")
   public WebElement inputUserName;

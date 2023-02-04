@@ -54,7 +54,7 @@ public class MainPage {
   public WebElement getForgotPasswordNameXpathTags;
 
   @FindBy(how = How.XPATH, using = "//form/input[2]")
-  public WebElement getForgotPasswordEmailPathTags;
+  public WebElement getForgotPasswordEmailXpathTags;
 
   @FindBy(how = How.XPATH, using = "//form/input[3]")
   public WebElement getForgotPasswordPhoneNumberXpathTags;

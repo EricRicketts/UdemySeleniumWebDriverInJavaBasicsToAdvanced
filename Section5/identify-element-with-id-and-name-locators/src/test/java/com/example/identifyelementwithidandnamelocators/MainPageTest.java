@@ -86,11 +86,13 @@ public class MainPageTest {
   @Test
   @DisplayName("fill out input user name and password and submit using Selenium locators only")
   public void testFillOutUsernameAndPasswordAndSubmitWithLocators() {
+    // In this method
     inputForUserName = driver.findElement(By.id("inputUsername"));
     inputForPassword = driver.findElement(By.name("inputPassword"));
     signInButton = driver.findElement(By.cssSelector("button.submit.signInBtn"));
     forgotPasswordLink = driver.findElement(By.linkText("Forgot your password?"));
 
+    // now that we have the web elements 
     inputForUserName.sendKeys(expectedUsername);
     inputForPassword.sendKeys(expectedPassword);
 
