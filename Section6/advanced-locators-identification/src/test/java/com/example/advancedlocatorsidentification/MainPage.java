@@ -74,6 +74,12 @@ public class MainPage {
   @FindBy(how = How.XPATH, using = "//div[@class='login-container']/p")
   public WebElement successfulLoginMessage;
 
+  @FindBy(how = How.CSS, using = "div.overlay-panel.overlay-left")
+  public WebElement leftOverlay;
+
+  @FindBy(how = How.CSS, using = "div.overlay-panel.overlay-right")
+  public WebElement rightOverlay;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }

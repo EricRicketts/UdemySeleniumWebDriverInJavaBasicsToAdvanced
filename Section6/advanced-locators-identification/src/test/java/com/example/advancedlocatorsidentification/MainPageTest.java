@@ -223,23 +223,33 @@ public class MainPageTest {
     // click the goto login button
     mainPage.goToLoginButton.click();
 
+    // what we are going to try now is before filling out the username and password
+    // fields and clicking the sign-in button we are going to wait for the left
+    // overlay to disappear and the right overlay to appear
+    // it turns out all I needed to do was to make sure the left overlay disappeared
+    boolean leftOverlayVisible = true;
+    while (leftOverlayVisible) {
+      boolean leftOverlayNotVisible = wait.until(ExpectedConditions.invisibilityOf(mainPage.leftOverlay));
+      if (leftOverlayNotVisible) leftOverlayVisible = false;
+    }
+
     // get the username, password (by css regex), and sign in buttons (by xpath regex)
-    inputForUserName = wait.until(ExpectedConditions.visibilityOf(mainPage.inputUserName));
-    inputForPassword = wait.until(ExpectedConditions.visibilityOf(mainPage.getInputPasswordByCssRegex));
+    inputForUserName = wait.until(ExpectedConditions.elementToBeClickable(mainPage.inputUserName));
+    inputForPassword = wait.until(ExpectedConditions.elementToBeClickable(mainPage.getInputPasswordByCssRegex));
 
     // fill out the username and password fields
     inputForUserName.sendKeys(expectedUsername);
     inputForPassword.sendKeys(correctPassword);
 
     WebElement signInButtonXpathRegex = wait.until(
-        ExpectedConditions.visibilityOf(mainPage.signInButtonXpathRegex)
+        ExpectedConditions.elementToBeClickable(mainPage.signInButtonXpathRegex)
     );
 
     // had to put in an explicit wait because Selenium was clicking the wrong element, error message shown below
     // org.openqa.selenium.ElementClickInterceptedException: element click intercepted: Element <button class="submit signInBtn" type="submit">...</button>
     // is not clickable at point (1128, 610). Other element would receive the click: <div class="overlay-panel overlay-right">...</div>
+    //  the brute force way of ensuring the right overlay is out of the way is to insert a Thread.sleep(#ms)
 
-    Thread.sleep(1000);
     signInButtonXpathRegex.click();
 
     WebElement successfulLoginHeading = wait.until(
