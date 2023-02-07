@@ -38,6 +38,12 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "button.go-to-login-btn")
   WebElement goToLoginButton;
 
+  @FindBy(how = How.CSS, using = "div.overlay-panel.overlay-left")
+  WebElement leftOverlayPanel;
+
+  @FindBy(how = How.CSS, using = "div.overlay-panel.overlay-right")
+  WebElement rightOverlayPanel;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }

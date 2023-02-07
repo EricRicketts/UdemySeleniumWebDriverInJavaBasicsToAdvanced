@@ -138,6 +138,7 @@ public class MainPageTest {
 
   @Test
   public void testGetPassword() throws InterruptedException {
+    boolean rightOverlayInvisible = true;
     String informationMessageText = "Please use temporary password 'rahulshettyacademy' to Login.";
     String successfulLoginText = "You are successfully logged in.";
     String password;
@@ -174,11 +175,17 @@ public class MainPageTest {
 
     Assert.assertTrue(mainPage.passwordInput.isDisplayed());
 
+    while (rightOverlayInvisible) {
+      WebElement rightOverlay = wait.until(ExpectedConditions.elementToBeClickable(mainPage.rightOverlayPanel));
+      boolean rightOverlayVisible = !(rightOverlay == null);
+      if (rightOverlayVisible) rightOverlayInvisible = false;
+    }
+
     mainPage.usernameInput.sendKeys(username);
     mainPage.passwordInput.sendKeys(password);
 
     // though I do not like to do this I had to put the delay in
-    Thread.sleep(1_000);
+//    Thread.sleep(1_000);
     mainPage.signInButton.click();
 
     WebElement successfulLoginParagraph = wait.until(
@@ -190,6 +197,7 @@ public class MainPageTest {
 
   @Test
   public void testGetPasswordMethod() throws InterruptedException {
+    boolean rightOverlayInvisible = true;
     String successfulLoginText = "You are successfully logged in.";
     String password = extractPasswordUsingSplit(driver);
 
@@ -211,12 +219,18 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.signInButton)
     );
 
+    // I was trying techniques where I would not have to put in explicit sleeps, in this case I attempt
+    while (rightOverlayInvisible) {
+      WebElement rightOverlay = wait.until(ExpectedConditions.elementToBeClickable(mainPage.rightOverlayPanel));
+      boolean rightOverlayVisible = !(rightOverlay == null);
+      if (rightOverlayVisible) rightOverlayInvisible = false;
+    }
     usernameInput.sendKeys(username);
     passwordInput.sendKeys(password);
 
     // as with the testGetPassword method I had to add in a delay
     // it would be unambiguous which element would be selected
-    Thread.sleep(1000);
+    // Thread.sleep(1000);
     signInButton.click();
 
     WebElement informationalMessage = wait.until(
