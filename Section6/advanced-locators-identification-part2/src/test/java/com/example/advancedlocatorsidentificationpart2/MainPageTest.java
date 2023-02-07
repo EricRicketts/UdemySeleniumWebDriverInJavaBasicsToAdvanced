@@ -197,8 +197,10 @@ public class MainPageTest {
 
   @Test
   public void testGetPasswordMethod() throws InterruptedException {
-    boolean rightOverlayInvisible = true;
+    String usernamePlaceholder = "Username";
+    String expectedLoginHeading = "Hello EricRicketts,";
     String successfulLoginText = "You are successfully logged in.";
+    boolean rightOverlayInvisible = true;
     String password = extractPasswordUsingSplit(driver);
 
     WebElement goToLoginButton = wait.until(
@@ -238,5 +240,26 @@ public class MainPageTest {
     );
 
     Assert.assertEquals(informationalMessage.getText(), successfulLoginText);
+
+    WebElement successfulLoginParagraph = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.successfulLoginParagraph)
+    );
+
+    WebElement logoutButton = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.getLogoutButton)
+    );
+
+
+    WebElement loginHeading = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.loginHeading)
+    );
+
+    Assert.assertEquals(successfulLoginParagraph.getText(), successfulLoginText);
+    Assert.assertEquals(loginHeading.getText(), expectedLoginHeading);
+
+    logoutButton.click();
+
+    Assert.assertTrue(usernameInput.isDisplayed());
+    Assert.assertEquals(usernameInput.getAttribute("placeholder"), usernamePlaceholder);
   }
 }

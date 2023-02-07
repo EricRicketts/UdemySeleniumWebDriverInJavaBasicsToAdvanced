@@ -14,7 +14,10 @@ public class MainPage {
   @FindBy(how = How.NAME, using = "inputPassword")
   WebElement passwordInput;
 
-  @FindBy(how = How.CSS, using = "button[class*='submit signIn']")
+  // this is a CSS regular expression, we recognize this by
+  // *= after the attribute and before the '', in this case the *=
+  // means contained anywhere in the attribute
+  @FindBy(how = How.CSS, using = "button[class*='submit s']")
   WebElement signInButton;
 
   @FindBy(how = How.LINK_TEXT, using = "Forgot your password?")
@@ -25,6 +28,11 @@ public class MainPage {
 
   @FindBy(how = How.XPATH, using = "//button[text()='Log Out']")
   WebElement logoutButton;
+
+  // find the logout button by using xpath regular expressions
+  // key parts of the syntax are contains(@attribute, 'text')]
+  @FindBy(how = How.XPATH, using = "//button[contains(@class, 'logout-')]")
+  WebElement getLogoutButton;
 
   @FindBy(how = How.TAG_NAME, using = "h2")
   WebElement loginHeading;
