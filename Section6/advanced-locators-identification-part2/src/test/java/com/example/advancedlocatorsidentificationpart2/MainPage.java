@@ -26,6 +26,9 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "div.login-container p")
   WebElement successfulLoginParagraph;
 
+  // this xpath syntax identifies an element by its
+  // text, obviously the content between the opening
+  // and closing tags
   @FindBy(how = How.XPATH, using = "//button[text()='Log Out']")
   WebElement logoutButton;
 
