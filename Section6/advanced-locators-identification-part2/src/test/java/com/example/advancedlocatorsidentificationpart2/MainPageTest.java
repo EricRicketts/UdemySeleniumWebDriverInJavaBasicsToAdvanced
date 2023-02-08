@@ -28,6 +28,7 @@ public class MainPageTest {
   private Duration duration;
 
   private String extractPasswordUsingSplit(WebDriver driver) {
+    Pattern pattern = Pattern.compile("'([\\w]+)'");
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     WebElement forgotPasswordLink = wait.until(
         ExpectedConditions.presenceOfElementLocated(By.linkText("Forgot your password?"))
@@ -45,10 +46,18 @@ public class MainPageTest {
     );
 
     String passwordText = informationalMessage.getText();
+    Matcher matcher = pattern.matcher(passwordText);
 
     String[] passwordTextArrayOfWords = passwordText.split("\'");
+    String passwordFromRegex = "";
+    if (matcher.find()) passwordFromRegex = matcher.group(1);
 
-    return passwordTextArrayOfWords[1];
+    String passwordFromSplit = passwordTextArrayOfWords[1];
+    if (passwordFromRegex.equals(passwordFromSplit)) {
+      return passwordFromRegex;
+    } else {
+      return passwordFromSplit;
+    }
   }
   private void setDriverLocationAndDriverSystemProperty() {
     String windowsOSPattern = "Windows";
