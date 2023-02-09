@@ -19,6 +19,8 @@ public class MainPageTest {
   String signUpButtonText = "Signup";
   private WebDriver driver;
   private MainPage mainPage;
+  private Duration duration;
+  private WebDriverWait wait;
 
   @BeforeEach
   public void setUp() {
@@ -28,6 +30,8 @@ public class MainPageTest {
     driver.get("https://www.rahulshettyacademy.com/AutomationPractice/");
 
     mainPage = new MainPage(driver);
+    duration = Duration.ofSeconds(10);
+    wait = new WebDriverWait(driver, duration);
   }
 
   @AfterEach
@@ -37,8 +41,6 @@ public class MainPageTest {
 
   @Test
   public void testParentToChild() {
-    Duration duration = Duration.ofSeconds(10);
-    WebDriverWait wait = new WebDriverWait(driver, duration);
 
     // traversing parent to child
     String[] expected = new String[]{practiceButtonText, practiceButtonText};
@@ -61,5 +63,29 @@ public class MainPageTest {
 
     // traverse up and down parent child hierarchy using xpath
     assertEquals(signUpButtonText, mainPage.signUpButtonGoingUpAndDownElementHierarchy.getText());
+  }
+
+  @Test
+  public void testNavigatingForwardAndBackwards() {
+    driver.navigate().to("https://google.com");
+    WebElement gmail = wait.until(
+        ExpectedConditions.elementToBeClickable(By.xpath("//a[text()='Gmail']"))
+    );
+    assertEquals("Gmail", gmail.getText());
+    driver.navigate().back();
+
+    WebElement practiceButton = wait.until(
+        ExpectedConditions.elementToBeClickable(mainPage.practiceButtonWithXpath)
+    );
+
+    assertEquals(practiceButtonText, practiceButton.getText());
+
+    driver.navigate().forward();
+
+    WebElement googleImage = wait.until(
+        ExpectedConditions.visibilityOfElementLocated(By.xpath("//img[@alt='Google']"))
+    );
+
+    assertTrue(googleImage.isDisplayed());
   }
 }

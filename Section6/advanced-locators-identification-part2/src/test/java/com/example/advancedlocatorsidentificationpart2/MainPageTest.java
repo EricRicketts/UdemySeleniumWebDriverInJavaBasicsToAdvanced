@@ -98,7 +98,7 @@ public class MainPageTest {
     driver.quit();
   }
 
-  @Test(enabled = false)
+  @Test
   public void testLoginAndLogOut() {
     String successfulLoginText = "You are successfully logged in.";
     String usernamePlaceholder = "Username";
@@ -145,7 +145,7 @@ public class MainPageTest {
     Assert.assertEquals(usernameInput.getAttribute("placeholder"), usernamePlaceholder);
   }
 
-  @Test(enabled = false)
+  @Test
   public void testGetPassword() throws InterruptedException {
     boolean rightOverlayInvisible = true;
     String informationMessageText = "Please use temporary password 'rahulshettyacademy' to Login.";
@@ -204,7 +204,7 @@ public class MainPageTest {
     Assert.assertEquals(successfulLoginParagraph.getText(), successfulLoginText);
   }
 
-  @Test(enabled = false)
+  @Test
   public void testGetPasswordMethod() throws InterruptedException {
     String usernamePlaceholder = "Username";
     String expectedLoginHeading = "Hello EricRicketts,";
