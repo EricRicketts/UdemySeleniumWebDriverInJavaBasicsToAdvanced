@@ -1,5 +1,6 @@
 package com.example.advancedlocatorsidentificationpart2;
 
+import org.example.SetWebDriverLocation;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -14,6 +15,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.time.Duration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.example.SetWebDriverLocation.*;
 
 public class MainPageTest {
   private WebDriver driver;
@@ -59,31 +62,11 @@ public class MainPageTest {
       return passwordFromSplit;
     }
   }
-  private void setDriverLocationAndDriverSystemProperty() {
-    String windowsOSPattern = "Windows";
-    String webDriversFolderPC = "C:\\Program Files\\WebDrivers\\";
-    String chromeDriverWindows = "chromedriver.exe";
-
-    String getWebDriversFolderMac = "/usr/local/bin/";
-    String chromeDriverMac = "chromedriver";
-
-    String chromeDriverProperty = "webdriver.chrome.driver";
-
-    Pattern regex = Pattern.compile(windowsOSPattern);
-    String os = System.getProperty("os.name");
-    Matcher matchWindows = regex.matcher(os);
-
-    if (matchWindows.find()) {
-      System.setProperty(chromeDriverProperty, webDriversFolderPC + chromeDriverWindows);
-    } else {
-      System.setProperty(chromeDriverProperty, getWebDriversFolderMac + chromeDriverMac);
-    }
-  }
 
   @BeforeMethod
   public void setUp() {
     duration = Duration.ofSeconds(10);
-    setDriverLocationAndDriverSystemProperty();
+    SetWebDriverLocation.setDriverLocationAndDriverSystemProperty();
     driver = new ChromeDriver();
     driver.manage().window().maximize();
 //    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
@@ -100,10 +83,13 @@ public class MainPageTest {
 
   @Test
   public void testLoginAndLogOut() {
+    // I will be introducing comments for testLoginAndLogOut method
     String successfulLoginText = "You are successfully logged in.";
     String usernamePlaceholder = "Username";
     String expectedLoginHeading = "Hello EricRicketts,";
 
+    // the page should already be loaded, but just in case I wait for the
+    // username and password inputs to be visible, along with the sign-in button
     WebElement usernameInput = wait.until(
         ExpectedConditions.visibilityOf(mainPage.usernameInput)
     );
@@ -116,14 +102,22 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.signInButton)
     );
 
+    // fill out the username and password fields, the password with the known correct password
     usernameInput.sendKeys(username);
     passwordInput.sendKeys(correctPassword);
 
+    // verify username and correct password entry
     Assert.assertEquals(usernameInput.getAttribute("value"), username);
     Assert.assertEquals(passwordInput.getAttribute("value"), correctPassword);
 
+    // click the sign-in button since the correct password was entered, this should take us
+    // to the successful login screen
     signInButton.click();
 
+    // wait for the right overlay to be gone, since it is the visible overlay
+    boolean rightOverlayGone = wait.until(ExpectedConditions.invisibilityOf(mainPage.rightOverlayPanel));
+
+    // get the successful login paragraph, the logout button, and the login heading
     WebElement successfulLoginParagraph = wait.until(
         ExpectedConditions.visibilityOf(mainPage.successfulLoginParagraph)
     );
@@ -136,40 +130,58 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.loginHeading)
     );
 
-    Assert.assertEquals(successfulLoginParagraph.getText(), successfulLoginText);
-    Assert.assertEquals(loginHeading.getText(), expectedLoginHeading);
+    if (rightOverlayGone) {
+      Assert.assertEquals(successfulLoginParagraph.getText(), successfulLoginText);
+      Assert.assertEquals(loginHeading.getText(), expectedLoginHeading);
+    }
 
     logoutButton.click();
 
-    Assert.assertTrue(usernameInput.isDisplayed());
-    Assert.assertEquals(usernameInput.getAttribute("placeholder"), usernamePlaceholder);
+    // wait for the logout button to disappear before making assertions
+    boolean logoutButtonGone = wait.until(ExpectedConditions.invisibilityOf(logoutButton));
+
+    if (logoutButtonGone) {
+      Assert.assertTrue(usernameInput.isDisplayed());
+      Assert.assertEquals(usernamePlaceholder, usernameInput.getAttribute("placeholder"));
+    }
   }
 
   @Test
   public void testGetPassword() throws InterruptedException {
+    // in this method we get the temporary password and use this as a precursor
+    // to developing a method to extract the temporary password from the informational message
     boolean rightOverlayInvisible = true;
     String informationMessageText = "Please use temporary password 'rahulshettyacademy' to Login.";
     String successfulLoginText = "You are successfully logged in.";
     String password;
 
+    // get the forgot password link, click it and wait for the right overlay to clear
     WebElement forgotPasswordLink = wait.until(
         ExpectedConditions.visibilityOf(mainPage.forgotPasswordLink)
     );
 
     forgotPasswordLink.click();
 
+    boolean rightOverlayGone = wait.until(ExpectedConditions.invisibilityOf(mainPage.rightOverlayPanel));
+
+    // once the right overlay is gone, click the rest password button
+    // this will display the information paragraph which contains the temporary password
     WebElement resetPasswordButton = wait.until(
         ExpectedConditions.visibilityOf(mainPage.resetPasswordButton)
     );
 
-    resetPasswordButton.click();
+    if (rightOverlayGone) resetPasswordButton.click();
 
+    // get the informational message paragraph
     WebElement informationMessage = wait.until(
         ExpectedConditions.visibilityOf(mainPage.informationMessage)
     );
 
+    // check the text in the paragraph is what we expect
     Assert.assertEquals(informationMessage.getText(), informationMessageText);
 
+    // look behind the characters [a-z] to find a ' and look ahead of the characters [a-z] to find a '
+    // if we get a match, the password becomes the matched group of characters
     String regexString = "(?<=')[a-z]+(?=')";
     Pattern pattern = Pattern.compile(regexString);
     Matcher matcher = pattern.matcher(informationMessage.getText());
@@ -180,28 +192,34 @@ public class MainPageTest {
       password = "foobar";
     }
 
+    // go back to the login page
     mainPage.goToLoginButton.click();
 
-    Assert.assertTrue(mainPage.passwordInput.isDisplayed());
+    // wait for the left overlay to disappear
+    boolean leftOverlayGone = wait.until(ExpectedConditions.invisibilityOf(mainPage.leftOverlayPanel));
 
-    while (rightOverlayInvisible) {
-      WebElement rightOverlay = wait.until(ExpectedConditions.elementToBeClickable(mainPage.rightOverlayPanel));
-      boolean rightOverlayVisible = !(rightOverlay == null);
-      if (rightOverlayVisible) rightOverlayInvisible = false;
-    }
+    // if the left overlay is no longer visible then the username and password inputs should be visible
+    if (leftOverlayGone) Assert.assertTrue(mainPage.passwordInput.isDisplayed());
 
+    // now that we have the correct password sign in by entering the username and correct password
     mainPage.usernameInput.sendKeys(username);
     mainPage.passwordInput.sendKeys(password);
 
-    // though I do not like to do this I had to put the delay in
-//    Thread.sleep(1_000);
+    // verify the elements hold the values before signing in
+    Assert.assertEquals(mainPage.usernameInput.getAttribute("value"), username);
+    Assert.assertEquals(mainPage.passwordInput.getAttribute("value"), password);
+
     mainPage.signInButton.click();
+
+    rightOverlayGone = wait.until(
+      ExpectedConditions.invisibilityOf(mainPage.rightOverlayPanel)
+    );
 
     WebElement successfulLoginParagraph = wait.until(
         ExpectedConditions.visibilityOf(mainPage.successfulLoginParagraph)
     );
 
-    Assert.assertEquals(successfulLoginParagraph.getText(), successfulLoginText);
+    if (rightOverlayGone) Assert.assertEquals(successfulLoginParagraph.getText(), successfulLoginText);
   }
 
   @Test

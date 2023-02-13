@@ -35,17 +35,26 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "input[placeholder='Email']")
   public WebElement forgotPasswordEmail;
 
+  @FindBy(how = How.CSS, using = "input[placeholder='Phone Number']")
+  public WebElement forgotPasswordPhoneNumber;
+
   @FindBy(how = How.XPATH, using = "//input[@type='text'][1]")
   public WebElement getForgotPasswordNameXpathArray;
 
   @FindBy(how = How.XPATH, using = "//input[@type='text'][2]")
   public WebElement getForgotPasswordEmailXpathArray;
 
+  @FindBy(how = How.XPATH, using = "//input[@type='text'][3]")
+  public WebElement getForgotPasswordPhoneNumberXpathArray;
+
   @FindBy(how = How.CSS, using = "input[type='text']:nth-child(2)")
   public WebElement getForgotPasswordNameCssArray;
 
   @FindBy(how = How.CSS, using = "input[type='text']:nth-child(3)")
   public WebElement getForgotPasswordEmailCssArray;
+
+  @FindBy(how = How.CSS, using = "input[type='text']:nth-child(4)")
+  public WebElement getForgotPasswordPhoneNumberCssArray;
 
   @FindBy(how = How.XPATH, using = "//form/h2")
   public WebElement getForgotPasswordH2;

@@ -1,9 +1,6 @@
 package com.example.parentsiblinglocators;
-
 import org.junit.jupiter.api.*;
-
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import org.example.SetWebDriverLocation;
 
 public class MainPageTest {
   String practiceButtonText = "Practice";
@@ -67,6 +65,7 @@ public class MainPageTest {
 
   @Test
   public void testNavigatingForwardAndBackwards() {
+    SetWebDriverLocation.setDriverLocationAndDriverSystemProperty();
     driver.navigate().to("https://google.com");
     WebElement gmail = wait.until(
         ExpectedConditions.elementToBeClickable(By.xpath("//a[text()='Gmail']"))

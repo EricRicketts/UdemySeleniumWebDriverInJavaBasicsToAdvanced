@@ -1,5 +1,6 @@
 package com.example.advancedlocatorsidentification;
 
+import org.example.SetWebDriverLocation;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,6 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.example.SetWebDriverLocation.*;
 
 public class MainPageTest {
 
@@ -39,22 +41,10 @@ public class MainPageTest {
   private WebElement forgotPasswordLink;
   private Duration duration;
 
-  private void setDriverLocationAndDriverSystemProperty() {
-    String windowsOSPattern = "Windows";
-    Pattern regex = Pattern.compile(windowsOSPattern);
-    String os = System.getProperty("os.name");
-    Matcher matchWindows = regex.matcher(os);
-
-    if (matchWindows.find()) {
-      System.setProperty(chromeDriverProperty, webDriversFolderPC + chromeDriverWindows);
-    } else {
-      System.setProperty(chromeDriverProperty, getWebDriversFolderMac + chromeDriverMac);
-    }
-  }
   @BeforeEach
   public void setUp() {
     duration = Duration.ofSeconds(10);
-    setDriverLocationAndDriverSystemProperty();
+    SetWebDriverLocation.setDriverLocationAndDriverSystemProperty();
     driver = new ChromeDriver();
     driver.manage().window().maximize();
     /*
@@ -115,6 +105,11 @@ public class MainPageTest {
     // these are the elements where the user enters the new name and email
     // the wait is an instance of WebDriverWait, so the duration of the wait
     // has already been defined
+
+   // I found waiting for the right overlay to disappear made for more robust testing
+   // If the right overlay is invisible, then all the content in the right pane must be visible
+    boolean rightOverlayGone = wait.until(ExpectedConditions.invisibilityOf(mainPage.rightOverlay));
+
     WebElement resetPasswordName = wait.until(
         ExpectedConditions.visibilityOf(mainPage.forgotPasswordName)
     );
@@ -123,18 +118,27 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.forgotPasswordEmail)
     );
 
+    WebElement resetPasswordPhoneNumber = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.forgotPasswordPhoneNumber)
+    );
+
     // enter the new username and email
-    resetPasswordName.sendKeys(expectedUsername);
-    resetPasswordEmail.sendKeys(expectedEmail);
+    if (rightOverlayGone) {
+      resetPasswordName.sendKeys(expectedUsername);
+      resetPasswordEmail.sendKeys(expectedEmail);
+      resetPasswordPhoneNumber.sendKeys(expectedPhoneNumber);
+    }
 
     // assert the values entered for the username and email have been
     // captured by the elements
     assertEquals(expectedUsername, resetPasswordName.getAttribute("value"));
     assertEquals(expectedEmail, resetPasswordEmail.getAttribute("value"));
+    assertEquals(expectedPhoneNumber, resetPasswordPhoneNumber.getAttribute("value"));
 
     // clear the name and email fields
     resetPasswordName.clear();
     resetPasswordEmail.clear();
+    resetPasswordPhoneNumber.clear();
 
     // acquire the name and email using xpath array notation
     WebElement resetPasswordNameXpathArray = wait.until(
@@ -145,17 +149,24 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.getForgotPasswordEmailXpathArray)
     );
 
+    WebElement resetPasswordPhoneNumberXpathArray = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.getForgotPasswordPhoneNumberXpathArray)
+    );
+
     // input values for the name and email
     resetPasswordNameXpathArray.sendKeys(expectedUsername);
     resetPasswordEmailXpathArray.sendKeys(expectedEmail);
+    resetPasswordPhoneNumberXpathArray.sendKeys(expectedPhoneNumber);
 
     // assert the values entered for name and email are captured by the elements
     assertEquals(expectedUsername, resetPasswordNameXpathArray.getAttribute("value"));
     assertEquals(expectedEmail, resetPasswordEmailXpathArray.getAttribute("value"));
+    assertEquals(expectedPhoneNumber, resetPasswordPhoneNumberXpathArray.getAttribute("value"));
 
     // clear the name and email fields
     resetPasswordNameXpathArray.clear();
     resetPasswordEmailXpathArray.clear();
+    resetPasswordPhoneNumberXpathArray.clear();
 
     // get name and email fields using css array technique
     WebElement resetPasswordNameCssArray = wait.until(
@@ -166,17 +177,24 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.getForgotPasswordEmailCssArray)
     );
 
+    WebElement resetPasswordPhoneNumberCssArray = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.getForgotPasswordPhoneNumberCssArray)
+    );
+
     // fill in the name and email fields
     resetPasswordNameCssArray.sendKeys(expectedUsername);
     resetPasswordEmailCssArray.sendKeys(expectedEmail);
+    resetPasswordPhoneNumberCssArray.sendKeys(expectedPhoneNumber);
 
     // assert that the entered name and emails were captured by the elements
     assertEquals(expectedUsername, resetPasswordNameCssArray.getAttribute("value"));
     assertEquals(expectedEmail, resetPasswordEmailCssArray.getAttribute("value"));
+    assertEquals(expectedPhoneNumber, resetPasswordPhoneNumberCssArray.getAttribute("value"));
 
     // clear the fields
     resetPasswordNameCssArray.clear();
     resetPasswordEmailCssArray.clear();
+    resetPasswordPhoneNumberCssArray.clear();
 
     // get the forgot password h2 element
     WebElement resetPasswordH2 = wait.until(
@@ -227,19 +245,17 @@ public class MainPageTest {
     // fields and clicking the sign-in button we are going to wait for the left
     // overlay to disappear and the right overlay to appear
     // it turns out all I needed to do was to make sure the left overlay disappeared
-    boolean leftOverlayVisible = true;
-    while (leftOverlayVisible) {
-      boolean leftOverlayNotVisible = wait.until(ExpectedConditions.invisibilityOf(mainPage.leftOverlay));
-      if (leftOverlayNotVisible) leftOverlayVisible = false;
-    }
+    boolean leftOverlayGone = wait.until(ExpectedConditions.invisibilityOf(mainPage.leftOverlay));
 
     // get the username, password (by css regex), and sign in buttons (by xpath regex)
     inputForUserName = wait.until(ExpectedConditions.elementToBeClickable(mainPage.inputUserName));
     inputForPassword = wait.until(ExpectedConditions.elementToBeClickable(mainPage.getInputPasswordByCssRegex));
 
     // fill out the username and password fields
-    inputForUserName.sendKeys(expectedUsername);
-    inputForPassword.sendKeys(correctPassword);
+    if (leftOverlayGone) {
+      inputForUserName.sendKeys(expectedUsername);
+      inputForPassword.sendKeys(correctPassword);
+    }
 
     WebElement signInButtonXpathRegex = wait.until(
         ExpectedConditions.elementToBeClickable(mainPage.signInButtonXpathRegex)
@@ -252,6 +268,8 @@ public class MainPageTest {
 
     signInButtonXpathRegex.click();
 
+    rightOverlayGone = wait.until(ExpectedConditions.invisibilityOf(mainPage.rightOverlay));
+
     WebElement successfulLoginHeading = wait.until(
         ExpectedConditions.visibilityOf(mainPage.successfulLoginHeading)
     );
@@ -260,7 +278,10 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.successfulLoginMessage)
     );
 
-    assertEquals("Hello EricRicketts,", successfulLoginHeading.getText());
-    assertEquals(successfulLoginMessageText, successfulLoginMessage.getText());
+
+    if (rightOverlayGone) {
+      assertEquals("Hello EricRicketts,", successfulLoginHeading.getText());
+      assertEquals(successfulLoginMessageText, successfulLoginMessage.getText());
+    }
   }
 }

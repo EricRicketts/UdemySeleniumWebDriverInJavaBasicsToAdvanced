@@ -16,6 +16,9 @@ public class FirefoxEdge {
 //  Note for some reason I could not get the gecko driver to work by explicitly pointing to it.
 //  It worked when I just included the WebDrivers directory in the PATH variable.
 
+      System.setProperty("webdriver.chrome.driver", "C:\\Program Files\\WebDrivers\\chromedriver.exe");
+//    System.setProperty("webdriver.edge.driver", "C:\\Program Files\\WebDrivers\\msedgedriver.exe");
+//    System.setProperty("webdriver.gecko.driver", "C:\\Program Files\\WebDrivers\\geckodriver.exe");
     WebDriver chromeDriver = new ChromeDriver();
 //    WebDriver edgeDriver = new EdgeDriver();
 //    WebDriver geckoDriver = new FirefoxDriver();

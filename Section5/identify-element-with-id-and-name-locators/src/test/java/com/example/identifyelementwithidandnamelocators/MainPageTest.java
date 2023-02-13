@@ -199,9 +199,10 @@ public class MainPageTest {
     WebElement resetPasswordH2 = wait.until(
         ExpectedConditions.presenceOfElementLocated(By.cssSelector("form > h2"))
     );
+    boolean rightOverlayGone = wait.until( ExpectedConditions.invisibilityOf(mainPage.rightOverlay));
 
     // assert on the text of the h2 element
-    assertEquals(expectedH2Text, resetPasswordH2.getText());
+    if (rightOverlayGone) assertEquals(expectedH2Text, resetPasswordH2.getText());
 
     // though labeled xpath tags these locators are css hierarchical tags for name, password
     // and phone number
@@ -355,11 +356,14 @@ public class MainPageTest {
     WebElement resetPasswordPhoneNumberXpathTags = wait.until(
         ExpectedConditions.visibilityOf(mainPage.getForgotPasswordPhoneNumberXpathTags)
     );
+    boolean rightOverlayGone = wait.until(ExpectedConditions.invisibilityOf(mainPage.rightOverlay));
 
     // fill out the name, email, and phone number elements
-    resetPasswordNameXpathTags.sendKeys(expectedUsername);
-    resetPasswordEmailXpathTags.sendKeys(expectedEmail);
-    resetPasswordPhoneNumberXpathTags.sendKeys(expectedPhoneNumber);
+    if (rightOverlayGone) {
+      resetPasswordNameXpathTags.sendKeys(expectedUsername);
+      resetPasswordEmailXpathTags.sendKeys(expectedEmail);
+      resetPasswordPhoneNumberXpathTags.sendKeys(expectedPhoneNumber);
+    }
 
     // assert on the content of the name, email, and phone number elements
     assertEquals(expectedUsername, resetPasswordNameXpathTags.getAttribute("value"));

@@ -65,6 +65,9 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "input[placeholder='Email']")
   public WebElement forgotPasswordEmail;
 
+  @FindBy(how = How.XPATH, using = "//div[@class='overlay-panel overlay-right']")
+  public WebElement rightOverlay;
+
   @FindBy(how = How.XPATH, using = "//input[@type='text'][1]")
   public WebElement getForgotPasswordNameXpathArray;
 
