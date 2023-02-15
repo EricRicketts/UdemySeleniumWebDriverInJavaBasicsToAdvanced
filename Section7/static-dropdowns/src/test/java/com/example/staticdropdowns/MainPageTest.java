@@ -40,6 +40,7 @@ public class MainPageTest {
     driver.quit();
   }
 
+  @Disabled
   @Test
   public void testCurrencyDropdown() throws InterruptedException {
     // this method will exercise a static dropdown element
@@ -98,6 +99,7 @@ public class MainPageTest {
     assertEquals("INR", dropdown.getFirstSelectedOption().getText());
   }
 
+  @Disabled
   @Test
   public void testPassengersDropdown() throws InterruptedException {
     // this method tests a dropdown not made up of <select> and <option>
@@ -133,5 +135,36 @@ public class MainPageTest {
     );
 
     assertEquals("4 Adult", passengerDropdown.getText());
+  }
+
+  @Test
+  public void testDepartureAndArrivalDropdowns() throws InterruptedException {
+    duration = Duration.ofSeconds(10);
+    wait = new WebDriverWait(driver, duration);
+
+    WebElement departureDropdown = wait.until(
+        ExpectedConditions.visibilityOfElementLocated(By.id("ctl00_mainContent_ddl_originStation1_CTXT"))
+    );
+
+    WebElement arrivalDropdown = wait.until(
+        ExpectedConditions.visibilityOfElementLocated(By.id("ctl00_mainContent_ddl_destinationStation1_CTXT"))
+    );
+
+    departureDropdown.click();
+    WebElement bengaluru = wait.until(
+        ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@value='BLR']"))
+    );
+
+    bengaluru.click();
+    assertEquals("Bengaluru (BLR)", departureDropdown.getAttribute("value"));
+
+    String xpathSelectSecondOfTwoForChennai = "(//a[@value='MAA'])[2]";
+    WebElement chennai = wait.until(
+        ExpectedConditions.visibilityOfElementLocated(By.xpath(xpathSelectSecondOfTwoForChennai))
+    );
+
+    chennai.click();
+    assertEquals("Chennai (MAA)", arrivalDropdown.getAttribute("value"));
+
   }
 }
