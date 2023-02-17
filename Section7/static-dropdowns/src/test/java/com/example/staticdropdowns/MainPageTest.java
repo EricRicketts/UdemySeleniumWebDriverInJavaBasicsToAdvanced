@@ -137,6 +137,7 @@ public class MainPageTest {
     assertEquals("4 Adult", passengerDropdown.getText());
   }
 
+  @Disabled
   @Test
   public void testDepartureAndArrivalDropdowns() throws InterruptedException {
     duration = Duration.ofSeconds(10);
@@ -166,5 +167,30 @@ public class MainPageTest {
     chennai.click();
     assertEquals("Chennai (MAA)", arrivalDropdown.getAttribute("value"));
 
+  }
+
+  @Test
+  public void testDepartureAndArrivalDropdownsWithParentChildTraversal() throws InterruptedException {
+    duration = Duration.ofSeconds(10);
+    wait = new WebDriverWait(driver, duration);
+
+    WebElement departureDropdown = wait.until(
+        ExpectedConditions.visibilityOfElementLocated(By.id("ctl00_mainContent_ddl_originStation1_CTXT"))
+    );
+
+    WebElement arrivalDropdown = wait.until(
+        ExpectedConditions.visibilityOfElementLocated(By.id("ctl00_mainContent_ddl_destinationStation1_CTXT"))
+    );
+
+    departureDropdown.click();
+
+    String xpathForDepartureCity = "//div[@id='glsctl00_mainContent_ddl_originStation1_CTNR'] //a[@value='BLR']";
+    WebElement departureCity = wait.until(
+        ExpectedConditions.visibilityOfElementLocated(By.xpath(xpathForDepartureCity))
+    );
+
+    departureCity.click();
+
+    Thread.sleep(2000);
   }
 }
