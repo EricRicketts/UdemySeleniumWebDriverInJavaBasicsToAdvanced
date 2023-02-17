@@ -33,6 +33,8 @@ public class MainPageTest {
 //    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     driver.get("https://rahulshettyacademy.com/dropdownsPractise/");
     mainPage = new MainPage(driver);
+    duration = Duration.ofSeconds(10);
+    wait = new WebDriverWait(driver, duration);
   }
 
   @AfterEach
@@ -49,12 +51,6 @@ public class MainPageTest {
     // allows the user to select the currency for payment
     String staticSelectId = "ctl00_mainContent_DropDownListCurrency";
     String staticSelectName = "ctl00$mainContent$DropDownListCurrency";
-
-    // for some reason I found when these were put in the BeforeEach
-    // method I found these variables did not initialize as thought,
-    // I might try again later
-    duration = Duration.ofSeconds(10);
-    wait = new WebDriverWait(driver, duration);
 
     // get the static dropdown by id
     WebElement staticDropdown = wait.until(
@@ -104,8 +100,6 @@ public class MainPageTest {
   public void testPassengersDropdown() throws InterruptedException {
     // this method tests a dropdown not made up of <select> and <option>
     // elements but of nested <div> elements.
-    duration = Duration.ofSeconds(10);
-    wait = new WebDriverWait(driver, duration);
 
     WebElement passengerDropdown = wait.until(
         ExpectedConditions.visibilityOfElementLocated(By.id("divpaxinfo"))
@@ -140,9 +134,6 @@ public class MainPageTest {
   @Disabled
   @Test
   public void testDepartureAndArrivalDropdowns() throws InterruptedException {
-    duration = Duration.ofSeconds(10);
-    wait = new WebDriverWait(driver, duration);
-
     WebElement departureDropdown = wait.until(
         ExpectedConditions.visibilityOfElementLocated(By.id("ctl00_mainContent_ddl_originStation1_CTXT"))
     );
@@ -169,11 +160,9 @@ public class MainPageTest {
 
   }
 
+  @Disabled
   @Test
   public void testDepartureAndArrivalDropdownsWithParentChildTraversal() throws InterruptedException {
-    duration = Duration.ofSeconds(10);
-    wait = new WebDriverWait(driver, duration);
-
     WebElement departureDropdown = wait.until(
         ExpectedConditions.visibilityOfElementLocated(By.id("ctl00_mainContent_ddl_originStation1_CTXT"))
     );
@@ -184,13 +173,32 @@ public class MainPageTest {
 
     departureDropdown.click();
 
+    // we need to mention something very important here in the xpath notation notice the single space between
+    // the two xpath elements, this is telling xpath to look for the <a> element within the div element
+    // that is search anywhere within the hierarchy of the div element to find the anchor element in CSS
+    // this would be written div[id='glsctl00_mainContent_ddl_originStation1_CTNR'] a[value='BLR']
     String xpathForDepartureCity = "//div[@id='glsctl00_mainContent_ddl_originStation1_CTNR'] //a[@value='BLR']";
     WebElement departureCity = wait.until(
         ExpectedConditions.visibilityOfElementLocated(By.xpath(xpathForDepartureCity))
     );
 
+    // choose the departure city
     departureCity.click();
+    assertEquals("Bengaluru (BLR)", departureCity.getText());
 
-    Thread.sleep(2000);
+    // again as with the departure city this xpath searches for the second element only within the scope
+    // of the first element
+    String xpathForArrivalCity = "//div[@id='ctl00_mainContent_ddl_destinationStation1_CTNR'] //a[@value='MAA']";
+    WebElement arrivalCity = wait.until(
+        ExpectedConditions.visibilityOfElementLocated(By.xpath(xpathForArrivalCity))
+    );
+
+    // choose the arrival city
+    arrivalCity.click();
+    assertEquals("Chennai (MAA)", arrivalDropdown.getAttribute("value"));
+  }
+
+  @Test
+  public void testAutoSuggestiveDropdowns() throws InterruptedException {
   }
 }
