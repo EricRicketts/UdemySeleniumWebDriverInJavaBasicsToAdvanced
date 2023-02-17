@@ -42,7 +42,6 @@ public class MainPageTest {
     driver.quit();
   }
 
-  @Disabled
   @Test
   public void testCurrencyDropdown() throws InterruptedException {
     // this method will exercise a static dropdown element
@@ -95,7 +94,6 @@ public class MainPageTest {
     assertEquals("INR", dropdown.getFirstSelectedOption().getText());
   }
 
-  @Disabled
   @Test
   public void testPassengersDropdown() throws InterruptedException {
     // this method tests a dropdown not made up of <select> and <option>
@@ -131,7 +129,6 @@ public class MainPageTest {
     assertEquals("4 Adult", passengerDropdown.getText());
   }
 
-  @Disabled
   @Test
   public void testDepartureAndArrivalDropdowns() throws InterruptedException {
     WebElement departureDropdown = wait.until(
@@ -160,7 +157,6 @@ public class MainPageTest {
 
   }
 
-  @Disabled
   @Test
   public void testDepartureAndArrivalDropdownsWithParentChildTraversal() throws InterruptedException {
     WebElement departureDropdown = wait.until(
@@ -200,5 +196,35 @@ public class MainPageTest {
 
   @Test
   public void testAutoSuggestiveDropdowns() throws InterruptedException {
+    // get the actual <input> element which will hold the selected suggestion
+    WebElement autoSuggestInput = wait.until(
+        ExpectedConditions.visibilityOfElementLocated(By.id("autosuggest"))
+    );
+
+    // here we send a string to the <input> element as if we were typing the input
+    autoSuggestInput.sendKeys("ind");
+
+    // the way the autosuggestion inputs work is kind of like a search, you type in some letters
+    // and a list is brought up in which the suggestions would contain the string you typed in
+    // below we know we have an unordered list and each <li> element has a class of 'ui-menu-item'
+    // we use CSS to get the immediate <a> child of the <li> element
+    // Note the strategy here is to grab the entirety of the <a> elements as a list and search for
+    // the desired one by its text value
+    List<WebElement> suggestions = wait.until(
+        ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector("li[class='ui-menu-item'] > a"))
+    );
+
+    // get the text value of each <a> element when you find text 'India' click the selection and break
+    // out of the loop
+    for(WebElement suggestion: suggestions) {
+      if (suggestion.getText().equals("India")) {
+        suggestion.click();
+        break;
+      }
+    }
+
+    // remember on an <input> element calling getText() will return an empty string
+    // in order to get what the user entered you have to query the value attribute
+    assertEquals("India", autoSuggestInput.getAttribute("value"));
   }
 }
