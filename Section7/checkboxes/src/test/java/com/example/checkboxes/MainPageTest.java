@@ -52,10 +52,17 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.seniorCitizenCheckbox)
     );
 
+    WebElement indianArmedServicesCheckbox = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.indianArmedServicesCheckbox)
+    );
+
     friendsAndFamilyCheckbox.click();
     assertTrue(friendsAndFamilyCheckbox.isSelected());
 
     seniorCitizenCheckbox.click();
     assertTrue(seniorCitizenCheckbox.isSelected());
+
+    indianArmedServicesCheckbox.click();
+    assertTrue(indianArmedServicesCheckbox.isSelected());
   }
 }
