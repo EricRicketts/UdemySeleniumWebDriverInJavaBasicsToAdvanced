@@ -56,6 +56,14 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.indianArmedServicesCheckbox)
     );
 
+    WebElement studentCheckbox = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.studentCheckbox)
+    );
+
+    WebElement unaccompaniedMinorCheckbox = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.unaccompaniedMinorCheckbox)
+    );
+
     friendsAndFamilyCheckbox.click();
     assertTrue(friendsAndFamilyCheckbox.isSelected());
 
@@ -64,5 +72,11 @@ public class MainPageTest {
 
     indianArmedServicesCheckbox.click();
     assertTrue(indianArmedServicesCheckbox.isSelected());
+
+    studentCheckbox.click();
+    assertTrue(studentCheckbox.isSelected());
+
+    unaccompaniedMinorCheckbox.click();
+    assertTrue(unaccompaniedMinorCheckbox.isSelected());
   }
 }
