@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.example.checkboxes.MainPageTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.006 sec <<< FAILURE!
+com.example.checkboxes.MainPageTest.testCheckboxes()  Time elapsed: 0.003 sec  <<< FAILURE!
+java.lang.NullPointerException: Cannot read field "friendsAndFamilyCheckbox" because "this.mainPage" is null
+	at com.example.checkboxes.MainPageTest.testCheckboxes(MainPageTest.java:50)
+

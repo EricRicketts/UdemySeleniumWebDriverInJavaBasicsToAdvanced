@@ -1,5 +1,6 @@
 package com.example.checkboxes;
 
+import org.example.SetWebDriverLocation;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,6 +22,11 @@ public class MainPageTest {
 
   private Duration duration;
   private WebDriverWait wait;
+
+  @BeforeAll
+  public static void oneTimeSetup() {
+    SetWebDriverLocation.setDriverLocationAndDriverSystemProperty();
+  }
 
   @BeforeEach
   public void setUp() {
