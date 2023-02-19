@@ -84,5 +84,8 @@ public class MainPageTest {
 
     unaccompaniedMinorCheckbox.click();
     assertTrue(unaccompaniedMinorCheckbox.isSelected());
+
+    // do not know why there is an extra checkbox, I cannot see it in the website
+    assertEquals(6, mainPage.allCheckboxes.size());
   }
 }
