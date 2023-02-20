@@ -22,7 +22,7 @@ public class MainPage {
   @FindBy(how = How.ID, using = "ctl00_mainContent_ddl_originStation1_CTXT")
   public WebElement departureInput;
 
-  @FindBy(how = How.NAME, using = "ctl00_mainContent_ddl_destinationStation1_CTXT")
+  @FindBy(how = How.ID, using = "ctl00_mainContent_ddl_destinationStation1_CTXT")
   public WebElement arrivalInput;
 
   @FindBy(how = How.XPATH, using = departureCityXpath)
@@ -30,6 +30,15 @@ public class MainPage {
 
   @FindBy(how = How.CSS, using = arrivalCityCss)
   public WebElement arrivalCity;
+
+  @FindBy(how = How.NAME, using = "ctl00$mainContent$view_date1")
+  public WebElement departureDateInput;
+
+  @FindBy(how = How.ID, using = "ctl00_mainContent_view_date2")
+  public WebElement arrivalDateInput;
+
+  @FindBy(how = How.CSS, using = "a.ui-state-default.ui-state-highlight")
+  public WebElement defaultDepartureDate;
 
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
