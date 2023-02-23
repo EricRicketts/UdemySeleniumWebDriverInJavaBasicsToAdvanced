@@ -24,7 +24,7 @@ public class MainPage {
   @FindBy(how = How.ID, using = "exampleFormControlSelect1")
   public WebElement selectGender;
 
-  @FindBy(how = How.XPATH, using = "//input[@type='radio]")
+  @FindBy(how = How.XPATH, using = "//input[@type='radio']")
   public List<WebElement> employmentStatusRadioButtons;
 
   @FindBy(how = How.CSS, using = "input[type='date']")
@@ -32,6 +32,9 @@ public class MainPage {
 
   @FindBy(how = How.CSS, using = "input[type='submit']")
   public WebElement submitButton;
+
+  @FindBy(how = How.XPATH, using = "//div[contains(@class, 'alert')]")
+  public WebElement successAlert;
 
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
