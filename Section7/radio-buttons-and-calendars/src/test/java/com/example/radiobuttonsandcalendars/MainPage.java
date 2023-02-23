@@ -37,7 +37,7 @@ public class MainPage {
   @FindBy(how = How.ID, using = "ctl00_mainContent_view_date2")
   public WebElement arrivalDateInput;
 
-  @FindBy(how = How.CSS, using = "a.ui-state-default.ui-state-highlight")
+  @FindBy(how = How.CSS, using = "a[class*='ui-state-highlight']")
   public WebElement defaultDepartureDate;
 
   @FindBy(how = How.ID, using = "Div1")

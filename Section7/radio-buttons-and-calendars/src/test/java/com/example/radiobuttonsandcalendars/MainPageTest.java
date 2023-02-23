@@ -169,5 +169,27 @@ public class MainPageTest {
     );
 
     assertTrue(arrivalCitySelected);
+
+    // click the departure date to bring up the calendar
+    mainPage.departureDateInput.click();
+    WebElement defaultDepartureDate = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.defaultDepartureDate)
+    );
+
+    // once we see the default departure date in the calendar view
+    // we have to grab its text value because once we click
+    // the default date the element will disappear meaning we can
+    // no longer query it for attribute values
+    String departureDay = defaultDepartureDate.getText();
+    defaultDepartureDate.click();
+
+    // the text in the input field will have the form dd/mm
+    // two digits for the day and two digits for the month
+    boolean departureDateSelected = wait.until(
+        ExpectedConditions.attributeContains(mainPage.departureDateInput,
+            "value", departureDay)
+    );
+
+    assertTrue(departureDateSelected);
   }
 }
