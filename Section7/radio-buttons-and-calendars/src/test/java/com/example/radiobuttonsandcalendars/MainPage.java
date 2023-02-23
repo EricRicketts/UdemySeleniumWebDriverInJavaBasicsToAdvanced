@@ -16,7 +16,7 @@ public class MainPage {
   @FindBy(how = How.ID, using = "ctl00_mainContent_rbtnl_Trip_0")
   public WebElement oneWayTripRadioButton;
 
-  @FindBy(how = How.NAME, using = "ctl00$mainContent$rbtnl_Trip")
+  @FindBy(how = How.ID, using = "ctl00_mainContent_rbtnl_Trip_1")
   public WebElement roundTripRadioButton;
 
   @FindBy(how = How.ID, using = "ctl00_mainContent_ddl_originStation1_CTXT")
@@ -39,6 +39,9 @@ public class MainPage {
 
   @FindBy(how = How.CSS, using = "a.ui-state-default.ui-state-highlight")
   public WebElement defaultDepartureDate;
+
+  @FindBy(how = How.ID, using = "Div1")
+  public WebElement enableDisableArrivalController;
 
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);

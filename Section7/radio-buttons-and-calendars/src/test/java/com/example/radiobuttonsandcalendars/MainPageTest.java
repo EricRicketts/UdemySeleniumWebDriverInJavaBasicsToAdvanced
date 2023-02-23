@@ -16,8 +16,9 @@ import java.time.Duration;
 
 public class MainPageTest {
   private final String departureCityText = "Bengaluru (BLR)";
-
   private final String arrivalCityText = "Chennai (MAA)";
+  private final String disabledArrivalDateText = "display: block; opacity: 0.5;";
+  private final String enabledArrivalDateText = "display: block; opacity: 1;";
   private WebDriver driver;
   private MainPage mainPage;
   private final String url = "https://rahulshettyacademy.com/dropdownsPractise/";
@@ -45,12 +46,18 @@ public class MainPageTest {
     driver.quit();
   }
 
+  @Disabled
   @Test
   public void testOneWayTrip() throws InterruptedException {
     // we land on the airline reservation page and check that the one way
     // radio button is selected
     assertTrue(mainPage.oneWayTripRadioButton.isSelected());
-    assertFalse(mainPage.roundTripRadioButton.isSelected());
+
+    // ensure the arrival date is currently disabled, note is disabled
+    // not functionally but by styling, the opacity of the styling causes
+    // the input field to appear greyed out.  If the element were truly
+    // disabled then there would be no interaction with it
+    assertEquals(disabledArrivalDateText, mainPage.enableDisableArrivalController.getAttribute("style"));
 
     // click on the departure city input to bring up the cities for departure
     mainPage.departureInput.click();
@@ -92,22 +99,39 @@ public class MainPageTest {
     defaultDepartureDate.click();
     assertTrue(mainPage.departureDateInput.getAttribute("value").contains(defaultDepartureDateText));
 
-    // assert it is still a one way trip
-    assertTrue(mainPage.oneWayTripRadioButton.isSelected());
+    // assert it is still a one way trip we do this by making sure the style of the arrival date is still
+    // greyed out
+    assertEquals(disabledArrivalDateText, mainPage.enableDisableArrivalController.getAttribute("style"));
   }
 
   @Test
   public void testRoundTrip() throws InterruptedException {
     // check the round trip button to enable all calendars
     mainPage.roundTripRadioButton.click();
-    assertTrue(mainPage.roundTripRadioButton.isSelected());
-    assertFalse(mainPage.oneWayTripRadioButton.isSelected());
 
+    // Experiment with different techniques to see if a radio button
+    // is selected or not.  If the round trip button is selected then
+    // the one way trip button must not be selected.  Important note here
+    // elementToBeSelected is a wait condition it returns boolean true
+    // within a set time limit waiting for the element to be selected.
+    // if the element fails to be set during the time constraint an
+    // exception is thrown.
+    boolean roundTripTripRadioButtonSelected = wait.until(
+        ExpectedConditions.elementToBeSelected(mainPage.roundTripRadioButton)
+    );
+    boolean oneWayTripRadioButtonSelected = mainPage.oneWayTripRadioButton.isSelected();
+    boolean[] expected = new boolean[]{true, false};
+    boolean[] results = new boolean[]{roundTripTripRadioButtonSelected, oneWayTripRadioButtonSelected};
+    assertArrayEquals(expected, results);
+
+    // now that round trip is selected the arrival date should not be greyed out, opacity should be 1
+    assertEquals(enabledArrivalDateText, mainPage.enableDisableArrivalController.getAttribute("style"));
     // click the departure input to enable to departure city choice
     mainPage.departureInput.click();
 
+    // find the desired departure city and select it
     WebElement departureCity = wait.until(
-        
-    )
+      ExpectedConditions.visibilityOf(mainPage.departureCity)
+    );
   }
 }
