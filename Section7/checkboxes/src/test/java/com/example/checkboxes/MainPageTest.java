@@ -1,6 +1,5 @@
 package com.example.checkboxes;
 
-import org.example.SetWebDriverLocation;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,7 +12,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-
 public class MainPageTest {
   private WebDriver driver;
   private MainPage mainPage;
@@ -25,7 +23,7 @@ public class MainPageTest {
 
   @BeforeAll
   public static void oneTimeSetup() {
-    SetWebDriverLocation.setDriverLocationAndDriverSystemProperty();
+    // SetWebDriverLocation.setDriverLocationAndDriverSystemProperty();
   }
 
   @BeforeEach

@@ -50,6 +50,7 @@ public class MainPageTest {
     // we land on the airline reservation page and check that the one way
     // radio button is selected
     assertTrue(mainPage.oneWayTripRadioButton.isSelected());
+    assertFalse(mainPage.roundTripRadioButton.isSelected());
 
     // click on the departure city input to bring up the cities for departure
     mainPage.departureInput.click();
@@ -93,5 +94,20 @@ public class MainPageTest {
 
     // assert it is still a one way trip
     assertTrue(mainPage.oneWayTripRadioButton.isSelected());
+  }
+
+  @Test
+  public void testRoundTrip() throws InterruptedException {
+    // check the round trip button to enable all calendars
+    mainPage.roundTripRadioButton.click();
+    assertTrue(mainPage.roundTripRadioButton.isSelected());
+    assertFalse(mainPage.oneWayTripRadioButton.isSelected());
+
+    // click the departure input to enable to departure city choice
+    mainPage.departureInput.click();
+
+    WebElement departureCity = wait.until(
+        
+    )
   }
 }
