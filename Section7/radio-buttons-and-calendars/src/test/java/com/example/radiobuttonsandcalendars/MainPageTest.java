@@ -106,6 +106,10 @@ public class MainPageTest {
 
   @Test
   public void testRoundTrip() throws InterruptedException {
+    // before selecting the round trip button ensure the arrival date is greyed out
+    // which means its opacity will be 0.5
+    assertEquals(disabledArrivalDateText, mainPage.enableDisableArrivalController.getAttribute("style"));
+
     // check the round trip button to enable all calendars
     mainPage.roundTripRadioButton.click();
 
@@ -119,6 +123,9 @@ public class MainPageTest {
     boolean roundTripTripRadioButtonSelected = wait.until(
         ExpectedConditions.elementToBeSelected(mainPage.roundTripRadioButton)
     );
+
+    // the round trip button should be selected but the one way trip
+    // button should not be selected
     boolean oneWayTripRadioButtonSelected = mainPage.oneWayTripRadioButton.isSelected();
     boolean[] expected = new boolean[]{true, false};
     boolean[] results = new boolean[]{roundTripTripRadioButtonSelected, oneWayTripRadioButtonSelected};
@@ -129,9 +136,38 @@ public class MainPageTest {
     // click the departure input to enable to departure city choice
     mainPage.departureInput.click();
 
-    // find the desired departure city and select it
+    // find the desired departure city and select it, then assert the departure city
+    // element has captured it
     WebElement departureCity = wait.until(
       ExpectedConditions.visibilityOf(mainPage.departureCity)
     );
+
+    departureCity.click();
+
+    // this is a more robust way of checking the departure city was selected
+    // as the event has to resolve to true or throw an exception
+    boolean departureCitySelected = wait.until(
+        ExpectedConditions.attributeToBe(mainPage.departureInput, "value", departureCityText)
+    );
+    assertTrue(departureCitySelected);
+
+    // following the same pattern with the departure city, click the arrival city input
+    mainPage.arrivalInput.click();
+
+    // The select list should appear, wait for the arrival city to appear
+    // once it appears click it
+    WebElement arrivalCity = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.arrivalCity)
+    );
+
+    arrivalCity.click();
+
+    // ensure the arrival city has been captured by the arrival city input element
+    // then assert it was captured
+    boolean arrivalCitySelected = wait.until(
+        ExpectedConditions.attributeToBe(mainPage.arrivalInput, "value", arrivalCityText)
+    );
+
+    assertTrue(arrivalCitySelected);
   }
 }
