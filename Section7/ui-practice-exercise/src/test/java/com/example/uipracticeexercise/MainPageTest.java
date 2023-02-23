@@ -115,12 +115,15 @@ public class MainPageTest {
     mainPage.dateOfBirthInput.sendKeys(dateOfBirthKeys);
     assertEquals(dateOfBirthValue, mainPage.dateOfBirthInput.getAttribute("value"));
 
+    // submit the form
     mainPage.submitButton.click();
 
+    // wait for the alert message to appear
     WebElement successAlert = wait.until(
         ExpectedConditions.visibilityOf(mainPage.successAlert)
     );
 
+    // assert on some portion of the text of the success alert
     assertTrue(successAlert.getText().contains(alertSuccessText));
   }
 }
