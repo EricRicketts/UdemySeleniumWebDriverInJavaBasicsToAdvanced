@@ -43,6 +43,9 @@ public class MainPage {
   @FindBy(how = How.ID, using = "Div1")
   public WebElement enableDisableArrivalController;
 
+  @FindBy(how = How.CLASS_NAME, using = "ui-datepicker-title")
+  public WebElement currentMonthAndYear;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }

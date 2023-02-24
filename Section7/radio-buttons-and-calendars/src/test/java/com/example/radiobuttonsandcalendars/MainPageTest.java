@@ -13,8 +13,19 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainPageTest {
+  String[] monthsArray = {
+      "january", "february", "march", "april", "may", "june",
+      "july", "august", "september", "october", "november", "december"
+  };
+
+  List<String> monthsList = Arrays.asList(monthsArray);
   private final String departureCityText = "Bengaluru (BLR)";
   private final String arrivalCityText = "Chennai (MAA)";
   private final String disabledArrivalDateText = "display: block; opacity: 0.5;";
@@ -25,6 +36,29 @@ public class MainPageTest {
   private Duration duration;
   private WebDriverWait wait;
 
+  private StringBuilder createFormattedDate(String monthAndYear, String day) {
+    String[] monthAndYearArray = monthAndYear.split("\s+");
+    String month = monthAndYearArray[0];
+    String year =  monthAndYearArray[1];
+    String formattedMonth, formattedDayOfMonth, formattedDate;
+    int monthNumber = monthsList.indexOf(month.toLowerCase()) + 1;
+    if (monthNumber < 10) {
+      formattedMonth = "0" + monthNumber;
+    } else {
+      formattedMonth = Integer.toString(monthNumber);
+    }
+    if (day.length() < 2) {
+      formattedDayOfMonth = "0" + day;
+    } else {
+      formattedDayOfMonth = day;
+    }
+    DateTimeFormatter formatDateTemplate = DateTimeFormatter.ofPattern("uuuu-MM-dd");
+    formattedDate = year + "-" + formattedMonth + "-" + formattedDayOfMonth;
+    StringBuilder date = new StringBuilder(monthAndYear);
+    int firstSpaceLocation = date.indexOf(" ");
+    date.insert(firstSpaceLocation, " " + day + ",");
+    return date;
+  }
   @BeforeAll
   public static void oneTimeSetup() {
     SetWebDriverLocation.setDriverLocationAndDriverSystemProperty();
@@ -181,6 +215,15 @@ public class MainPageTest {
     // the default date the element will disappear meaning we can
     // no longer query it for attribute values
     String departureDay = defaultDepartureDate.getText();
+
+    // at the same time we have to grab the current month
+    // and year if we are going to robustly predefine the
+    // return date
+
+    String currentMonthAndYear = mainPage.currentMonthAndYear.getText();
+
+    StringBuilder date = createFormattedDate(currentMonthAndYear, departureDay);
+    // Februrary 2023
     defaultDepartureDate.click();
 
     // the text in the input field will have the form dd/mm
@@ -191,5 +234,7 @@ public class MainPageTest {
     );
 
     assertTrue(departureDateSelected);
+
+
   }
 }
