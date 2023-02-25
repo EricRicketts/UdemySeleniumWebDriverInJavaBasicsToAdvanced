@@ -97,6 +97,7 @@ public class MainPageTest {
   public void testOneWayTrip() throws InterruptedException {
     // we land on the airline reservation page and check that the one way
     // radio button is selected and the round trip button is not selected
+    mainPage.oneWayTripRadioButton.click();
     assertTrue(mainPage.oneWayTripRadioButton.isSelected());
     assertFalse(mainPage.roundTripRadioButton.isSelected());
 

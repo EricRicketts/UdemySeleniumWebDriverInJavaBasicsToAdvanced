@@ -42,9 +42,6 @@ public class MainPage {
   @FindBy(how = How.ID, using = "Div1")
   public WebElement enableDisableArrivalController;
 
-  @FindBy(how = How.CLASS_NAME, using = "ui-datepicker-title")
-  public WebElement currentMonthAndYear;
-
   @FindBy(how = How.ID, using = "divpaxinfo")
   public WebElement numberAndKindOfPassengersInput;
 
