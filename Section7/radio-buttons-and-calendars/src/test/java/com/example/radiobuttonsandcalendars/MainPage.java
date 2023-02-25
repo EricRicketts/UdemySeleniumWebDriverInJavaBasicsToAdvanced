@@ -1,5 +1,6 @@
 package com.example.radiobuttonsandcalendars;
 
+import io.opentelemetry.api.baggage.propagation.W3CBaggagePropagator;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -34,8 +35,6 @@ public class MainPage {
   @FindBy(how = How.NAME, using = "ctl00$mainContent$view_date1")
   public WebElement departureDateInput;
 
-  @FindBy(how = How.ID, using = "ctl00_mainContent_view_date2")
-  public WebElement arrivalDateInput;
 
   @FindBy(how = How.CSS, using = "a[class*='ui-state-highlight']")
   public WebElement defaultDepartureDate;
@@ -45,6 +44,24 @@ public class MainPage {
 
   @FindBy(how = How.CLASS_NAME, using = "ui-datepicker-title")
   public WebElement currentMonthAndYear;
+
+  @FindBy(how = How.ID, using = "divpaxinfo")
+  public WebElement numberAndKindOfPassengersInput;
+
+  @FindBy(how = How.ID, using = "hrefIncAdt")
+  public WebElement incrementNumberOfAdultsButton;
+
+  @FindBy(how = How.ID, using = "spanAudlt")
+  public WebElement numberOfAdultsNumber;
+
+  @FindBy(how = How.ID, using = "btnclosepaxoption")
+  public WebElement doneButtonForNumberOfPassengers;
+
+  @FindBy(how = How.ID, using = "ctl00_mainContent_chk_SeniorCitizenDiscount")
+  public WebElement seniorCitizenDiscountButton;
+
+  @FindBy(how = How.ID, using = "ctl00_mainContent_btn_FindFlights")
+  public WebElement findFlightsButton;
 
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);

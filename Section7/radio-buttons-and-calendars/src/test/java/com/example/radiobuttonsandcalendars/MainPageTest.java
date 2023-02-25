@@ -13,11 +13,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.IntStream;
 
 public class MainPageTest {
   String[] monthsArray = {
@@ -26,37 +29,47 @@ public class MainPageTest {
   };
 
   List<String> monthsList = Arrays.asList(monthsArray);
+
+  private final String departureCityDefaultText = "Departure City";
   private final String departureCityText = "Bengaluru (BLR)";
   private final String arrivalCityText = "Chennai (MAA)";
   private final String disabledArrivalDateText = "display: block; opacity: 0.5;";
   private final String enabledArrivalDateText = "display: block; opacity: 1;";
+
+  private final String passengerInformationText = "3 Adult";
   private WebDriver driver;
   private MainPage mainPage;
   private final String url = "https://rahulshettyacademy.com/dropdownsPractise/";
   private Duration duration;
   private WebDriverWait wait;
 
-  private StringBuilder createFormattedDate(String monthAndYear, String day) {
+  private String formatMonthOrDay(String monthOrDay) {
+    return monthOrDay.length() < 2 ? "0" + monthOrDay : monthOrDay;
+  }
+  private LocalDate createLocalDateInstance(String monthAndYear, String day) {
+    String formattedMonth, formattedDay, formattedDate;
+    int monthNumber;
+    DateTimeFormatter formatDateTemplate;
+    LocalDate date;
+    // monthAndYear come in formatted as nameOfMonth<space>yyyy
+    // example February 2023
+
+    // split on the space first element is the month the second element is the year
     String[] monthAndYearArray = monthAndYear.split("\s+");
-    String month = monthAndYearArray[0];
-    String year =  monthAndYearArray[1];
-    String formattedMonth, formattedDayOfMonth, formattedDate;
-    int monthNumber = monthsList.indexOf(month.toLowerCase()) + 1;
-    if (monthNumber < 10) {
-      formattedMonth = "0" + monthNumber;
-    } else {
-      formattedMonth = Integer.toString(monthNumber);
-    }
-    if (day.length() < 2) {
-      formattedDayOfMonth = "0" + day;
-    } else {
-      formattedDayOfMonth = day;
-    }
-    DateTimeFormatter formatDateTemplate = DateTimeFormatter.ofPattern("uuuu-MM-dd");
-    formattedDate = year + "-" + formattedMonth + "-" + formattedDayOfMonth;
-    StringBuilder date = new StringBuilder(monthAndYear);
-    int firstSpaceLocation = date.indexOf(" ");
-    date.insert(firstSpaceLocation, " " + day + ",");
+    String month = monthAndYearArray[0], year =  monthAndYearArray[1];
+
+    // use the list of months to get the month number and prefix a "0" to
+    // the month number if it is < 10 do the same for the day of the month
+    monthNumber = monthsList.indexOf(month.toLowerCase()) + 1;
+    formattedMonth = formatMonthOrDay(Integer.toString(monthNumber));
+    formattedDay = formatMonthOrDay(day);
+
+    // date time format will be yyyy-mm-dd, example 2023-02-24
+    formatDateTemplate = DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.ENGLISH);
+    formattedDate = year + "-" + formattedMonth + "-" + formattedDay;
+
+    // use the DateTimeFormatter and its desired string representation to get a LocalDate object
+    date = LocalDate.parse(formattedDate, formatDateTemplate);
     return date;
   }
   @BeforeAll
@@ -80,12 +93,12 @@ public class MainPageTest {
     driver.quit();
   }
 
-  @Disabled
   @Test
   public void testOneWayTrip() throws InterruptedException {
     // we land on the airline reservation page and check that the one way
-    // radio button is selected
+    // radio button is selected and the round trip button is not selected
     assertTrue(mainPage.oneWayTripRadioButton.isSelected());
+    assertFalse(mainPage.roundTripRadioButton.isSelected());
 
     // ensure the arrival date is currently disabled, note is disabled
     // not functionally but by styling, the opacity of the styling causes
@@ -134,107 +147,43 @@ public class MainPageTest {
     assertTrue(mainPage.departureDateInput.getAttribute("value").contains(defaultDepartureDateText));
 
     // assert it is still a one way trip we do this by making sure the style of the arrival date is still
-    // greyed out
-    assertEquals(disabledArrivalDateText, mainPage.enableDisableArrivalController.getAttribute("style"));
-  }
-
-  @Test
-  public void testRoundTrip() throws InterruptedException {
-    // before selecting the round trip button ensure the arrival date is greyed out
-    // which means its opacity will be 0.5
+    // greyed out, ie, disabled
     assertEquals(disabledArrivalDateText, mainPage.enableDisableArrivalController.getAttribute("style"));
 
-    // check the round trip button to enable all calendars
-    mainPage.roundTripRadioButton.click();
+    // now select the input for the number and kind of passengers
+    mainPage.numberAndKindOfPassengersInput.click();
 
-    // Experiment with different techniques to see if a radio button
-    // is selected or not.  If the round trip button is selected then
-    // the one way trip button must not be selected.  Important note here
-    // elementToBeSelected is a wait condition it returns boolean true
-    // within a set time limit waiting for the element to be selected.
-    // if the element fails to be set during the time constraint an
-    // exception is thrown.
-    boolean roundTripTripRadioButtonSelected = wait.until(
-        ExpectedConditions.elementToBeSelected(mainPage.roundTripRadioButton)
+    // wait until the increment number of adults button is visible and the add two more adults
+    WebElement incrementNumberOfAdultsButton = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.incrementNumberOfAdultsButton)
     );
 
-    // the round trip button should be selected but the one way trip
-    // button should not be selected
-    boolean oneWayTripRadioButtonSelected = mainPage.oneWayTripRadioButton.isSelected();
-    boolean[] expected = new boolean[]{true, false};
-    boolean[] results = new boolean[]{roundTripTripRadioButtonSelected, oneWayTripRadioButtonSelected};
-    assertArrayEquals(expected, results);
+    // click the "+" button twice assert on three adults as passengers
+    for (int i = 0; i < 2; i++) incrementNumberOfAdultsButton.click();
+    boolean twoMoreAdultsAdded = wait.until(
+        ExpectedConditions.textToBePresentInElement(mainPage.numberOfAdultsNumber, "3")
+    );
+    assertTrue(twoMoreAdultsAdded);
 
-    // now that round trip is selected the arrival date should not be greyed out, opacity should be 1
-    assertEquals(enabledArrivalDateText, mainPage.enableDisableArrivalController.getAttribute("style"));
-    // click the departure input to enable to departure city choice
-    mainPage.departureInput.click();
+    // click the done button to finish adding two more adults
+    mainPage.doneButtonForNumberOfPassengers.click();
 
-    // find the desired departure city and select it, then assert the departure city
-    // element has captured it
-    WebElement departureCity = wait.until(
-      ExpectedConditions.visibilityOf(mainPage.departureCity)
+    boolean numberOfPassengersCaptured = wait.until(
+        ExpectedConditions.textToBePresentInElement(mainPage.numberAndKindOfPassengersInput, passengerInformationText)
     );
 
-    departureCity.click();
+    assertTrue(numberOfPassengersCaptured);
 
-    // this is a more robust way of checking the departure city was selected
-    // as the event has to resolve to true or throw an exception
-    boolean departureCitySelected = wait.until(
-        ExpectedConditions.attributeToBe(mainPage.departureInput, "value", departureCityText)
-    );
-    assertTrue(departureCitySelected);
+    mainPage.seniorCitizenDiscountButton.click();
+    assertTrue(mainPage.seniorCitizenDiscountButton.isSelected());
 
-    // following the same pattern with the departure city, click the arrival city input
-    mainPage.arrivalInput.click();
+    mainPage.findFlightsButton.click();
 
-    // The select list should appear, wait for the arrival city to appear
-    // once it appears click it
-    WebElement arrivalCity = wait.until(
-        ExpectedConditions.visibilityOf(mainPage.arrivalCity)
+    boolean flightFound = wait.until(
+        ExpectedConditions.attributeToBe(mainPage.departureInput, "value",
+            departureCityDefaultText)
     );
 
-    arrivalCity.click();
-
-    // ensure the arrival city has been captured by the arrival city input element
-    // then assert it was captured
-    boolean arrivalCitySelected = wait.until(
-        ExpectedConditions.attributeToBe(mainPage.arrivalInput, "value", arrivalCityText)
-    );
-
-    assertTrue(arrivalCitySelected);
-
-    // click the departure date to bring up the calendar
-    mainPage.departureDateInput.click();
-    WebElement defaultDepartureDate = wait.until(
-        ExpectedConditions.visibilityOf(mainPage.defaultDepartureDate)
-    );
-
-    // once we see the default departure date in the calendar view
-    // we have to grab its text value because once we click
-    // the default date the element will disappear meaning we can
-    // no longer query it for attribute values
-    String departureDay = defaultDepartureDate.getText();
-
-    // at the same time we have to grab the current month
-    // and year if we are going to robustly predefine the
-    // return date
-
-    String currentMonthAndYear = mainPage.currentMonthAndYear.getText();
-
-    StringBuilder date = createFormattedDate(currentMonthAndYear, departureDay);
-    // Februrary 2023
-    defaultDepartureDate.click();
-
-    // the text in the input field will have the form dd/mm
-    // two digits for the day and two digits for the month
-    boolean departureDateSelected = wait.until(
-        ExpectedConditions.attributeContains(mainPage.departureDateInput,
-            "value", departureDay)
-    );
-
-    assertTrue(departureDateSelected);
-
-
+    assertTrue(flightFound);
   }
 }
