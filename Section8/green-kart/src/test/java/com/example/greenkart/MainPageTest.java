@@ -1,6 +1,7 @@
 package com.example.greenkart;
 
 import org.example.SetWebDriverLocation;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -18,6 +19,7 @@ import java.util.List;
 public class MainPageTest {
   private final String url = "https://rahulshettyacademy.com/seleniumPractise/#/";
   private final String cucumberHeading = "Cucumber - 1 Kg";
+  private final String productAddedText = "ADDED";
   private WebDriver driver;
   private MainPage mainPage;
   private Duration duration;
@@ -47,7 +49,7 @@ public class MainPageTest {
 
   @Test
   public void testAddToCartAndCheckout() throws InterruptedException {
-    WebElement numberOfItems, totalPrice;
+    WebElement numberOfItems, totalPrice, cucumberAddToCartButton;
     String[] expected, results;
     /*
     We have a large amount of grocery items at the website, Rahul wants Cucumber to be initially
@@ -77,7 +79,17 @@ public class MainPageTest {
     }
 
     // once the index is found add one cucumber to the cart
-    mainPage.addToCartButtons.get(productIndex).click();
-    Thread.sleep(2000);
+    cucumberAddToCartButton = mainPage.addToCartButtons.get(productIndex);
+    cucumberAddToCartButton.click();
+    // assert the cart has been updated, first check the ADDED text appears
+    boolean addedTextAppears = wait.until(
+        ExpectedConditions.textToBePresentInElement(cucumberAddToCartButton, productAddedText)
+    );
+    Assert.assertTrue(addedTextAppears);
+
+    // how check for the cart update itself
+    expected = new String[]{"1", "48"};
+    results = new String[]{numberOfItems.getText(), totalPrice.getText()};
+    Assert.assertEquals(results, expected);
   }
 }
