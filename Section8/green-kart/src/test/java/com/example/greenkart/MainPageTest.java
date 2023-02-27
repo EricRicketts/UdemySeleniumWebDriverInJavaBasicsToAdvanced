@@ -17,6 +17,7 @@ import java.lang.reflect.Array;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.IntFunction;
 
 public class MainPageTest {
   private final String url = "https://rahulshettyacademy.com/seleniumPractise/#/";
@@ -25,6 +26,8 @@ public class MainPageTest {
   private MainPage mainPage;
   private Duration duration;
   private WebDriverWait wait;
+  private WebElement[] fruitOrVegetableNamesArray;
+  private WebElement[] addToCardButtonsArray;
 
 
   @BeforeClass
@@ -41,6 +44,8 @@ public class MainPageTest {
 
     mainPage = new MainPage(driver);
     wait = new WebDriverWait(driver, duration);
+    fruitOrVegetableNamesArray =  mainPage.productTitles.toArray(new WebElement[mainPage.productTitles.size()]);
+    addToCardButtonsArray = mainPage.addToCartButtons.toArray(new WebElement[mainPage.addToCartButtons.size()]);
   }
 
   @AfterMethod
@@ -57,6 +62,7 @@ public class MainPageTest {
     };
     String[] expected, results;
     List<String> selectedFruitOrVegetableList = Arrays.asList(selectedFruitOrVegetableItems);
+    boolean hitBranch = false;
     /*
     We have a large amount of grocery items at the website, Rahul wants Cucumber to be initially
     selected.  However, when we query the "ADD TO CART" button 30 elements are found.  The technique
@@ -91,26 +97,32 @@ public class MainPageTest {
     // iterate through the entire list of fruits and vegetables titles, this will
     // only be done one time.  For each product item check to see if
     // it is included in the desired product list, if it is then click to add
-    for (int index = 0; index < mainPage.productTitles.size(); index+=1) {
-      WebElement currentProduct = mainPage.productTitles.get(index);
+    for (int index = 0; index < fruitOrVegetableNamesArray.length; index++) {
+      Thread.sleep(2000);
+      hitBranch = true;
+      WebElement currentFruitOrVegetableNameElement = (WebElement) Array.get(fruitOrVegetableNamesArray, index);
       // strip away the excess text
-      String currentProductAllText = currentProduct.getText();
+      String currentFruitOrVegetableAllText = currentFruitOrVegetableNameElement.getText();
       // the format for the product title is => Cucumber - 1 Kg
-      String currentProductName = currentProductAllText.split("\s+")[0];
-      if (selectedFruitOrVegetableList.contains(currentProductName)) {
+      String currentFruitOrVegetableName = currentFruitOrVegetableAllText.split("\s+")[0];
+      if (selectedFruitOrVegetableList.contains(currentFruitOrVegetableName)) {
         // the current product is in the desired list so select it
-        fruitOrVegetableAddToCartButton = mainPage.addToCartButtons.get(index);
-        fruitOrVegetableAddToCartButton.click();
-
+        String xpathForButtonSibling = "//following-sibling::div[@class='product-action']/button";
+        WebElement currentFruitOrVegetableButtonElement =
+            currentFruitOrVegetableNameElement.findElement(By.xpath(xpathForButtonSibling));
+        currentFruitOrVegetableButtonElement.click();
+//        fruitOrVegetableAddToCartButton = mainPage.addToCartButtons.get(index);
+//        fruitOrVegetableAddToCartButton.click();
         // assert the cart has been updated, check the ADDED text appears
+        System.out.println("got into if condition " + currentFruitOrVegetableButtonElement);
         boolean addedTextAppears = wait.until(
-            ExpectedConditions.textToBePresentInElement(fruitOrVegetableAddToCartButton, productAddedText)
+            ExpectedConditions.textToBePresentInElement(currentFruitOrVegetableButtonElement, productAddedText)
         );
         Assert.assertTrue(addedTextAppears);
       }
     }
 
-
+    assertTrue(hitBranch);
     // how check for the cart update itself
     /*
     expected = new String[]{"1", "48"};
