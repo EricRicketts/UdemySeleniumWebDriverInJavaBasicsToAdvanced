@@ -17,14 +17,28 @@ import java.lang.reflect.Array;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.IntFunction;
 
 public class MainPageTest {
   private final String url = "https://rahulshettyacademy.com/seleniumPractise/#/";
   private final String productAddedText = "ADDED";
+  private final String buttonXpath = "//button[text()='ADD TO CART']";
+  private final String[] desiredProducts = {
+      "Cucumber", "Brocolli", "Tomato",
+      "Mushroom", "Apple", "Mango",
+      "Strawberry", "Almonds", "Walnuts"
+  };
+  // convert the array to a list, can now search for items within the list
+  private List<String> desiredProductsList = Arrays.asList(desiredProducts);
+  List<WebElement> products;
+  int desiredProductCount, numberOfProductItems;
+
   private WebDriver driver;
   private MainPage mainPage;
   private Duration duration;
   private WebDriverWait wait;
+  private WebElement[] fruitOrVegetableNamesArray;
+  private WebElement[] addToCardButtonsArray;
 
 
   @BeforeClass
@@ -41,8 +55,9 @@ public class MainPageTest {
 
     mainPage = new MainPage(driver);
     wait = new WebDriverWait(driver, duration);
+    products = mainPage.productTitles;
+    desiredProductCount = 0; numberOfProductItems = 30;
   }
-
   @AfterMethod
   public void tearDown() {
     driver.quit();
@@ -50,13 +65,6 @@ public class MainPageTest {
 
   @Test
   public void testAddToCartAndCheckout() throws InterruptedException {
-    WebElement numberOfItems, totalPrice, fruitOrVegetableAddToCartButton;
-    String[] selectedFruitOrVegetableItems = {
-        "Brocolli", "Cauliflower", "Cucumber",
-         "Carrot", "Brinjal", "Almonds"
-    };
-    String[] expected, results;
-    List<String> selectedFruitOrVegetableList = Arrays.asList(selectedFruitOrVegetableItems);
     /*
     We have a large amount of grocery items at the website, Rahul wants Cucumber to be initially
     selected.  However, when we query the "ADD TO CART" button 30 elements are found.  The technique
@@ -78,45 +86,107 @@ public class MainPageTest {
     using my initial approach the entire list of fruits and vegetables is being searched multiple times.
     */
 
-    // first ensure there are no items in the cart
-    numberOfItems = mainPage.numberOfItemsAndTotalPrice.get(0);
-    totalPrice = mainPage.numberOfItemsAndTotalPrice.get(1);
+    /*
+      I put in an event driven delay to make sure the last image was visible, which did not work.  I got the
+      following error: IndexOutOfBoundsException: Index 25 out of bounds for length 23, this means the product
+      list when initialized held 23 items but now later in time due to the for loop it is being asked to access
+      index 25 as the index variable has continued to advance in the for loop.
 
-    // there should be 0 items and the price should be 0
-    expected = new String[]{"0", "0"};
-    results = new String[]{numberOfItems.getText(), totalPrice.getText()};
-    Assert.assertEquals(results, expected);
+      My initial thoughts are to figure out some way to wait until the list is fully loaded before iterating
+      through the for loop.
+
+      Rahul explained the problem it comes down to the nature of the search for the "ADD TO CART" button.  The
+      problem is once a user selects "ADD TO CART" the button changes to "ADDED" so the number of "ADD TO CART"
+      button is now less for a brief period of time.  We need to put in a wait condition until there are no
+      more "ADDED" buttons
+     */
+
+    /*
+      Since I added the second test which runs much faster, if the first test finishes the browser
+      might not be done disappearing before the next one appears in such a case it might be good to
+      ensure the browser has closed and is not visible in the @AfterMethod
+    */
+    WebElement walnutImageVisible = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.walnutImage)
+    );
+
+    Assert.assertNotNull(walnutImageVisible);
+
+    for (int index = 0; index < products.size(); index++) {
+      // this has the entire product description formatted
+      // like Broccoli - 1 Kg
+      String productTitle = products.get(index).getText();
+      // split the string on spaces and then grab the first
+      // non-space text which would be the product name
+      String productName = productTitle.split("-")[0].trim();
 
 
-    // iterate through the entire list of fruits and vegetables titles, this will
-    // only be done one time.  For each product item check to see if
-    // it is included in the desired product list, if it is then click to add
-    for (int index = 0; index < mainPage.productTitles.size(); index+=1) {
-      WebElement currentProduct = mainPage.productTitles.get(index);
-      // strip away the excess text
-      String currentProductAllText = currentProduct.getText();
-      // the format for the product title is => Cucumber - 1 Kg
-      String currentProductName = currentProductAllText.split("\s+")[0];
-      if (selectedFruitOrVegetableList.contains(currentProductName)) {
-        // the current product is in the desired list so select it
-        fruitOrVegetableAddToCartButton = mainPage.addToCartButtons.get(index);
-        fruitOrVegetableAddToCartButton.click();
-
-        // assert the cart has been updated, check the ADDED text appears
-        boolean addedTextAppears = wait.until(
-            ExpectedConditions.textToBePresentInElement(fruitOrVegetableAddToCartButton, productAddedText)
+      // check to see if the current product name is part of our desired
+      // products to buy
+      if (desiredProductsList.contains(productName)){
+        desiredProductCount++;
+        driver.findElements(By.xpath(buttonXpath)).get(index).click();
+        boolean noAddedButtonsPresent = wait.until(
+            ExpectedConditions.invisibilityOfAllElements(mainPage.allAddedButtons)
         );
-        Assert.assertTrue(addedTextAppears);
+        assertTrue(noAddedButtonsPresent);
+        if (desiredProductCount >= desiredProducts.length) break;
       }
     }
+    List<WebElement> numberOfItemsAndTotalPrice = wait.until(
+        ExpectedConditions.visibilityOfAllElements(mainPage.numberOfItemsAndTotalPrice)
+    );
+    String numberOfItems = numberOfItemsAndTotalPrice.get(0).getText();
+    String totalPrice = numberOfItemsAndTotalPrice.get(1).getText();
+    String[] expected = {"9", "956"};
+    String[] results = {numberOfItems, totalPrice};
 
-
-    // how check for the cart update itself
+    Assert.assertEquals(results, expected);
     /*
-    expected = new String[]{"1", "48"};
-    results = new String[]{numberOfItems.getText(), totalPrice.getText()};
+      Note there is a weakness in this solution as I have to manipulate the button status before
+      ensuring I can click the correct button.  Rahul stated what is generally good practise in the
+      end-to-end testing community, avoid identifying elements by text as text can change, in the
+      solution below the "ADD TO CART" buttons are identified by an element xpath which is more
+      robust.  The test will also run faster as I will not be waiting for the "ADDED" text to clear
+    */
+  }
+
+  @Test
+  public void addToCartAndCheckoutMoreRobust() {
+    WebElement walnutImageVisible = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.walnutImage)
+    );
+
+    Assert.assertNotNull(walnutImageVisible);
+
+    for (int index = 0; index < products.size(); index++) {
+      // this has the entire product description formatted
+      // like Broccoli - 1 Kg
+      String productTitle = products.get(index).getText();
+      // split the string on spaces and then grab the first
+      // non-space text which would be the product name
+      String productName = productTitle.split("-")[0].trim();
+
+      // check to see if the current product name is part of our desired
+      // products to buy
+      if (desiredProductsList.contains(productName)){
+        desiredProductCount++;
+        // click the "ADD TO CART" button which is positionally located
+        mainPage.addToCartButtonsWithXpath.get(index).click();
+        if (desiredProductCount >= desiredProducts.length) break;
+      }
+    }
+    String numberOfItems = mainPage.numberOfItemsAndTotalPrice.get(0).getText();
+    String totalPrice = mainPage.numberOfItemsAndTotalPrice.get(1).getText();
+    String[] expected = {"9", "956"};
+    String[] results = {numberOfItems, totalPrice};
+
     Assert.assertEquals(results, expected);
 
-     */
   }
 }
+/*
+One thing to consider for a future project is to take Mike Schiemer's suggestion and randomly pick 6 items
+out of the 30 and then only iterate through those six, the immediate problem is asserting on the total price,
+for each item we are going to have to grab the price and then keep adding the price to the sum total
+ */

@@ -12,11 +12,17 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "h4.product-name")
   public List<WebElement> productTitles;
 
-  @FindBy(how = How.XPATH, using = "//button[text()='ADD TO CART']")
-  public List<WebElement> addToCartButtons;
+  @FindBy(how = How.XPATH, using = "//div[@class='product-action']/button")
+  List<WebElement> addToCartButtonsWithXpath;
 
   @FindBy(how = How.XPATH, using = "//div[@class='cart-info'] //tr/td[position()=3]")
   public List<WebElement> numberOfItemsAndTotalPrice;
+
+  @FindBy(how = How.XPATH, using = "//button[contains(text(), 'ADDED')]")
+  public List<WebElement> allAddedButtons;
+
+  @FindBy(how = How.XPATH, using = "//img[@src='./images/walnuts.jpg']")
+  public WebElement walnutImage;
 
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
