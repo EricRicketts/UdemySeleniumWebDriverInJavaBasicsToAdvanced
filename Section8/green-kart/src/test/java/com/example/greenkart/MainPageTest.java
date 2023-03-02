@@ -14,7 +14,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.lang.reflect.Array;
+import java.security.SecureRandom;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.IntFunction;
@@ -184,9 +186,29 @@ public class MainPageTest {
     Assert.assertEquals(results, expected);
 
   }
+
+  @Test
+  public void testAddToCartAndCheckoutSchiemer() {
+    /*
+      One thing to consider for a future project is to take Mike Schiemer's suggestion and randomly pick 6 items
+      out of the 30 and then only iterate through those six, the immediate problem is asserting on the total price,
+      for each item we are going to have to grab the price and then keep adding the price to the sum total
+     */
+
+    // get the number of products which is the same as the number of product titles
+    // and define a integer list to hold the indices for each of the six randomly
+    // chosen products
+    int numberOfProducts = mainPage.allProducts.size();
+    List<Integer> randomProductIndices = new ArrayList<Integer>();
+
+    // define a secure random object then get six random numbers for 0 to number of products minus one
+    SecureRandom random = new SecureRandom();
+    for (int index = 0; index < 6; index++) randomProductIndices.add(random.nextInt(numberOfProducts));
+
+    // iterate through the six indices and get the product price, add to the total price, and then add the
+    // product to the cart
+    randomProductIndices.stream().forEach((index) -> {
+      WebElement product = mainPage.allProducts.get(index);
+    });
+  }
 }
-/*
-One thing to consider for a future project is to take Mike Schiemer's suggestion and randomly pick 6 items
-out of the 30 and then only iterate through those six, the immediate problem is asserting on the total price,
-for each item we are going to have to grab the price and then keep adding the price to the sum total
- */
