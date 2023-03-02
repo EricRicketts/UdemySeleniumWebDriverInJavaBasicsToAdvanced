@@ -16,7 +16,7 @@ public class MainPage {
   public List<WebElement> allProducts;
 
   @FindBy(how = How.XPATH, using = "//div[@class='product-action']/button")
-  List<WebElement> addToCartButtonsWithXpath;
+  public List<WebElement> addToCartButtonsWithXpath;
 
   @FindBy(how = How.XPATH, using = "//div[@class='cart-info'] //tr/td[position()=3]")
   public List<WebElement> numberOfItemsAndTotalPrice;
