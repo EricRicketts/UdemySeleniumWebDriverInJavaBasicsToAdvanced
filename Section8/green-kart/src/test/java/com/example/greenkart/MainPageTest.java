@@ -14,7 +14,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.lang.reflect.Array;
+import java.security.SecureRandom;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.IntFunction;
@@ -39,7 +41,7 @@ public class MainPageTest {
   private WebDriverWait wait;
   private WebElement[] fruitOrVegetableNamesArray;
   private WebElement[] addToCardButtonsArray;
-
+  private WebElement walnutImageVisible;
 
   @BeforeClass
   public static void oneTimeSetup() {
@@ -57,12 +59,16 @@ public class MainPageTest {
     wait = new WebDriverWait(driver, duration);
     products = mainPage.productTitles;
     desiredProductCount = 0; numberOfProductItems = 30;
+    walnutImageVisible = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.walnutImage)
+    );
   }
   @AfterMethod
   public void tearDown() {
     driver.quit();
   }
 
+  @Ignore
   @Test
   public void testAddToCartAndCheckout() throws InterruptedException {
     /*
@@ -106,11 +112,6 @@ public class MainPageTest {
       might not be done disappearing before the next one appears in such a case it might be good to
       ensure the browser has closed and is not visible in the @AfterMethod
     */
-    WebElement walnutImageVisible = wait.until(
-        ExpectedConditions.visibilityOf(mainPage.walnutImage)
-    );
-
-    Assert.assertNotNull(walnutImageVisible);
 
     for (int index = 0; index < products.size(); index++) {
       // this has the entire product description formatted
@@ -151,6 +152,7 @@ public class MainPageTest {
     */
   }
 
+  @Ignore
   @Test
   public void addToCartAndCheckoutMoreRobust() {
     WebElement walnutImageVisible = wait.until(
@@ -184,9 +186,41 @@ public class MainPageTest {
     Assert.assertEquals(results, expected);
 
   }
+
+  @Test
+  public void testAddToCartAndCheckoutSchiemer() throws InterruptedException {
+    /*
+      One thing to consider for a future project is to take Mike Schiemer's suggestion and randomly pick 6 items
+      out of the 30 and then only iterate through those six, the immediate problem is asserting on the total price,
+      for each item we are going to have to grab the price and then keep adding the price to the sum total
+     */
+
+   // check the page has loaded
+    assertNotNull(walnutImageVisible);
+
+    // get the number of products which is the same as the number of product titles
+    // and define a integer list to hold the indices for each of the six randomly
+    // chosen products
+    int numberOfProducts = mainPage.allProducts.size();
+    List<Integer> randomProductIndices = new ArrayList<Integer>();
+
+    // define a secure random object then get six random numbers for 0 to number of products minus one
+    SecureRandom random = new SecureRandom();
+    for (int index = 0; index < 6; index++) randomProductIndices.add(random.nextInt(numberOfProducts));
+
+    // iterate through the six indices and get the product price, add to the total price, and then add the
+    // product to the cart
+    int totalPrice = randomProductIndices.stream().reduce(0, productIndex );
+
+    String expectedNumberOfItems = Integer.toString(randomProductIndices.size());
+    String expectedTotalPrice = Integer.toString(totalPrice);
+
+    String resultantNumberOfItems = mainPage.numberOfItemsAndTotalPrice.get(0).getText();
+    String resultantTotalPrice = mainPage.numberOfItemsAndTotalPrice.get(1).getText();
+
+    String[] expected = {expectedNumberOfItems, expectedTotalPrice};
+    String[] results = {resultantNumberOfItems, resultantTotalPrice};
+
+    Assert.assertEquals(results, expected);
+  }
 }
-/*
-One thing to consider for a future project is to take Mike Schiemer's suggestion and randomly pick 6 items
-out of the 30 and then only iterate through those six, the immediate problem is asserting on the total price,
-for each item we are going to have to grab the price and then keep adding the price to the sum total
- */

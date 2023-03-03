@@ -12,8 +12,11 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "h4.product-name")
   public List<WebElement> productTitles;
 
+  @FindBy(how = How.XPATH, using = "//div[@class='product']")
+  public List<WebElement> allProducts;
+
   @FindBy(how = How.XPATH, using = "//div[@class='product-action']/button")
-  List<WebElement> addToCartButtonsWithXpath;
+  public List<WebElement> addToCartButtonsWithXpath;
 
   @FindBy(how = How.XPATH, using = "//div[@class='cart-info'] //tr/td[position()=3]")
   public List<WebElement> numberOfItemsAndTotalPrice;
