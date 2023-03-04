@@ -15,18 +15,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainPageTest {
-  private final String url = "https://rahulshettyacademy.com/seleniumPractise/#/";
-  private int implicitTimeout = 10;
-  private int explicitTimeout;
   private WebDriver driver;
   private MainPage mainPage;
-  private Duration duration;
-  private WebDriverWait wait;
   private int expectedCartPrice;
 
   WebElement walnuts;
 
-  public void addItemsToCart(List<String> items) {
+  private void addItemsToCart(List<String> items) {
     int itemCount = 0;
 
     // loop over the given list of all items to see if a given item
@@ -60,19 +55,15 @@ public class MainPageTest {
 
   @BeforeEach
   public void setUp() {
+    int implicitTimeout = 10;
+    String url = "https://rahulshettyacademy.com/seleniumPractise/#/";
     expectedCartPrice = 0;
-    explicitTimeout = 15;
-    duration = Duration.ofSeconds(explicitTimeout);
     driver = new ChromeDriver();
     driver.manage().window().maximize();
     driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitTimeout));
     driver.get(url);
 
     mainPage = new MainPage(driver);
-    wait = new WebDriverWait(driver, duration);
-    walnuts = wait.until(
-        ExpectedConditions.visibilityOf(mainPage.walnuts)
-    );
   }
 
   @AfterEach
@@ -82,12 +73,20 @@ public class MainPageTest {
 
   @Test
   public void testAddItemsToCart() {
+    // define an explicit wait for the walnuts to appear
+    // which are the items at the bottom of the webpage
+    // and then wait for the walnuts to appear
+    int explicitTimeout = 15;
+    Duration duration = Duration.ofSeconds(explicitTimeout);
+    WebDriverWait wait = new WebDriverWait(driver, duration);
+    walnuts = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.walnuts)
+    );
+    Assertions.assertNotNull(walnuts);
+
+    // convert the desired array of items to buy to a list
     String[] itemsArray = {"Cucumber", "Brocolli", "Beetroot"};
     List<String> items = Arrays.asList(itemsArray);
-
-    // assert the page has fully loaded by making sure the last
-    // item at the bottom of the webpage is visible
-    Assertions.assertNotNull(walnuts);
 
     // add items to the cart
     addItemsToCart(items);
