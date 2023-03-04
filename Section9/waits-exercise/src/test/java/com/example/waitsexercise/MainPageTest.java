@@ -81,7 +81,7 @@ public class MainPageTest {
   }
 
   @Test
-  public void testAddItemsToCart() throws InterruptedException {
+  public void testAddItemsToCart() {
     String[] itemsArray = {"Cucumber", "Brocolli", "Beetroot"};
     List<String> items = Arrays.asList(itemsArray);
 
