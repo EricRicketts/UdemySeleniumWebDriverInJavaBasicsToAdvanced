@@ -8,10 +8,9 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
-// page_url = https://www.jetbrains.com/
 public class MainPage {
-  @FindBy(how = How.CSS, using = "h4.product-name")
-  public List<WebElement> allProductNames;
+  @FindBy(how = How.XPATH, using = "//div[@class='product']")
+  public List<WebElement> allProducts;
 
   @FindBy(how = How.XPATH, using = "//div[@class='product-image']/img[@alt='Walnuts - 1/4 Kg']")
   public WebElement walnuts;
