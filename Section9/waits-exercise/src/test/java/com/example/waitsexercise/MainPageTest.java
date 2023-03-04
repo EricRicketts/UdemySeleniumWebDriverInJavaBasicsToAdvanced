@@ -76,6 +76,7 @@ public class MainPageTest {
     // define an explicit wait for the walnuts to appear
     // which are the items at the bottom of the webpage
     // and then wait for the walnuts to appear
+    // doing this to fulfill assignment requirements
     int explicitTimeout = 15;
     Duration duration = Duration.ofSeconds(explicitTimeout);
     WebDriverWait wait = new WebDriverWait(driver, duration);
@@ -94,15 +95,15 @@ public class MainPageTest {
     // wait until expected number of items are in cart
     boolean cartNumberOfItemsUpdated = wait.until(
         ExpectedConditions.textToBePresentInElement(
-            mainPage.numberOfItemsAndTotalPrice.get(0), // first element is number of items
+            mainPage.cartNumberOfItems, // number of items in the cart
             Integer.toString(itemsArray.length)) // expected number of items in cart
     );
 
-    Assertions.assertTrue(cartNumberOfItemsUpdated);
+    Assertions.assertTrue(cartNumberOfItemsUpdated); // necessary?
 
     // we have already asserted on the number of cart items now assert on the
     // total cart price
-    String resultantCartPrice = mainPage.numberOfItemsAndTotalPrice.get(1).getText();
+    String resultantCartPrice = mainPage.cartTotalPrice.getText();
     Assertions.assertEquals(Integer.toString(expectedCartPrice), resultantCartPrice);
   }
 }
