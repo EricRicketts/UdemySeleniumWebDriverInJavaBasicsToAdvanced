@@ -72,7 +72,7 @@ public class MainPageTest {
   }
 
   @Test
-  public void testAddItemsToCart() {
+  public void testAddItemsToCartAndCheckout() {
     // define an explicit wait for the walnuts to appear
     // which are the items at the bottom of the webpage
     // and then wait for the walnuts to appear
@@ -80,30 +80,44 @@ public class MainPageTest {
     int explicitTimeout = 15;
     Duration duration = Duration.ofSeconds(explicitTimeout);
     WebDriverWait wait = new WebDriverWait(driver, duration);
+
+    //  wait and assert on the walnuts because the wait will fail
+    // only if it does not return something within the time limit
+    // so we need to ensure the WebElement is not null
     walnuts = wait.until(
         ExpectedConditions.visibilityOf(mainPage.walnuts)
     );
     Assertions.assertNotNull(walnuts);
 
     // convert the desired array of items to buy to a list
-    String[] itemsArray = {"Cucumber", "Brocolli", "Beetroot"};
+    String[] itemsArray = {
+        "Cucumber", "Brocolli", "Beetroot", "Cauliflower",
+        "Carrot", "Potato", "Apple", "Mango",
+        "Corn", "Strawberry", "Almonds", "Cashews"
+    };
     List<String> items = Arrays.asList(itemsArray);
 
     // add items to the cart
     addItemsToCart(items);
 
     // wait until expected number of items are in cart
+    // we do not need to make an assertion here because
+    // the call to textToBePresentInElement method returns
+    // true or throws an exception, so if no exception is
+    // thrown then we know the value is true
     boolean cartNumberOfItemsUpdated = wait.until(
         ExpectedConditions.textToBePresentInElement(
             mainPage.cartNumberOfItems, // number of items in the cart
             Integer.toString(itemsArray.length)) // expected number of items in cart
     );
 
-    Assertions.assertTrue(cartNumberOfItemsUpdated); // necessary?
-
     // we have already asserted on the number of cart items now assert on the
-    // total cart price
+    // total cart price, remember in the addItemsToCar method we also accumulate
+    // the expected price => expectedCartPrice which is a private variable
     String resultantCartPrice = mainPage.cartTotalPrice.getText();
     Assertions.assertEquals(Integer.toString(expectedCartPrice), resultantCartPrice);
+
+    // examine the details of the cart itself, each item in the cart should be
+    // listed along with its price
   }
 }

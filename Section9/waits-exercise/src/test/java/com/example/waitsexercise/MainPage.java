@@ -24,6 +24,9 @@ public class MainPage {
   @FindBy(how = How.XPATH, using = "(//div[@class='cart-info'] //tr/td[position()=3])[2]")
   public WebElement cartTotalPrice;
 
+  @FindBy(how = How.CSS, using = "img[alt='Cart']")
+  public WebElement cartIcon;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }
