@@ -10,9 +10,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.security.SecureRandom;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class MainPageTest {
   private WebDriver driver;
@@ -47,6 +51,13 @@ public class MainPageTest {
         if (itemCount >= items.size()) break;
       }
     }
+  }
+
+  private ArrayList<Integer> generateRandomItemIndices(int streamSize, int originValue, int boundValue) {
+    SecureRandom secureRandom = new SecureRandom();
+    IntStream randomIndicesStream = secureRandom.ints(streamSize, originValue, boundValue);
+    List<Integer> randomIndicesList = randomIndicesStream.boxed().collect(Collectors.toList());
+    return new ArrayList<Integer>(randomIndicesList);
   }
   @BeforeAll
   public static void oneTimeSetup() {
@@ -95,6 +106,7 @@ public class MainPageTest {
         "Carrot", "Potato", "Apple", "Mango",
         "Corn", "Strawberry", "Almonds", "Cashews"
     };
+
     List<String> items = Arrays.asList(itemsArray);
 
     // add items to the cart
