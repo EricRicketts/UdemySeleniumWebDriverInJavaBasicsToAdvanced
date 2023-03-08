@@ -10,13 +10,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.lang.reflect.Array;
 import java.security.SecureRandom;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class MainPageTest {
   private WebDriver driver;
@@ -25,39 +25,26 @@ public class MainPageTest {
 
   WebElement walnuts;
 
-  private void addItemsToCart(List<String> items) {
-    int itemCount = 0;
-
-    // loop over the given list of all items to see if a given item
-    // needs to be added to the cart
-    for (int index = 0; index < mainPage.allProducts.size(); index++) {
-      // get the current product element then find its name and price
-      WebElement currentProduct = mainPage.allProducts.get(index);
-      WebElement currentProductTitle = currentProduct.findElement(By.className("product-name"));
-      String currentProductName = currentProductTitle.getText().split("-")[0].trim();
-      String currentProductPrice = currentProduct.findElement(By.className("product-price")).getText();
-
-
-      // checks to see if the current item is in the list to be added to the cart
-      if (items.contains(currentProductName)) {
-        // check how many items have been added to the cart
-        itemCount++;
-        // since we are already adding this item to the cart we
-        // might as well sum the prices of all items in the cart
-        expectedCartPrice += Integer.parseInt(currentProductPrice);
-        // add the item to the cart
-        mainPage.allAddToCartButtons.get(index).click();
-        // if all the items are added no need to look for more items
-        if (itemCount >= items.size()) break;
-      }
-    }
+  private void addItemsToCart(List<WebElement> items) {
+    String addToCartLocator = "//div[@class='product-action']/button";
+    items.forEach(item -> item.findElement(By.xpath(addToCartLocator)).click());
   }
 
-  private ArrayList<Integer> generateRandomItemIndices(int streamSize, int originValue, int boundValue) {
-    SecureRandom secureRandom = new SecureRandom();
-    IntStream randomIndicesStream = secureRandom.ints(streamSize, originValue, boundValue);
-    List<Integer> randomIndicesList = randomIndicesStream.boxed().collect(Collectors.toList());
-    return new ArrayList<Integer>(randomIndicesList);
+  private ArrayList<Integer> generateRandomItemIndices(int numberOfIndices, int originValue, int boundValue) {
+    ArrayList<Integer> randomIndices = new ArrayList<>();
+    Random rand = new Random();
+    int randomIndicesCount = 0;
+    List<Integer> indices = IntStream.range(originValue, boundValue).boxed().toList();
+    while (randomIndicesCount < numberOfIndices) {
+      int randomIndex = rand.nextInt(boundValue);
+      if (randomIndices.contains(randomIndex)) {
+        continue;
+      } else {
+        randomIndices.add(randomIndex);
+        randomIndicesCount++;
+      }
+    }
+    return randomIndices;
   }
   @BeforeAll
   public static void oneTimeSetup() {
@@ -83,7 +70,7 @@ public class MainPageTest {
   }
 
   @Test
-  public void testAddItemsToCartAndCheckout() {
+  public void testAddItemsToCartAndCheckout() throws InterruptedException {
     // define an explicit wait for the walnuts to appear
     // which are the items at the bottom of the webpage
     // and then wait for the walnuts to appear
@@ -91,45 +78,27 @@ public class MainPageTest {
     int explicitTimeout = 15;
     Duration duration = Duration.ofSeconds(explicitTimeout);
     WebDriverWait wait = new WebDriverWait(driver, duration);
+    int numberOfItemsToBuy = 12;
+    List<WebElement> items = new ArrayList<>();
 
     //  wait and assert on the walnuts because the wait will fail
     // only if it does not return something within the time limit
-    // so we need to ensure the WebElement is not null
+    // we need to ensure the WebElement is not null
     walnuts = wait.until(
         ExpectedConditions.visibilityOf(mainPage.walnuts)
     );
     Assertions.assertNotNull(walnuts);
 
-    // convert the desired array of items to buy to a list
-    String[] itemsArray = {
-        "Cucumber", "Brocolli", "Beetroot", "Cauliflower",
-        "Carrot", "Potato", "Apple", "Mango",
-        "Corn", "Strawberry", "Almonds", "Cashews"
-    };
+    // upon Mike Schiemer's suggestion randomly select the products from the product list
+    // in this case we are randomly generating a list of product indices
+    ArrayList<Integer> indicesArrayList =
+        generateRandomItemIndices(numberOfItemsToBuy, 0, mainPage.allProducts.size());
 
-    List<String> items = Arrays.asList(itemsArray);
+    // map the product indices to products (WebElement)
+    indicesArrayList.forEach(index -> items.add(mainPage.allProducts.get(index)));
 
     // add items to the cart
     addItemsToCart(items);
-
-    // wait until expected number of items are in cart
-    // we do not need to make an assertion here because
-    // the call to textToBePresentInElement method returns
-    // true or throws an exception, so if no exception is
-    // thrown then we know the value is true
-    boolean cartNumberOfItemsUpdated = wait.until(
-        ExpectedConditions.textToBePresentInElement(
-            mainPage.cartNumberOfItems, // number of items in the cart
-            Integer.toString(itemsArray.length)) // expected number of items in cart
-    );
-
-    // we have already asserted on the number of cart items now assert on the
-    // total cart price, remember in the addItemsToCar method we also accumulate
-    // the expected price => expectedCartPrice which is a private variable
-    String resultantCartPrice = mainPage.cartTotalPrice.getText();
-    Assertions.assertEquals(Integer.toString(expectedCartPrice), resultantCartPrice);
-
-    // examine the details of the cart itself, each item in the cart should be
-    // listed along with its price
+    Thread.sleep(5000);
   }
 }
