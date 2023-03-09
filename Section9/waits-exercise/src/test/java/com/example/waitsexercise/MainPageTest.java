@@ -4,6 +4,7 @@ import org.example.SetWebDriverLocation;
 import org.junit.jupiter.api.*;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -25,16 +26,28 @@ public class MainPageTest {
   private int expectedCartPrice;
 
   WebElement walnuts;
+  private final String buttonDefault = "ADD TO CART";
 
   private void addItemsToCart(List<WebElement> items, WebDriver driver, WebDriverWait wait) {
+    // since the elements were chosen randomly there is no predictable scroll, thus in order
+    // to make sure the right button element is clicked the target button needs to be scrolled
+    // into the center of the view.
     items.forEach(item -> {
-      Actions actions = new Actions(driver);
+      // first scroll the object to the center of the screen, center the object vertically
+      // and horizontally it stays put if already in view
+      JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+      String executorScript = "arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})";
+      jsExecutor.executeScript(executorScript, item);
+
+      // get the button locator using css because the search for the button should be within
+      // the scope of the element itself, xpath would search the entire webpage
       String addToCartLocator = "div.product-action > button";
       WebElement addToCartButton = item.findElement(By.cssSelector(addToCartLocator));
-      actions.moveToElement(addToCartButton);
       addToCartButton.click();
+
+//       once clicked the button turns to "ADDED" then after a delay it goes to "ADD TO CART"
       boolean buttonTextBackToAddToCart = wait.until(
-          ExpectedConditions.textToBePresentInElement(addToCartButton, "ADD TO CART")
+          ExpectedConditions.textToBePresentInElement(addToCartButton, buttonDefault)
       );
     });
   }
@@ -108,6 +121,5 @@ public class MainPageTest {
 
     // add items to the cart
     addItemsToCart(items, driver, wait);
-    Thread.sleep(5000);
   }
 }
