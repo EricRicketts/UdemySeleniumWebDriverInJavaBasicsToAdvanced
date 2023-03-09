@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -25,9 +26,17 @@ public class MainPageTest {
 
   WebElement walnuts;
 
-  private void addItemsToCart(List<WebElement> items) {
-    String addToCartLocator = "//div[@class='product-action']/button";
-    items.forEach(item -> item.findElement(By.xpath(addToCartLocator)).click());
+  private void addItemsToCart(List<WebElement> items, WebDriver driver, WebDriverWait wait) {
+    items.forEach(item -> {
+      Actions actions = new Actions(driver);
+      String addToCartLocator = "div.product-action > button";
+      WebElement addToCartButton = item.findElement(By.cssSelector(addToCartLocator));
+      actions.moveToElement(addToCartButton);
+      addToCartButton.click();
+      boolean buttonTextBackToAddToCart = wait.until(
+          ExpectedConditions.textToBePresentInElement(addToCartButton, "ADD TO CART")
+      );
+    });
   }
 
   private ArrayList<Integer> generateRandomItemIndices(int numberOfIndices, int originValue, int boundValue) {
@@ -98,7 +107,7 @@ public class MainPageTest {
     indicesArrayList.forEach(index -> items.add(mainPage.allProducts.get(index)));
 
     // add items to the cart
-    addItemsToCart(items);
+    addItemsToCart(items, driver, wait);
     Thread.sleep(5000);
   }
 }
