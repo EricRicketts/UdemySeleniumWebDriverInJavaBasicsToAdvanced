@@ -55,17 +55,6 @@ public class MainPageTest {
           ExpectedConditions.textToBePresentInElement(addToCartButton, buttonDefault)
       );
     });
-
-    String[] results = new String[]{
-        mainPage.cartNumberOfItems.getText(),
-        mainPage.cartTotalPrice.getText()
-    };
-    String[] expected = new String[]{
-        Integer.toString(items.size()),
-        Integer.toString(expectedCartPrice)
-    };
-
-    Assertions.assertArrayEquals(expected, results);
   }
 
   private ArrayList<Integer> generateRandomItemIndices(int numberOfIndices, int originValue, int boundValue) {
@@ -137,5 +126,29 @@ public class MainPageTest {
 
     // add items to the cart
     addItemsToCart(items, driver, wait);
+    String[] results = new String[]{
+        mainPage.cartNumberOfItems.getText(),
+        mainPage.cartTotalPrice.getText()
+    };
+    String[] expected = new String[]{
+        Integer.toString(items.size()),
+        Integer.toString(expectedCartPrice)
+    };
+
+    Assertions.assertArrayEquals(expected, results);
+
+    // now that the total price and number of items is asserted proceed to checkout
+    mainPage.cartIcon.click();
+
+    WebElement proceedToCheckoutButton = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.proceedToCheckoutButton)
+    );
+    Assertions.assertNotNull(proceedToCheckoutButton);
+    proceedToCheckoutButton.click();
+
+    WebElement placeOrderButton = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.placeOrderButton)
+    );
+    Assertions.assertNotNull(placeOrderButton);
   }
 }

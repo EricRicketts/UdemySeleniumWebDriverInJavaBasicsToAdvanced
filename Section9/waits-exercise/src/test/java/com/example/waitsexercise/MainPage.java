@@ -27,6 +27,12 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "img[alt='Cart']")
   public WebElement cartIcon;
 
+  @FindBy(how = How.XPATH, using = "//button[contains(text(), 'PROCEED TO CHECKOUT')]")
+  public WebElement proceedToCheckoutButton;
+
+  @FindBy(how = How.XPATH, using = "//button[contains(text(), 'Place Order')]")
+  public WebElement placeOrderButton;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }
