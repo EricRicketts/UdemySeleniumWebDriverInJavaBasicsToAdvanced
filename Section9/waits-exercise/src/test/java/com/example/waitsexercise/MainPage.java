@@ -42,6 +42,15 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "span.discountAmt")
   public WebElement discountAmount;
 
+  @FindBy(how = How.CSS, using = "input.promoCode")
+  public WebElement promoCodeInput;
+
+  @FindBy(how = How.CSS, using = "button.promoBtn")
+  public WebElement applyPromoCodeButton;
+
+  @FindBy(how = How.CSS, using = "span.promoInfo")
+  public WebElement promoCodeApplied;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }

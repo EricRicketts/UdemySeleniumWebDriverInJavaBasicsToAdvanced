@@ -28,6 +28,8 @@ public class MainPageTest {
   WebElement walnuts;
   private final String buttonDefault = "ADD TO CART";
   private final String preDiscountPercentage = "0%";
+  private final String promoCode = "rahulshettyacademy";
+  private final String promoCodeAppliedString = "Code applied ..!";
 
   private void addItemsToCart(List<WebElement> items, WebDriver driver, WebDriverWait wait) {
     // since the elements were chosen randomly there is no predictable scroll, thus in order
@@ -166,5 +168,14 @@ public class MainPageTest {
     };
 
     Assertions.assertArrayEquals(expected, results);
+
+    // find the promo code input field and type in the promo code
+    mainPage.promoCodeInput.sendKeys(promoCode);
+    mainPage.applyPromoCodeButton.click();
+    WebElement promoCodeApplied = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.promoCodeApplied)
+    );
+    Assertions.assertEquals(promoCodeAppliedString, promoCodeApplied.getText());
+
   }
 }
