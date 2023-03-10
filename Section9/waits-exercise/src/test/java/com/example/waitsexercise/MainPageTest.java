@@ -27,6 +27,7 @@ public class MainPageTest {
 
   WebElement walnuts;
   private final String buttonDefault = "ADD TO CART";
+  private final String preDiscountPercentage = "0%";
 
   private void addItemsToCart(List<WebElement> items, WebDriver driver, WebDriverWait wait) {
     // since the elements were chosen randomly there is no predictable scroll, thus in order
@@ -150,5 +151,20 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.placeOrderButton)
     );
     Assertions.assertNotNull(placeOrderButton);
+
+    // assert totals and discount before applying the discount
+    expected = new String[]{
+        Integer.toString(expectedCartPrice),
+        Integer.toString(expectedCartPrice),
+        preDiscountPercentage
+    };
+
+    results = new String[]{
+        mainPage.totalAmount.getText(),
+        mainPage.discountAmount.getText(),
+        mainPage.discount.getText()
+    };
+
+    Assertions.assertArrayEquals(expected, results);
   }
 }

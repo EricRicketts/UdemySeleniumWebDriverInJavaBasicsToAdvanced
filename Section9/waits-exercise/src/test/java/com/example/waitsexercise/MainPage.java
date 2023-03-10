@@ -33,6 +33,15 @@ public class MainPage {
   @FindBy(how = How.XPATH, using = "//button[contains(text(), 'Place Order')]")
   public WebElement placeOrderButton;
 
+  @FindBy(how = How.CSS, using = "span.totAmt")
+  public WebElement totalAmount;
+
+  @FindBy(how = How.CSS, using = "span.discountPerc")
+  public WebElement discount;
+
+  @FindBy(how = How.CSS, using = "span.discountAmt")
+  public WebElement discountAmount;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }
