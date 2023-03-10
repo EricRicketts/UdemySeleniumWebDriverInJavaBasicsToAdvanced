@@ -33,8 +33,13 @@ public class MainPageTest {
     // to make sure the right button element is clicked the target button needs to be scrolled
     // into the center of the view.
     items.forEach(item -> {
-      // first scroll the object to the center of the screen, center the object vertically
-      // and horizontally it stays put if already in view
+      // now that we have the desired item, start adding up the price
+      String itemPriceString = item.findElement(By.cssSelector("p.product-price")).getText();
+      expectedCartPrice += Integer.parseInt(itemPriceString);
+      // first scroll the object to the center of the screen, center the object both vertically
+      // horizontally it stays put if already in view, this is what the js code does
+      // if this is not done then the program will terminate due to not clicking the desired
+      // element as the element will be selected in the code but not visible in the webpage
       JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
       String executorScript = "arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})";
       jsExecutor.executeScript(executorScript, item);
@@ -45,11 +50,22 @@ public class MainPageTest {
       WebElement addToCartButton = item.findElement(By.cssSelector(addToCartLocator));
       addToCartButton.click();
 
-//       once clicked the button turns to "ADDED" then after a delay it goes to "ADD TO CART"
+      // once clicked the button turns to "ADDED" then after a delay it goes to "ADD TO CART"
       boolean buttonTextBackToAddToCart = wait.until(
           ExpectedConditions.textToBePresentInElement(addToCartButton, buttonDefault)
       );
     });
+
+    String[] results = new String[]{
+        mainPage.cartNumberOfItems.getText(),
+        mainPage.cartTotalPrice.getText()
+    };
+    String[] expected = new String[]{
+        Integer.toString(items.size()),
+        Integer.toString(expectedCartPrice)
+    };
+
+    Assertions.assertArrayEquals(expected, results);
   }
 
   private ArrayList<Integer> generateRandomItemIndices(int numberOfIndices, int originValue, int boundValue) {
