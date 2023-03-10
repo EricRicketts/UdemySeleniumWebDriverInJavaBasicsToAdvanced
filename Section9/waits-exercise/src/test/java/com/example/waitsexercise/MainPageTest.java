@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.*;
@@ -176,6 +177,14 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.promoCodeApplied)
     );
     Assertions.assertEquals(promoCodeAppliedString, promoCodeApplied.getText());
+
+    // finally see if the price after discount is correct
+    String percentString = mainPage.discount.getText().split("%")[0];
+    BigDecimal percentNumber = new BigDecimal(1 - Integer.parseInt(percentString) / 100);
+    BigDecimal totalPrice = new BigDecimal(mainPage.totalAmount.getText());
+    BigDecimal discountedPrice = totalPrice.multiply(percentNumber);
+    int discountedPriceIntegerValue = discountedPrice.intValue();
+
 
   }
 }
