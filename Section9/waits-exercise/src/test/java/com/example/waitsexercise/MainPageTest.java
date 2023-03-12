@@ -185,7 +185,7 @@ public class MainPageTest {
     String percentString = mainPage.discount.getText().split("%")[0];
 
     // calculate the discounted payment percentage
-    BigDecimal percentNumber = new BigDecimal(1.00 - Integer.parseInt(percentString) / 100.00);
+    BigDecimal percentNumber = BigDecimal.valueOf(1.00 - Integer.parseInt(percentString) / 100.00);
 
     // calculate the discounted price and assert on its value in the application
     BigDecimal totalPrice = new BigDecimal(mainPage.totalAmount.getText());
@@ -195,7 +195,7 @@ public class MainPageTest {
     // find the number of decimal points in the value on the webpage
     BigDecimal discountedPriceInApp = new BigDecimal(mainPage.discountAmount.getText());
     int numberOfDecimals = Math.max(0, discountedPriceInApp.stripTrailingZeros().scale());
-    BigDecimal resultantDiscountedPrice = discountedPrice.setScale(numberOfDecimals, BigDecimal.ROUND_DOWN);
+    BigDecimal resultantDiscountedPrice = discountedPrice.setScale(numberOfDecimals, RoundingMode.DOWN);
 
     Assertions.assertEquals(mainPage.discountAmount.getText(), resultantDiscountedPrice.toString());
   }
