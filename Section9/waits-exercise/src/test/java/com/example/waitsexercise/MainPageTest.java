@@ -54,10 +54,20 @@ public class MainPageTest {
   }
 
   private ArrayList<Integer> generateRandomItemIndices(int numberOfIndices, int boundValue) {
+    // this method generate a list of random indices which are used to randomly select items
+    // to buy from the web page
+
+    // hold the random indices in a list, create an instance of a random number
+    // and create a count variable which state is used to exit the while loop
     ArrayList<Integer> randomIndices = new ArrayList<>();
     Random rand = new Random();
     int randomIndicesCount = 0;
+
+    // while there are still more indices to add
     while (randomIndicesCount < numberOfIndices) {
+      // get the next random number if the random number
+      // is not in the list of indices add it and increment
+      // the counter
       int randomIndex = rand.nextInt(boundValue);
       if (!randomIndices.contains(randomIndex)) {
         randomIndices.add(randomIndex);
