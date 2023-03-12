@@ -21,14 +21,10 @@ public class MainPageTest {
   private WebDriver driver;
   private MainPage mainPage;
   private int expectedCartPrice;
-
   WebElement walnuts;
-  private final String buttonDefault = "ADD TO CART";
-  private final String preDiscountPercentage = "0%";
-  private final String promoCode = "rahulshettyacademy";
-  private final String promoCodeAppliedString = "Code applied ..!";
 
   private void addItemsToCart(List<WebElement> items, WebDriver driver, WebDriverWait wait) {
+    final String buttonDefault = "ADD TO CART";
     // since the elements were chosen randomly there is no predictable scroll, thus in order
     // to make sure the right button element is clicked the target button needs to be scrolled
     // into the center of the view.
@@ -54,6 +50,7 @@ public class MainPageTest {
       boolean buttonTextBackToAddToCart = wait.until(
           ExpectedConditions.textToBePresentInElement(addToCartButton, buttonDefault)
       );
+      Assertions.assertTrue(buttonTextBackToAddToCart);
     });
   }
 
@@ -98,6 +95,9 @@ public class MainPageTest {
 
   @Test
   public void testAddItemsToCartAndCheckout() throws InterruptedException {
+    final String preDiscountPercentage = "0%";
+    final String promoCode = "rahulshettyacademy";
+    final String promoCodeAppliedString = "Code applied ..!";
     // define an explicit wait for the walnuts to appear
     // which are the items at the bottom of the webpage
     // and then wait for the walnuts to appear
