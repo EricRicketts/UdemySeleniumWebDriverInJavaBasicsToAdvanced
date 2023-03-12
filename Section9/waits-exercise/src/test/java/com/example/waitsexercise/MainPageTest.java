@@ -8,19 +8,14 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class MainPageTest {
   private WebDriver driver;
@@ -188,11 +183,14 @@ public class MainPageTest {
     BigDecimal percentNumber = BigDecimal.valueOf(1.00 - Integer.parseInt(percentString) / 100.00);
 
     // calculate the discounted price and assert on its value in the application
+
+    // first calculate the discounted price with a numeric type
     BigDecimal totalPrice = new BigDecimal(mainPage.totalAmount.getText());
     BigDecimal percentNumberToTwoDecimals = percentNumber.setScale(2, RoundingMode.DOWN);
     BigDecimal discountedPrice = totalPrice.multiply(percentNumberToTwoDecimals);
 
-    // find the number of decimal points in the value on the webpage
+    // find the number of decimal points in the value on the webpage then modify the
+    // discounted price to match the number of decimal points existing in the application
     BigDecimal discountedPriceInApp = new BigDecimal(mainPage.discountAmount.getText());
     int numberOfDecimals = Math.max(0, discountedPriceInApp.stripTrailingZeros().scale());
     BigDecimal resultantDiscountedPrice = discountedPrice.setScale(numberOfDecimals, RoundingMode.DOWN);
