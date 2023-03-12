@@ -112,7 +112,7 @@ public class MainPageTest {
     );
     Assertions.assertNotNull(walnuts);
 
-    // upon Mike Schiemer's suggestion randomly select the products from the product list
+    // upon Mike Schemer's suggestion randomly select the products from the product list
     // in this case we are randomly generating a list of product indices
     ArrayList<Integer> indicesArrayList =
         generateRandomItemIndices(numberOfItemsToBuy, mainPage.allProducts.size());
