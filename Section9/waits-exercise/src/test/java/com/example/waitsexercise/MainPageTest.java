@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class MainPageTest {
   private WebDriver driver;
@@ -54,16 +53,13 @@ public class MainPageTest {
     });
   }
 
-  private ArrayList<Integer> generateRandomItemIndices(int numberOfIndices, int originValue, int boundValue) {
+  private ArrayList<Integer> generateRandomItemIndices(int numberOfIndices, int boundValue) {
     ArrayList<Integer> randomIndices = new ArrayList<>();
     Random rand = new Random();
     int randomIndicesCount = 0;
-    List<Integer> indices = IntStream.range(originValue, boundValue).boxed().toList();
     while (randomIndicesCount < numberOfIndices) {
       int randomIndex = rand.nextInt(boundValue);
-      if (randomIndices.contains(randomIndex)) {
-        continue;
-      } else {
+      if (!randomIndices.contains(randomIndex)) {
         randomIndices.add(randomIndex);
         randomIndicesCount++;
       }
@@ -94,7 +90,7 @@ public class MainPageTest {
   }
 
   @Test
-  public void testAddItemsToCartAndCheckout() throws InterruptedException {
+  public void testAddItemsToCartAndCheckout() {
     final String preDiscountPercentage = "0%";
     final String promoCode = "rahulshettyacademy";
     final String promoCodeAppliedString = "Code applied ..!";
@@ -119,7 +115,7 @@ public class MainPageTest {
     // upon Mike Schiemer's suggestion randomly select the products from the product list
     // in this case we are randomly generating a list of product indices
     ArrayList<Integer> indicesArrayList =
-        generateRandomItemIndices(numberOfItemsToBuy, 0, mainPage.allProducts.size());
+        generateRandomItemIndices(numberOfItemsToBuy, mainPage.allProducts.size());
 
     // map the product indices to products (WebElement)
     indicesArrayList.forEach(index -> items.add(mainPage.allProducts.get(index)));
