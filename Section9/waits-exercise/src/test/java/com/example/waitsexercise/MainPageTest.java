@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.*;
@@ -179,12 +180,23 @@ public class MainPageTest {
     Assertions.assertEquals(promoCodeAppliedString, promoCodeApplied.getText());
 
     // finally see if the price after discount is correct
+
+    // get the discount percentage as a string
     String percentString = mainPage.discount.getText().split("%")[0];
-    BigDecimal percentNumber = new BigDecimal(1 - Integer.parseInt(percentString) / 100);
+
+    // calculate the discounted payment percentage
+    BigDecimal percentNumber = new BigDecimal(1.00 - Integer.parseInt(percentString) / 100.00);
+
+    // calculate the discounted price and assert on its value in the application
     BigDecimal totalPrice = new BigDecimal(mainPage.totalAmount.getText());
-    BigDecimal discountedPrice = totalPrice.multiply(percentNumber);
-    int discountedPriceIntegerValue = discountedPrice.intValue();
+    BigDecimal percentNumberToTwoDecimals = percentNumber.setScale(2, RoundingMode.DOWN);
+    BigDecimal discountedPrice = totalPrice.multiply(percentNumberToTwoDecimals);
 
+    // find the number of decimal points in the value on the webpage
+    BigDecimal discountedPriceInApp = new BigDecimal(mainPage.discountAmount.getText());
+    int numberOfDecimals = Math.max(0, discountedPriceInApp.stripTrailingZeros().scale());
+    BigDecimal resultantDiscountedPrice = discountedPrice.setScale(numberOfDecimals, BigDecimal.ROUND_DOWN);
 
+    Assertions.assertEquals(mainPage.discountAmount.getText(), resultantDiscountedPrice.toString());
   }
 }
