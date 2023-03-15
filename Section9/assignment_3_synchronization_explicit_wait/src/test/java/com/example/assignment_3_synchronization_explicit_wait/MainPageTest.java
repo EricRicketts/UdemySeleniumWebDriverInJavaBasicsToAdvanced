@@ -17,7 +17,9 @@ public class MainPageTest {
   private MainPage mainPage;
 
   @BeforeAll
-  public static void oneTimeSetup() { SetWebDriverLocation.setDriverLocationAndDriverSystemProperty(); }
+  public static void oneTimeSetup() {
+    SetWebDriverLocation.setDriverLocationAndDriverSystemProperty();
+  }
   @BeforeEach
   public void setUp() {
     int implicitWaitTime = 5;

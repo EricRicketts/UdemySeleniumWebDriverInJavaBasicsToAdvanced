@@ -16,10 +16,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class MainPageTest {
-  private final String url = "https://rahulshettyacademy.com/angularpractice/";
   private WebDriver driver;
   private MainPage mainPage;
-  private Duration duration;
   private WebDriverWait wait;
 
   @BeforeAll
@@ -28,7 +26,8 @@ public class MainPageTest {
   }
   @BeforeEach
   public void setUp() {
-    duration = Duration.ofSeconds(10);
+    String url = "https://rahulshettyacademy.com/angularpractice/";
+    Duration duration = Duration.ofSeconds(10);
     driver = new ChromeDriver();
     driver.manage().window().maximize();
     driver.get(url);
@@ -43,7 +42,7 @@ public class MainPageTest {
   }
 
   @Test
-  public void testUIExercise() throws InterruptedException {
+  public void testUIExercise() {
     final String name = "Eric Ricketts";
     final String email = "eric_ricketts@iclould.com";
     final String password = "foo123bar";
