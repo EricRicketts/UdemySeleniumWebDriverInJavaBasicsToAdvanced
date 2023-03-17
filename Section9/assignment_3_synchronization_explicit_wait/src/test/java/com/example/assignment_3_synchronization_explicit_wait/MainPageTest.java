@@ -18,16 +18,29 @@ public class MainPageTest {
 
   @BeforeAll
   public static void oneTimeSetup() {
+    System.setProperty("webdriver.http.factory", "jdk-http-client");
     SetWebDriverLocation.setDriverLocationAndDriverSystemProperty();
   }
   @BeforeEach
   public void setUp() {
-    // https://groups.google.com/g/chromedriver-users/c/xL5-13_qGaA?pli=1
-    // above is url discussing the issue with ChromeDriver 111, when you
-    // get to the website use "Expand All" to see all the conversation text in one page
-    // Hopefully, this will work for both Windows and Mac.  Put whatever changes in the @BeforeAll
-    // annotation as the webdriver should only have to be modified one time.  Also try to look
-    // at the WebDriverManager code and figure out what it is doing.
+    /*
+     https://groups.google.com/g/chromedriver-users/c/xL5-13_qGaA?pli=1
+     above is url discussing the issue with ChromeDriver 111, when you
+     get to the website use "Expand All" to see all the conversation text in one page
+     Hopefully, this will work for both Windows and Mac.  Put whatever changes in the @BeforeAll
+     annotation as the webdriver should only have to be modified one time.  Also try to look
+     at the WebDriverManager code and figure out what it is doing.
+     After some reading on the above website I tried introducing a new dependency and adding the selenium
+     http client:
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-http-jdk-client</artifactId>
+            <version>4.8.1</version>
+        </dependency>
+     System.setProperty("webdriver.http.factory", "jdk-http-client"); added above in the @BeforeAll annotation
+
+     Hopefully when Chrome version 112 is released I can just use the that driver with no modifications
+    */
     int implicitWaitTime = 5;
     String url = "https://rahulshettyacademy.com/loginpagePractise/";
     driver = new ChromeDriver();
