@@ -12,6 +12,15 @@ public class MainPage {
     @FindBy(how = How.ID, using = "page-footer")
     public WebElement pageFooter;
 
+    @FindBy(how = How.CSS, using = "a[href$='/dynamic_loading/1']")
+    public WebElement elementHiddenOnPageLink;
+
+    @FindBy(how = How.CSS, using = "div#start > button")
+    public WebElement startButton;
+
+    @FindBy(how = How.CSS, using = "div#finish > h4")
+    public WebElement fluentWaitResult;
+
     public MainPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
