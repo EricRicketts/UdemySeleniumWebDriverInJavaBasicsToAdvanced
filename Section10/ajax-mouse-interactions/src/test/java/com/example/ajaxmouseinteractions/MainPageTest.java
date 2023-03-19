@@ -4,6 +4,7 @@ import org.example.SetWebDriverLocation;
 import org.junit.jupiter.api.*;
 
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -67,13 +68,18 @@ public class MainPageTest {
     Assertions.assertNotNull(popUpSignInButton);
 
     // click in the search bar, hold down the SHIFT key, type in "HELLO"
+    // then highlight the text by double-clicking
     actions.moveToElement(mainPage.searchInput)
         .click()
         .keyDown(Keys.SHIFT)
         .sendKeys("hello")
+        .doubleClick()
         .build()
         .perform();
 
+    String highlightedText = (String) ((JavascriptExecutor) driver)
+        .executeScript("return window.getSelection().toString();");
+    Assertions.assertEquals(highlightedText, "HELLO");
     Assertions.assertTrue(mainPage.searchInput.getAttribute("value").contains("HELLO"));
   }
 }
