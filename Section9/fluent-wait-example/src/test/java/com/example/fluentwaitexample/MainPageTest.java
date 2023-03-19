@@ -13,6 +13,7 @@ import java.time.Duration;
 import java.util.NoSuchElementException;
 
 public class MainPageTest {
+    private final int explicitWaitTime = 10;
     private WebDriver driver;
     private MainPage mainPage;
 
@@ -40,7 +41,6 @@ public class MainPageTest {
 
     @Test
     public void testFluentWaitExample() {
-      int explicitWaitTime = 10;
       int pollingTime = 2;
       Duration duration = Duration.ofSeconds(explicitWaitTime);
       Duration pollingDuration = Duration.ofSeconds(pollingTime);
@@ -90,6 +90,60 @@ public class MainPageTest {
       WebElement fluentWaitResult = fluentWait.until(
           webDriver -> mainPage.fluentWaitResult.isDisplayed() ? mainPage.fluentWaitResult : null
       );
+      Assertions.assertTrue(fluentWaitResult.getText().contains("Hello World!"));
+    }
+
+    @Test
+    public void testNoFluentWaitExample() {
+      Duration duration = Duration.ofSeconds(explicitWaitTime);
+      WebDriverWait wait = new WebDriverWait(driver, duration);
+
+      // go to the main page and then select the Dynamic Loading link
+      WebElement dynamicLoadingLink = wait.until(
+          ExpectedConditions.visibilityOf(mainPage.dynamicLoadingLink)
+      );
+      dynamicLoadingLink.click();
+
+      // once we are on the Dynamic Loading link page we should
+      // see the page footer
+      WebElement pageFooter = wait.until(
+          ExpectedConditions.visibilityOf(mainPage.pageFooter)
+      );
+      Assertions.assertNotNull(pageFooter);
+
+      // now to get on the correct page to run our test select
+      // the hidden element on page link
+      WebElement elementHiddenOnPageLink = wait.until(
+          ExpectedConditions.visibilityOf(mainPage.elementHiddenOnPageLink)
+      );
+      elementHiddenOnPageLink.click();
+
+      // the start button will begin our exercise
+      WebElement startButton = wait.until(
+          ExpectedConditions.visibilityOf(mainPage.startButton)
+      );
+      Assertions.assertNotNull(startButton);
+
+      startButton.click();
+
+      // this is one way to work around using a fluent wait
+      // the developer can wait until the element is no longer present
+      // in the case of clicking the start button a loading GIF appears
+      // and in the code below, a wait is defined which returns a boolean
+      // true once the loading gif disappears from view
+      boolean loadingGIFFinished = wait.until(
+          ExpectedConditions.invisibilityOf(mainPage.loadingGIF)
+      );
+
+      // not necessary but done to get rid of the warning of variable
+      // not used
+      Assertions.assertTrue(loadingGIFFinished);
+
+      // wait for the "Hello World!" h4 element to show
+      WebElement fluentWaitResult = wait.until(
+          ExpectedConditions.visibilityOf(mainPage.fluentWaitResult)
+      );
+
       Assertions.assertTrue(fluentWaitResult.getText().contains("Hello World!"));
     }
 }

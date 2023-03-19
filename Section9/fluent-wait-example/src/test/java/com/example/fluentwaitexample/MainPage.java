@@ -21,6 +21,9 @@ public class MainPage {
     @FindBy(how = How.CSS, using = "div#finish > h4")
     public WebElement fluentWaitResult;
 
+    @FindBy(how = How.CSS, using = "div#loading > img")
+    public WebElement loadingGIF;
+
     public MainPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
