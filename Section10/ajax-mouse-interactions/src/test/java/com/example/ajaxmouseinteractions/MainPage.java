@@ -13,6 +13,9 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "div#nav-flyout-ya-signin > a > span")
   public WebElement popUpSignInButton;
 
+  @FindBy(how = How.CSS, using = "input#twotabsearchtextbox")
+  public WebElement searchInput;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }
