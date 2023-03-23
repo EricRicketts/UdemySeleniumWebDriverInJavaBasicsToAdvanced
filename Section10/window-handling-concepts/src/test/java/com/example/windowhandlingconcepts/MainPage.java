@@ -11,7 +11,13 @@ public class MainPage {
   public WebElement blinkingTextLink;
 
   @FindBy(how = How.CSS, using = "p.im-para.red")
-  public WebElement desiredUsernameParagraph;
+  public WebElement getDesiredUsernameParagraph;
+
+  @FindBy(how = How.CSS, using = "p.im-para.red a")
+  public WebElement desiredUsernameAnchor;
+
+  @FindBy(how = How.ID, using = "username")
+  public WebElement usernameInput;
 
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
