@@ -50,6 +50,9 @@ public class MainPageTest {
     Duration duration = Duration.ofSeconds(explicitWaitTime);
     WebDriverWait wait = new WebDriverWait(driver, duration);
 
+    // before using the desired iframe, find out how many iframes exist
+    Assertions.assertEquals(1, mainPage.iframeElements.size());
+
     // we have to switch to the iframe element because it is encapsulated
     // from the main web page, so we can only search for those elements
     // within the iframe when we switch to the iframe context
@@ -67,7 +70,7 @@ public class MainPageTest {
 
     // build and execute the drag and drop operation
     Actions actionsBuilder = new Actions(driver);
-    actionsBuilder.dragAndDrop(mainPage.draggableElement, mainPage.droppableElement).build().perform();
+    actionsBuilder.dragAndDrop(draggableElement, mainPage.droppableElement).build().perform();
 
     // when the drag and drop operation is complete the text of the droppable element changes
     // wait and assert on this change of text
