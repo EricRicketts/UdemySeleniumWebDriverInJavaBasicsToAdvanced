@@ -21,6 +21,9 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "iframe.demo-frame")
   public WebElement iframeElement;
 
+  @FindBy(how = How.LINK_TEXT, using = "Accept")
+  public WebElement acceptLink;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }

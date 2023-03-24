@@ -6,6 +6,7 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -43,6 +44,7 @@ public class MainPageTest {
 
   @Test
   public void testIFrames() {
+    boolean elementNotFound = false;
     final String draggableText = "Drag me to my target";
     final String initialDroppableText = "Drop here";
     final String finalDroppableText = "Dropped!";
@@ -57,6 +59,17 @@ public class MainPageTest {
     // from the main web page, so we can only search for those elements
     // within the iframe when we switch to the iframe context
     driver.switchTo().frame(mainPage.iframeElement);
+
+    // now in the iframe context we should not be able to see the Accept link
+    // this causes the test to take a long time but it does prove we cannot
+    // find the Accept link while in the iFrame
+    try {
+      WebElement acceptLinkInIFrame = wait.until(
+          ExpectedConditions.visibilityOf(mainPage.acceptLink)
+      );
+    } catch (TimeoutException e) {
+      Assertions.assertTrue(true);
+    }
 
     // find element to perform drag and drop
     WebElement draggableElement = wait.until(
@@ -78,5 +91,11 @@ public class MainPageTest {
         ExpectedConditions.textToBePresentInElement(mainPage.droppableElement, finalDroppableText)
     );
     Assertions.assertTrue(dragAndDropOperationComplete);
+
+    // now that we are done with our iframe content we need to switch back to the original content
+    driver.switchTo().defaultContent();
+
+    // Accept link is now visible since we are at the top level of the web page
+    Assertions.assertNotNull(mainPage.acceptLink);
   }
 }
