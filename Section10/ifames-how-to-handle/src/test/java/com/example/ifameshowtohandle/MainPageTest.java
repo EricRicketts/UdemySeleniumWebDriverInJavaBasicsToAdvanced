@@ -44,7 +44,6 @@ public class MainPageTest {
 
   @Test
   public void testIFrames() {
-    boolean elementNotFound = false;
     final String draggableText = "Drag me to my target";
     final String initialDroppableText = "Drop here";
     final String finalDroppableText = "Dropped!";
