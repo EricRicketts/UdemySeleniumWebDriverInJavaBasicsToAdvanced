@@ -4,6 +4,7 @@ import org.example.SetWebDriverLocation;
 import org.junit.jupiter.api.*;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,7 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
+import java.util.*;
 
 public class MainPageTest {
   private WebDriver driver;
@@ -41,7 +42,14 @@ public class MainPageTest {
   }
 
   @Test
-  public void testNumberOfLinks() {
+  public void testNumberOfLinks() throws InterruptedException {
+    List<String> expectedTitles = Arrays.asList(
+      "REST API Tutorial",
+      "The World's Most Popular API Testing Tool | SoapUI",
+      "Appium Mobile Automation Testing from Scratch + Frameworks Tutorial | Udemy",
+       "Apache JMeter - Apache JMeter™"
+    );
+    List<String> resultantTitles = new ArrayList<>();
     final int expectedNumberOfLinks = 27;
     final int expectedNumberOfLinksInFooter = 20;
     final int expectedNumberOfLinksInFirstFooterColumn = 5;
@@ -69,7 +77,44 @@ public class MainPageTest {
     int numberOfLinksInFirstFooterColumn = mainPage.firstColumnOfFooterTable.findElements(By.tagName("a")).size();
     Assertions.assertEquals(expectedNumberOfLinksInFirstFooterColumn, numberOfLinksInFirstFooterColumn);
 
-    // how click on each link in the first footer section and verify you have landed on the appropriate page
+    // get all the links in the first column then get all the links not part of a header element
     List<WebElement> firstColumnLinks = mainPage.firstColumnOfFooterTable.findElements(By.tagName("a"));
+    List<WebElement> firstColumnNonHeaderLines = firstColumnLinks.subList(1, numberOfLinksInFirstFooterColumn);
+
+    // for all the non-header links click each one is such a manner as to open up a window tab
+    firstColumnNonHeaderLines.forEach(link -> {
+      // ensures a new tab is opened in response to the click on the link
+      String clickOnLinkTab = Keys.chord(Keys.COMMAND, Keys.ENTER);
+      link.sendKeys(clickOnLinkTab);
+    });
+
+    // wait until all the tabs are open
+    wait.until(ExpectedConditions.numberOfWindowsToBe(numberOfLinksInFirstFooterColumn));
+
+    // now instantiate the window handles so we can move between each window
+    Set<String> windows = driver.getWindowHandles();
+    Iterator<String> windowIDs = windows.iterator();
+    String parentWindowID = windowIDs.next();
+    String firstChildWindowID = windowIDs.next();
+    String secondChildWindowID = windowIDs.next();
+    String thirdChildWindowID = windowIDs.next();
+    String fourthChildWindowID = windowIDs.next();
+
+    // form a list of window ids
+    List<String> childWindowIDs = Arrays.asList(
+        firstChildWindowID,
+        secondChildWindowID,
+        thirdChildWindowID,
+        fourthChildWindowID
+    );
+
+    // move through the list of window ids and get the title for each window
+    childWindowIDs.forEach(childID -> resultantTitles.add(driver.switchTo().window(childID).getTitle()));
+
+    // in order to assert the lists are the same ensure the lists are the same size and each
+    // list fully contains the other list
+    boolean sameListsButNotInSameOrder = expectedTitles.size() == resultantTitles.size() &&
+        expectedTitles.containsAll(resultantTitles) && resultantTitles.containsAll(expectedTitles);
+    Assertions.assertTrue(sameListsButNotInSameOrder);
   }
 }
