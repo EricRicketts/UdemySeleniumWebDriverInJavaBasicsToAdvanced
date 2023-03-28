@@ -3,17 +3,17 @@ package com.example.assignment6varioustasks;
 import org.example.SetWebDriverLocation;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.devtools.v85.page.Page;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class MainPageTest {
   private WebDriver driver;
@@ -44,7 +44,16 @@ public class MainPageTest {
 
   @Test
   public void testAssignmentSix() {
+    /*
+      1.  select one of the checkboxes under "Checkbox Example" and then grab the text associated with the checkbox
+      2.  Navigate to the pull-down on the left and select the option you chose for your checkbox selection
+      3.  Navigate to the "Switch To Alert Example" and enter your chosen option text then select the "Alert" button.
+      4.  Verify the Alert message contains the chosen option
+    */
+    List<Integer> indicesList = new ArrayList<>();
     final int explicitWaitTime = 10;
+    WebElement checkedCheckbox = null;
+    int index = 0;
     Duration duration = Duration.ofSeconds(explicitWaitTime);
     WebDriverWait wait = new WebDriverWait(driver, duration);
 
@@ -53,5 +62,45 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.footerDivContainerElement)
     );
     Assertions.assertNotNull(footerDivContainerElement);
+
+    // get all the label elements of the checkboxes
+    List<WebElement> checkboxLabelElements = wait.until(
+        ExpectedConditions.visibilityOfAllElements(mainPage.checkboxLabelElements)
+    );
+
+    // build up the list of indices
+    for (int listIndex = 0; listIndex < checkboxLabelElements.size(); listIndex++) indicesList.add(listIndex);
+
+    // find the number of labels, then the random number will be between 0 and 1 less
+    // the number of labels which matches the indices in the list
+    int maxIndex= checkboxLabelElements.size() - 1;
+    int minIndex = 0;
+    int chosenLabelElementIndex = new Random().nextInt(maxIndex - minIndex) + minIndex;
+
+    // assert the chosen index is contained in the list of indices
+    Assertions.assertTrue(indicesList.contains(chosenLabelElementIndex));
+
+    // use the randomly generated index to get the desired label, then get the text and click
+    // on the checkbox
+    WebElement chosenCheckboxLabelElement = checkboxLabelElements.get(chosenLabelElementIndex);
+    String chosenCheckboxLabelText = chosenCheckboxLabelElement.getText();
+    chosenCheckboxLabelElement.findElement(By.tagName("input")).click();
+
+    // cycle through the checkboxes and get the checked element
+    while (index < mainPage.checkboxInputElements.size()) {
+      if (mainPage.checkboxInputElements.get(index).isSelected()) {
+        checkedCheckbox = mainPage.checkboxInputElements.get(index);
+        break;
+      }
+      index += 1;
+    }
+
+    // now get the parent of the checked checkbox and the text of the parent
+    // it should match the chosen checkbox label
+    Assertions.assertNotNull(checkedCheckbox);
+    WebElement checkedCheckboxParentLabelElement = checkedCheckbox.findElement(By.xpath("parent::*"));
+    String checkedCheckboxParentLabelElementText = checkedCheckboxParentLabelElement.getText();
+
+    Assertions.assertEquals(chosenCheckboxLabelText, checkedCheckboxParentLabelElementText);
   }
 }
