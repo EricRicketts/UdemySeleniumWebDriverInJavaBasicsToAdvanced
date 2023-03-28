@@ -42,7 +42,8 @@ public class MainPageTest {
   }
 
   @Test
-  public void testNumberOfLinks() throws InterruptedException {
+  public void testNumberOfLinks() {
+    List<String> childWindowIDs = new ArrayList<>();
     List<String> expectedTitles = Arrays.asList(
       "REST API Tutorial",
       "The World's Most Popular API Testing Tool | SoapUI",
@@ -91,22 +92,15 @@ public class MainPageTest {
     // wait until all the tabs are open
     wait.until(ExpectedConditions.numberOfWindowsToBe(numberOfLinksInFirstFooterColumn));
 
-    // now instantiate the window handles so we can move between each window
+    // now instantiate the window handles, so we can move between each window
     Set<String> windows = driver.getWindowHandles();
     Iterator<String> windowIDs = windows.iterator();
-    String parentWindowID = windowIDs.next();
-    String firstChildWindowID = windowIDs.next();
-    String secondChildWindowID = windowIDs.next();
-    String thirdChildWindowID = windowIDs.next();
-    String fourthChildWindowID = windowIDs.next();
+    // get the parent window because we do not want to iterate over this one
+    // just the child windows
+    windowIDs.next();
 
-    // form a list of window ids
-    List<String> childWindowIDs = Arrays.asList(
-        firstChildWindowID,
-        secondChildWindowID,
-        thirdChildWindowID,
-        fourthChildWindowID
-    );
+    // iterate through the remaining window ids which are all child windows
+    while (windowIDs.hasNext()) childWindowIDs.add(windowIDs.next());
 
     // move through the list of window ids and get the title for each window
     childWindowIDs.forEach(childID -> resultantTitles.add(driver.switchTo().window(childID).getTitle()));
