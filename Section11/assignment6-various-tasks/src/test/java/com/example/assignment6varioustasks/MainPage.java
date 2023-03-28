@@ -18,6 +18,9 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "div#checkbox-example input")
   public List<WebElement> checkboxInputElements;
 
+  @FindBy(how = How.ID, using = "dropdown-class-example")
+  public WebElement dropdownElement;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }
