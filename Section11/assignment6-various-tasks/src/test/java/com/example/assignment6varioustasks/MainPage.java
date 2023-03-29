@@ -21,6 +21,12 @@ public class MainPage {
   @FindBy(how = How.ID, using = "dropdown-class-example")
   public WebElement dropdownElement;
 
+  @FindBy(how = How.ID, using = "name")
+  public WebElement nameInputElement;
+
+  @FindBy(how = How.ID, using = "alertbtn")
+  public WebElement alertButton;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }

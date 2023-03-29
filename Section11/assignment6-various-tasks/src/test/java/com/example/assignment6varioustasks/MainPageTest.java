@@ -3,6 +3,7 @@ package com.example.assignment6varioustasks;
 import org.example.SetWebDriverLocation;
 import org.junit.jupiter.api.*;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -104,10 +105,28 @@ public class MainPageTest {
 
     Assertions.assertEquals(chosenCheckboxLabelText, checkedCheckboxParentLabelElementText);
 
+    // move to the select element and select the option with the same text as that
+    // chosen via the checkbox elements
     Select dropdown = new Select(mainPage.dropdownElement);
     dropdown.selectByVisibleText(chosenCheckboxLabelText);
     WebElement selectedOption = dropdown.getFirstSelectedOption();
 
     Assertions.assertEquals(chosenCheckboxLabelText, selectedOption.getText());
+
+    // navigate to the input element with id "name" and enter the checkbox selection
+    // then select the alert button to get the pop-up
+    mainPage.nameInputElement.sendKeys(chosenCheckboxLabelText);
+
+    mainPage.alertButton.click();
+
+    // switch to the alert dialog
+    Alert alertDialog = driver.switchTo().alert();
+    // grab the dialog text
+    String alertText = alertDialog.getText();
+
+    Assertions.assertTrue(alertText.contains(chosenCheckboxLabelText));
+    alertDialog.accept();
+
+    driver.switchTo().defaultContent();
   }
 }
