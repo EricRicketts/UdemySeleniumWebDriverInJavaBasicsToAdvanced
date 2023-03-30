@@ -3,9 +3,6 @@ package com.example.handlingcalendarui;
 import org.example.SetWebDriverLocation;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,7 +10,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+
 import java.time.Duration;
+import java.util.Objects;
 
 public class MainPageTest {
   private WebDriver driver;
@@ -44,24 +43,38 @@ public class MainPageTest {
 
   @Test
   public void testCalendarUI() throws InterruptedException {
+    WebElement currentDayOfMonth;
     int explicitWaitTime = 10;
-    Duration  duration = Duration.ofSeconds(explicitWaitTime);
+    Duration duration = Duration.ofSeconds(explicitWaitTime);
     WebDriverWait wait = new WebDriverWait(driver, duration);
 
-    WebElement travelDateInput = wait.until(
-        ExpectedConditions.visibilityOf(mainPage.travelDateInput)
+    // wait until the calendar input is visible, then click to
+    // bring up the calendar itself
+    WebElement socialMediaIconsDivElement = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.socialMediaIconsDivElement)
     );
-    Assertions.assertNotNull(travelDateInput);
-    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", travelDateInput);
+    Assertions.assertNotNull(socialMediaIconsDivElement);
 
-    // before we click on the date field we need to be make sure the scrolling id done or else
-    // we will get an intercepted component error
+    // scroll the input to the top of the page
+    ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView()", mainPage.travelDateInput);
+    Thread.sleep(1000);
 
     // get the current date
     String currentDateString = String.valueOf(java.time.LocalDate.now());
     // format will be YYYY-MM-DD, so get the last element of hte split array
     String[] yearMonthDay = currentDateString.split("-");
     String currentDay = yearMonthDay[2];
-    Thread.sleep(3000);
+
+    // click on the calendar input to reveal the calendar
+    // cycle through all the days viewed in the calendar until you come across
+    // the desired day of the month
+    mainPage.travelDateInput.click();
+    for (int index = 0; index < mainPage.allDatesForTravel.size(); index++) {
+      currentDayOfMonth = mainPage.allDatesForTravel.get(index);
+      if (Objects.equals(currentDayOfMonth.getText(), currentDay)) {
+        currentDayOfMonth.click();
+        break;
+      }
+    }
   }
 }

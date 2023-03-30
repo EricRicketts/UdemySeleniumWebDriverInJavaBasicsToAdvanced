@@ -16,6 +16,8 @@ public class MainPage {
   @FindBy(how = How.CLASS_NAME, using = ".flatpickr-day")
   public List<WebElement> allDatesForTravel;
 
+  @FindBy(how = How.CSS, using = "div.elementor-social-icons-wrapper.elementor-grid")
+  public WebElement socialMediaIconsDivElement;
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }
