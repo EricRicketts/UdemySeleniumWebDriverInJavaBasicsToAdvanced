@@ -13,7 +13,13 @@ public class MainPage {
   @FindBy(how = How.ID, using = "form-field-travel_comp_date")
   public WebElement travelDateInput;
 
-  @FindBy(how = How.CLASS_NAME, using = ".flatpickr-day")
+  @FindBy(how = How.CSS, using = "div.flatpickr-current-month")
+  public WebElement currentCalendarMonth;
+
+  @FindBy(how = How.CSS, using = "div.dayContainer")
+  public WebElement dayOfMonthContainer;
+
+  @FindBy(how = How.CSS, using = "div.dayContainer > span")
   public List<WebElement> allDatesForTravel;
 
   @FindBy(how = How.CSS, using = "div.elementor-social-icons-wrapper.elementor-grid")

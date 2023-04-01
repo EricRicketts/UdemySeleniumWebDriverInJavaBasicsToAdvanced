@@ -3,6 +3,7 @@ package com.example.handlingcalendarui;
 import org.example.SetWebDriverLocation;
 import org.junit.jupiter.api.*;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,37 +12,21 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import com.example.handlingcalendarui.ExpectedConditionUtils;
 
 import javax.annotation.Nullable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
 
 public class MainPageTest {
   private WebDriver driver;
   private MainPage mainPage;
 
-  private static ExpectedCondition<Boolean> isVisibleInViewport(WebElement element) {
-    return new ExpectedCondition<>() {
-      @Nullable
-      @Override
-      public Boolean apply(@Nullable WebDriver input) {
-        if (input != null) {
-          return (Boolean) ((JavascriptExecutor) input).executeScript(
-              "var element = arguments[0]; " +
-                  "var rect = element.getBoundingClientRect(); " +
-                  "return ( " +
-                  "rect.top >= 0 && " +
-                  "rect.left >= 0 && " +
-                  "rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && " +
-                  "rect.right <= (window.innerWidth || document.documentElement.clientWidth) " +
-                  ");"
-              , element);
-        } else {
-          return false;
-        }
-      }
-    };
-  }
   @BeforeAll
   public static void oneTimeSetup() {
     System.setProperty("webdriver.http.factory", "jdk-http-client");
@@ -66,9 +51,9 @@ public class MainPageTest {
   }
 
   @Test
-  public void testCalendarUI() throws InterruptedException {
-    WebElement currentDayOfMonth;
+  public void testCalendarUI() throws InterruptedException, ParseException {
     int explicitWaitTime = 10;
+    String selectedTravelDate = "";
     Duration duration = Duration.ofSeconds(explicitWaitTime);
     WebDriverWait wait = new WebDriverWait(driver, duration);
 
@@ -79,12 +64,8 @@ public class MainPageTest {
     );
     Assertions.assertNotNull(socialMediaIconsDivElement);
 
-
-    // get the current date
+    // get the current date format is YYYY-MM-DD
     String currentDateString = String.valueOf(java.time.LocalDate.now());
-    // format will be YYYY-MM-DD, so get the last element of hte split array
-    String[] yearMonthDay = currentDateString.split("-");
-    String currentDay = yearMonthDay[2];
 
 
     // ensure the travel date input field is visible
@@ -96,22 +77,45 @@ public class MainPageTest {
 
     // got this function from
     // https://medium.com/bliblidotcom-techblog/how-to-create-custom-expectedcondition-to-check-whether-an-element-within-web-viewport-not-on-fad42bc4d0f9
-    // the code below works but I really should put it in a separate class like the URL suggested
-    boolean isVisibleInViewport = wait.until(isVisibleInViewport(travelDateInput));
+    // the code below works I really should put it in a separate class like the URL suggested
+    boolean isVisibleInViewport = wait.until(ExpectedConditionUtils.isVisibleInViewport(travelDateInput));
     Assertions.assertTrue(isVisibleInViewport);
 
     // move the mouse to the center of the travel date input and then click
     new Actions(driver).moveToElement(travelDateInput).build().perform();
     mainPage.travelDateInput.click();
 
+    // wait for the calendar of the current month to appear
+    WebElement currentCalendarMonth = wait.until(
+            ExpectedConditions.visibilityOf(mainPage.currentCalendarMonth)
+    );
+    Assertions.assertNotNull(currentCalendarMonth);
+
+    // wait for all the days of month to appear
+    WebElement dayOfMonthContainer = wait.until(
+            ExpectedConditions.visibilityOf(mainPage.dayOfMonthContainer)
+    );
+    Assertions.assertNotNull(dayOfMonthContainer);
+
     // cycle through all the days viewed in the calendar until you come across
-    // the desired day of the month
-    for (int index = 0; index < mainPage.allDatesForTravel.size(); index++) {
-      currentDayOfMonth = mainPage.allDatesForTravel.get(index);
-      if (currentDayOfMonth.getText().equalsIgnoreCase(currentDay)) {
-        currentDayOfMonth.click();
+    // the desired date.  I had to do this because I was not able to extract
+    // text from the span element, I have no idea why this did not work.  So the solution
+    // is to format the day from the aria-label into the format extracted from LocalDate
+
+    // unfortunately, this code performs inconsistently sometimes it works sometimes it does not
+    for (int index = 0; index < driver.findElements(By.cssSelector("div.dayContainer > span")).size(); index++) {
+      String date = driver.findElements(By.cssSelector("div.dayContainer > span"))
+              .get(index).getAttribute("aria-label");
+      String formattedDate = HandlingCalendarUIDateUtils.convertAriaLabelDateToLocalDateFormat(date);
+      if (Objects.equals(formattedDate, currentDateString)) {
+        wait.until(
+          ExpectedConditions.elementToBeClickable(driver.findElements(By.cssSelector("div.dayContainer > span")).get(index))
+        );
+        driver.findElements(By.cssSelector("div.dayContainer > span")).get(index).click();
+        selectedTravelDate = driver.findElement(By.id("form-field-travel_comp_date")).getAttribute("value");
         break;
       }
     }
+    Assertions.assertEquals(currentDateString, selectedTravelDate);
   }
 }
