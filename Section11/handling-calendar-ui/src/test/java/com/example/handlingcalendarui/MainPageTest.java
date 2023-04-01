@@ -3,10 +3,7 @@ package com.example.handlingcalendarui;
 import org.example.SetWebDriverLocation;
 import org.junit.jupiter.api.*;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -54,6 +51,7 @@ public class MainPageTest {
   public void testCalendarUI() throws InterruptedException, ParseException {
     int explicitWaitTime = 10;
     String selectedTravelDate = "";
+    String allDatesCSSLocator = "div.dayContainer > span";
     Duration duration = Duration.ofSeconds(explicitWaitTime);
     WebDriverWait wait = new WebDriverWait(driver, duration);
 
@@ -104,13 +102,16 @@ public class MainPageTest {
 
     // unfortunately, this code performs inconsistently sometimes it works sometimes it does not
     for (int index = 0; index < driver.findElements(By.cssSelector("div.dayContainer > span")).size(); index++) {
-      String date = driver.findElements(By.cssSelector("div.dayContainer > span"))
-              .get(index).getAttribute("aria-label");
+      String date = "";
+      try {
+        date = driver.findElements(By.cssSelector("div.dayContainer > span"))
+                .get(index).getAttribute("aria-label");
+      } catch(StaleElementReferenceException error) {
+        date = driver.findElements(By.cssSelector("div.dayContainer > span"))
+                .get(index).getAttribute("aria-label");
+      }
       String formattedDate = HandlingCalendarUIDateUtils.convertAriaLabelDateToLocalDateFormat(date);
       if (Objects.equals(formattedDate, currentDateString)) {
-        wait.until(
-          ExpectedConditions.elementToBeClickable(driver.findElements(By.cssSelector("div.dayContainer > span")).get(index))
-        );
         driver.findElements(By.cssSelector("div.dayContainer > span")).get(index).click();
         selectedTravelDate = driver.findElement(By.id("form-field-travel_comp_date")).getAttribute("value");
         break;
