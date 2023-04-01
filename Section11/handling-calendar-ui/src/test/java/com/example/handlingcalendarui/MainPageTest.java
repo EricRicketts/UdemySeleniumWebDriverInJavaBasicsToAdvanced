@@ -103,6 +103,7 @@ public class MainPageTest {
     // unfortunately, this code performs inconsistently sometimes it works sometimes it does not
     for (int index = 0; index < driver.findElements(By.cssSelector("div.dayContainer > span")).size(); index++) {
       String date = "";
+      // this seems to have rid myself of the element staleness exception
       try {
         date = driver.findElements(By.cssSelector("div.dayContainer > span"))
                 .get(index).getAttribute("aria-label");
@@ -112,7 +113,14 @@ public class MainPageTest {
       }
       String formattedDate = HandlingCalendarUIDateUtils.convertAriaLabelDateToLocalDateFormat(date);
       if (Objects.equals(formattedDate, currentDateString)) {
-        driver.findElements(By.cssSelector("div.dayContainer > span")).get(index).click();
+        // https://stackoverflow.com/questions/59669474/why-is-this-element-not-interactable-python-selenium
+        // span is not interactable try reaching it through its parent div and an xpath
+        // "//div[span[text()='OK']]"
+        try {
+          driver.findElements(By.cssSelector("div.dayContainer > span")).get(index).click();
+        } catch(ElementNotInteractableException error) {
+          driver.findElements(By.cssSelector("div.dayContainer > span")).get(index).click();
+        }
         selectedTravelDate = driver.findElement(By.id("form-field-travel_comp_date")).getAttribute("value");
         break;
       }
