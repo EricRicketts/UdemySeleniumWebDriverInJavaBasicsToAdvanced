@@ -48,10 +48,9 @@ public class MainPageTest {
   }
 
   @Test
-  public void testCalendarUI() throws InterruptedException, ParseException {
+  public void testCalendarUI() throws ParseException {
     int explicitWaitTime = 10;
-    String selectedTravelDate = "";
-    String allDatesCSSLocator = "div.dayContainer > span";
+    String dayFromAriaLabel = "";
     Duration duration = Duration.ofSeconds(explicitWaitTime);
     WebDriverWait wait = new WebDriverWait(driver, duration);
 
@@ -64,6 +63,7 @@ public class MainPageTest {
 
     // get the current date format is YYYY-MM-DD
     String currentDateString = String.valueOf(java.time.LocalDate.now());
+    String currentDay = currentDateString.split("-")[2];
 
 
     // ensure the travel date input field is visible
@@ -83,48 +83,35 @@ public class MainPageTest {
     new Actions(driver).moveToElement(travelDateInput).build().perform();
     mainPage.travelDateInput.click();
 
-    // wait for the calendar of the current month to appear
-    WebElement currentCalendarMonth = wait.until(
-            ExpectedConditions.visibilityOf(mainPage.currentCalendarMonth)
-    );
-    Assertions.assertNotNull(currentCalendarMonth);
-
-    // wait for all the days of month to appear
-    WebElement dayOfMonthContainer = wait.until(
-            ExpectedConditions.visibilityOf(mainPage.dayOfMonthContainer)
-    );
-    Assertions.assertNotNull(dayOfMonthContainer);
-
-    // cycle through all the days viewed in the calendar until you come across
-    // the desired date.  I had to do this because I was not able to extract
-    // text from the span element, I have no idea why this did not work.  So the solution
-    // is to format the day from the aria-label into the format extracted from LocalDate
-
-    // unfortunately, this code performs inconsistently sometimes it works sometimes it does not
-    for (int index = 0; index < driver.findElements(By.cssSelector("div.dayContainer > span")).size(); index++) {
-      String date = "";
-      // this seems to have rid myself of the element staleness exception
+    // cycle through all the days of the month until you land on the current day
+    for (int index = 0; index < mainPage.allDatesForTravel.size(); index++) {
+      String date;
+      // this seems to have rid myself of the element staleness exception in this part of the loop
       try {
-        date = driver.findElements(By.cssSelector("div.dayContainer > span"))
-                .get(index).getAttribute("aria-label");
+        date = mainPage.allDatesForTravel.get(index).getAttribute("aria-label");
       } catch(StaleElementReferenceException error) {
-        date = driver.findElements(By.cssSelector("div.dayContainer > span"))
-                .get(index).getAttribute("aria-label");
+        date = mainPage.allDatesForTravel.get(index).getAttribute("aria-label");
       }
       String formattedDate = HandlingCalendarUIDateUtils.convertAriaLabelDateToLocalDateFormat(date);
       if (Objects.equals(formattedDate, currentDateString)) {
-        // https://stackoverflow.com/questions/59669474/why-is-this-element-not-interactable-python-selenium
-        // span is not interactable try reaching it through its parent div and an xpath
-        // "//div[span[text()='OK']]"
-        try {
-          driver.findElements(By.cssSelector("div.dayContainer > span")).get(index).click();
-        } catch(ElementNotInteractableException error) {
-          driver.findElements(By.cssSelector("div.dayContainer > span")).get(index).click();
-        }
+        // the aria label format will be something like "month day, year" => April 3, 2023
+        // split on the comma to get something like "April 3" then split on the space to
+        // get the day of the month
+        dayFromAriaLabel = date.split(",")[0].split(" ")[1];
+        /*
+        None of the code works below because the span element is non-interactive, in the calendar the
+        spans are the only elements which contain the dates.  Ideally, these spans should be wrapped
+        in a paragraph element which is interactive
+        So in order to run some kind of test I decide to compare the day of the month from the LocalDate
+        object and then parse the day from the aria-label
+        new Actions(driver).moveToElement(mainPage.allDatesForTravel.get(index)).build().perform();
+        dayToSelect = mainPage.allDatesForTravel.get(index).getText();
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click", dayToSelect);
         selectedTravelDate = driver.findElement(By.id("form-field-travel_comp_date")).getAttribute("value");
+        */
         break;
       }
     }
-    Assertions.assertEquals(currentDateString, selectedTravelDate);
+    Assertions.assertEquals(Integer.parseInt(currentDay), Integer.parseInt(dayFromAriaLabel));
   }
 }

@@ -33,4 +33,11 @@ public class HandlingCalendarUIDateUtils {
 
         return year + "-" + month + "-" + day;
     }
+
+    public static String extractDayOfMonthFromDate (String dateString) {
+        // date format is YYYY-MM-DD
+        String day = dateString.split("-")[2];
+        String leadingDigit = String.valueOf(day.charAt(0));
+        return leadingDigit.equals("0") ? String.valueOf(day.charAt(1)) : day;
+    }
 }
