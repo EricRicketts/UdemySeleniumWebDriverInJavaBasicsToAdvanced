@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.example.handlingcalendarui.ExpectedConditionUtils;
 
 import javax.annotation.Nullable;
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -47,6 +48,7 @@ public class MainPageTest {
     driver.quit();
   }
 
+  @Disabled("no need to run work on next test only")
   @Test
   public void testCalendarUI() throws ParseException {
     int explicitWaitTime = 10;
@@ -54,8 +56,8 @@ public class MainPageTest {
     Duration duration = Duration.ofSeconds(explicitWaitTime);
     WebDriverWait wait = new WebDriverWait(driver, duration);
 
-    // wait until the calendar input is visible, then click to
-    // bring up the calendar itself
+    // wait until elements at the bottom of the page are visible
+    // to ensure the page has loaded
     WebElement socialMediaIconsDivElement = wait.until(
         ExpectedConditions.visibilityOf(mainPage.socialMediaIconsDivElement)
     );
@@ -113,5 +115,48 @@ public class MainPageTest {
       }
     }
     Assertions.assertEquals(Integer.parseInt(currentDay), Integer.parseInt(dayFromAriaLabel));
+  }
+
+  @Test
+  public void testNavigatingMonths() {
+    int explicitWaitTime = 10;
+    int newMonthNumber;
+    Duration duration = Duration.ofSeconds(explicitWaitTime);
+    WebDriverWait wait = new WebDriverWait(driver, duration);
+
+    // wait until elements at the bottom of the page are visible
+    // to ensure the page has loaded
+    WebElement socialMediaIconsDivElement = wait.until(
+            ExpectedConditions.visibilityOf(mainPage.socialMediaIconsDivElement)
+    );
+    Assertions.assertNotNull(socialMediaIconsDivElement);
+
+    // get the current date format is YYYY-MM-DD
+    String currentDateString = String.valueOf(java.time.LocalDate.now());
+    int currentMonthNumber = Integer.parseInt(currentDateString.split("-")[1]);
+    String currentMonthName = new DateFormatSymbols().getMonths()[currentMonthNumber - 1];
+
+
+    // ensure the travel date input field is visible
+    WebElement travelDateInput = wait.until(
+            ExpectedConditions.visibilityOf(mainPage.travelDateInput)
+    );
+    // scroll the travel date input to the top of the page it is visible within the viewport
+    ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView()", travelDateInput);
+
+    // got this function from
+    // https://medium.com/bliblidotcom-techblog/how-to-create-custom-expectedcondition-to-check-whether-an-element-within-web-viewport-not-on-fad42bc4d0f9
+    boolean isVisibleInViewport = wait.until(ExpectedConditionUtils.isVisibleInViewport(travelDateInput));
+    Assertions.assertTrue(isVisibleInViewport);
+
+    // move the mouse to the center of the travel date input and then click
+    new Actions(driver).moveToElement(travelDateInput).build().perform();
+    mainPage.travelDateInput.click();
+
+    // grab the current display month from the calendar and compare it with
+    // the month derived from the LocalDate object
+    String currentMonthFromCalendar = mainPage.currentDisplayMonth.getText();
+    Assertions.assertEquals(currentMonthName, currentMonthFromCalendar);
+
   }
 }

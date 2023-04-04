@@ -18,6 +18,13 @@ public class MainPage {
 
   @FindBy(how = How.CSS, using = "div.elementor-social-icons-wrapper.elementor-grid")
   public WebElement socialMediaIconsDivElement;
+
+  @FindBy(how = How.CSS, using = "div.flatpickr-month > div.flatpickr-current-month > span")
+  public WebElement currentDisplayMonth;
+
+  @FindBy(how = How.CSS, using = "div.flatpickr-month > span.flatpickr-next-month > svg")
+  public WebElement nextMonthAdvanceIcon;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }
