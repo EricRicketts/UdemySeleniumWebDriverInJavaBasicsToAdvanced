@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public class MainPageTest {
   private WebDriver driver;
@@ -118,9 +119,10 @@ public class MainPageTest {
   }
 
   @Test
-  public void testNavigatingMonths() {
+  public void testNavigatingMonths() throws InterruptedException {
     int explicitWaitTime = 10;
-    int newMonthNumber;
+    String nextMonthName;
+    int nextMonthNumber;
     Duration duration = Duration.ofSeconds(explicitWaitTime);
     WebDriverWait wait = new WebDriverWait(driver, duration);
 
@@ -134,12 +136,13 @@ public class MainPageTest {
     // get the current date format is YYYY-MM-DD
     String currentDateString = String.valueOf(java.time.LocalDate.now());
     int currentMonthNumber = Integer.parseInt(currentDateString.split("-")[1]);
+    nextMonthNumber = currentMonthNumber;
     String currentMonthName = new DateFormatSymbols().getMonths()[currentMonthNumber - 1];
 
 
     // ensure the travel date input field is visible
     WebElement travelDateInput = wait.until(
-            ExpectedConditions.visibilityOf(mainPage.travelDateInput)
+      ExpectedConditions.visibilityOf(mainPage.travelDateInput)
     );
     // scroll the travel date input to the top of the page it is visible within the viewport
     ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView()", travelDateInput);
@@ -152,11 +155,24 @@ public class MainPageTest {
     // move the mouse to the center of the travel date input and then click
     new Actions(driver).moveToElement(travelDateInput).build().perform();
     mainPage.travelDateInput.click();
-
     // grab the current display month from the calendar and compare it with
     // the month derived from the LocalDate object
     String currentMonthFromCalendar = mainPage.currentDisplayMonth.getText();
     Assertions.assertEquals(currentMonthName, currentMonthFromCalendar);
 
+    nextMonthNumber += 1;
+    nextMonthName = new DateFormatSymbols().getMonths()[nextMonthNumber - 1];
+    WebElement nextMonthAdvanceIcon = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.nextMonthAdvanceIcon)
+    );
+    nextMonthAdvanceIcon.click();
+    String currentMonthLocator = "div.flatpickr-month > div.flatpickr-current-month";
+    boolean currentMontIsGone = wait.until(
+      ExpectedConditions.invisibilityOfElementWithText(By.cssSelector(currentMonthLocator), currentMonthName + " ")
+    );
+    Assertions.assertTrue(currentMontIsGone);
+    WebElement nextMonthElement = driver.findElement(By.cssSelector(currentMonthLocator));
+    new Actions(driver).moveToElement(nextMonthElement).build().perform();
+    Assertions.assertEquals(nextMonthName, driver.findElement(By.cssSelector(currentMonthLocator)).getText().trim());
   }
 }
