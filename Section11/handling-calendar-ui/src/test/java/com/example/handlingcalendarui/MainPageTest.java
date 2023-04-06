@@ -49,10 +49,11 @@ public class MainPageTest {
     driver.quit();
   }
 
-  @Disabled("no need to run work on next test only")
   @Test
   public void testCalendarUI() throws ParseException {
     int explicitWaitTime = 10;
+    String dayToSelect;
+    String selectedTravelDate = null;
     String dayFromAriaLabel = "";
     Duration duration = Duration.ofSeconds(explicitWaitTime);
     WebDriverWait wait = new WebDriverWait(driver, duration);
@@ -101,25 +102,24 @@ public class MainPageTest {
         // split on the comma to get something like "April 3" then split on the space to
         // get the day of the month
         dayFromAriaLabel = date.split(",")[0].split(" ")[1];
-        /*
-        None of the code works below because the span element is non-interactive, in the calendar the
-        spans are the only elements which contain the dates.  Ideally, these spans should be wrapped
-        in a paragraph element which is interactive
-        So in order to run some kind of test I decide to compare the day of the month from the LocalDate
-        object and then parse the day from the aria-label
+//        None of the code works below because the span element is non-interactive, in the calendar the
+//        spans are the only elements which contain the dates.  Ideally, these spans should be wrapped
+//        in a paragraph element which is interactive
+//        So in order to run some kind of test I decide to compare the day of the month from the LocalDate
+//        object and then parse the day from the aria-label
         new Actions(driver).moveToElement(mainPage.allDatesForTravel.get(index)).build().perform();
         dayToSelect = mainPage.allDatesForTravel.get(index).getText();
         ((JavascriptExecutor) driver).executeScript("arguments[0].click", dayToSelect);
         selectedTravelDate = driver.findElement(By.id("form-field-travel_comp_date")).getAttribute("value");
-        */
         break;
       }
     }
     Assertions.assertEquals(Integer.parseInt(currentDay), Integer.parseInt(dayFromAriaLabel));
+    Assertions.assertEquals(currentDateString, selectedTravelDate);
   }
 
   @Test
-  public void testNavigatingMonths() throws InterruptedException {
+  public void testNavigatingMonths() {
     int explicitWaitTime = 10;
     String nextMonthName;
     int nextMonthNumber;
