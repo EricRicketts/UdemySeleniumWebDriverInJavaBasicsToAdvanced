@@ -12,7 +12,10 @@ public class MainPage {
     @FindBy(how = How.CSS, using = "table#product")
     public WebElement productTable;
 
-    @FindBy(how = How.CSS, using = "table#product > tbody > tr > td:nth-of-type(4)")
+    @FindBy(how = How.CSS, using = "div.tableFixHead > table#product > tbody > tr")
+    List<WebElement> allProductRows;
+
+    @FindBy(how = How.CSS, using = "div.tableFixHead > table#product > tbody > tr > td:nth-of-type(4)")
     List<WebElement> productAmounts;
 
     @FindBy(how = How.CSS, using = "div.totalAmount")

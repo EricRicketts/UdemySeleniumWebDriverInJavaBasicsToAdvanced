@@ -15,6 +15,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainPageTest {
   private WebDriver driver;
@@ -49,6 +52,8 @@ public class MainPageTest {
   public void testScrollExercise() throws InterruptedException {
     int explicitTimeWait = 10;
     int totalAmount = 0;
+    String[] expectedFirstRowDataEntries = new String[]{"Alex", "Engineer", "Chennai", "28"};
+    List<String> resultantFirstRowDataEntries = new ArrayList<>(){};
     Duration duration = Duration.ofSeconds(explicitTimeWait);
     WebDriverWait wait = new WebDriverWait(driver, duration);
 
@@ -72,11 +77,29 @@ public class MainPageTest {
     // is obtained by the loop above
     String totalDivElementText = mainPage.totalAmountElement.getText();
 
-    // the text is Total Amount Collected: 296 (or some number)
+    // the text is "Total Amount Collected: 296" (or some number)
     // split on the ":" so the number remains in the last array position
+    // since the number is going to have at least one space before it, invoke the trim method
+    // to isolate the number
     String[] totalAmountEntireTextArray = totalDivElementText.split(":");
     String totalAmountNumberString = totalAmountEntireTextArray[totalAmountEntireTextArray.length - 1].trim();
 
+    // assert the manual sum and the total amount displayed are the same
     Assertions.assertEquals(Integer.parseInt(totalAmountNumberString), totalAmount);
+
+    // now for an exercise to manually scroll within the table
+    // assert the first row content
+    WebElement firstTableRow = mainPage.allProductRows.get(0);
+
+    // get all the td elements within the first row and then get their content
+    List<WebElement> firstTableRowDataElements = firstTableRow.findElements(By.tagName("td"));
+    for (WebElement firstTableRowDataElement : firstTableRowDataElements) {
+      String data = firstTableRowDataElement.getText();
+      resultantFirstRowDataEntries.add(data);
+    }
+
+    // assert first row content versus expected content
+    Assertions.assertNotNull(resultantFirstRowDataEntries);
+    Assertions.assertArrayEquals(expectedFirstRowDataEntries, resultantFirstRowDataEntries.toArray());
   }
 }
