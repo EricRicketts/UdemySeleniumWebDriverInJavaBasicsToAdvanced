@@ -9,11 +9,17 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.List;
 
 public class MainPage {
-    @FindBy(how = How.CSS, using = "table#product")
+    @FindBy(how = How.CSS, using = "div.tableFixHead > table#product")
     public WebElement productTable;
 
     @FindBy(how = How.CSS, using = "div.tableFixHead > table#product > tbody > tr")
     List<WebElement> allProductRows;
+
+    @FindBy(how = How.CSS, using = "div.tableFixHead > table#product > tbody > tr:nth-of-type(1)")
+    WebElement firstProductRow;
+
+    @FindBy(how = How.CSS, using = "div.tableFixHead > table#product > tbody > tr:nth-of-type(2)")
+    WebElement secondProductRow;
 
     @FindBy(how = How.CSS, using = "div.tableFixHead > table#product > tbody > tr > td:nth-of-type(4)")
     List<WebElement> productAmounts;

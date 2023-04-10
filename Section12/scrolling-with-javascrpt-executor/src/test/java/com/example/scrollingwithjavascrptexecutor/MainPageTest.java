@@ -49,7 +49,10 @@ public class MainPageTest {
   }
 
   @Test
-  public void testScrollExercise() throws InterruptedException {
+  public void testScrollExercise() {
+    JavascriptExecutor js = (JavascriptExecutor) driver;
+    int firstRowPositionTop, firstRowPositionLeft;
+    int secondRowPositionTop, secondRowPositionLeft;
     int explicitTimeWait = 10;
     int totalAmount = 0;
     String[] expectedFirstRowDataEntries = new String[]{"Alex", "Engineer", "Chennai", "28"};
@@ -61,7 +64,7 @@ public class MainPageTest {
     Assertions.assertNotNull(mainPage.productTable);
 
     // use the utility class to scroll the product table into view and assert it is in the viewport
-    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true)", mainPage.productTable);
+    js.executeScript("arguments[0].scrollIntoView(true)", mainPage.productTable);
     boolean productTableInView = wait.until(ExpectedConditionUtils.isVisibleInViewport(mainPage.productTable));
     Assertions.assertTrue(productTableInView);
 
@@ -90,6 +93,7 @@ public class MainPageTest {
     // now for an exercise to manually scroll within the table
     // assert the first row content
     WebElement firstTableRow = mainPage.allProductRows.get(0);
+    WebElement secondTableRow = mainPage.allProductRows.get(1);
 
     // get all the td elements within the first row and then get their content
     List<WebElement> firstTableRowDataElements = firstTableRow.findElements(By.tagName("td"));
@@ -101,5 +105,33 @@ public class MainPageTest {
     // assert first row content versus expected content
     Assertions.assertNotNull(resultantFirstRowDataEntries);
     Assertions.assertArrayEquals(expectedFirstRowDataEntries, resultantFirstRowDataEntries.toArray());
+
+    // get the position of the first element in the table, note this position is absolute
+    // it is not relative to another element, say the parent element
+    firstRowPositionTop = firstTableRow.getLocation().getY();
+    firstRowPositionLeft = firstTableRow.getLocation().getX();
+    secondRowPositionTop = secondTableRow.getLocation().getY();
+    secondRowPositionLeft = secondTableRow.getLocation().getX();
+    int scrollAmountAbsolute = secondRowPositionTop - firstRowPositionTop;
+
+    // there should be no horizontal scrolling and the second element should be
+    // lower than the first element
+    Assertions.assertEquals(firstRowPositionLeft, secondRowPositionLeft);
+    Assertions.assertTrue(secondRowPositionTop > firstRowPositionTop);
+    // since no scrolling has taken place as of yet, the second row vertical position
+    // should be the first row vertical position plus the vertical difference between
+    // the first and second rows
+    Assertions.assertEquals((firstRowPositionTop + scrollAmountAbsolute), secondRowPositionTop);
+
+    // now we execute the scroll
+    js.executeScript("document.querySelector('div.tableFixHead').scrollTop = arguments[0]",
+            scrollAmountAbsolute);
+
+    // this is the absolute position of the second element in the table so the element was scrolled
+    // to the top of the table meaning its new position was that of the first table elements original
+    // position we have to get the position again because I do not believe there is a live update
+    // in the List of rows, so we cannot assert on secondRowPositionTop
+    int scrolledSecondRowPositionTop = mainPage.secondProductRow.getLocation().getY();
+    Assertions.assertEquals(firstRowPositionTop, scrolledSecondRowPositionTop);
   }
 }
