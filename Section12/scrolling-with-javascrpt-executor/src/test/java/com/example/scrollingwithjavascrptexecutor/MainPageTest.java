@@ -3,7 +3,6 @@ package com.example.scrollingwithjavascrptexecutor;
 import org.example.SetWebDriverLocation;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -11,18 +10,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainPageTest {
   private WebDriver driver;
   private MainPage mainPage;
-  private Duration duration;
   private WebDriverWait wait;
   @BeforeAll
   public static void oneTimeSetup() {
@@ -43,7 +39,7 @@ public class MainPageTest {
     driver.get(url);
 
     mainPage = new MainPage(driver);
-    duration = Duration.ofSeconds(explicitTimeWait);
+    Duration duration = Duration.ofSeconds(explicitTimeWait);
     wait = new WebDriverWait(driver, duration);
   }
 
@@ -125,7 +121,7 @@ public class MainPageTest {
     // lower than the first element
     Assertions.assertEquals(firstRowPositionLeft, secondRowPositionLeft);
     Assertions.assertTrue(secondRowPositionTop > firstRowPositionTop);
-    // since no scrolling has taken place as of yet, the second row vertical position
+    // since no scrolling has taken place yet, the second row vertical position
     // should be the first row vertical position plus the vertical difference between
     // the first and second rows
     Assertions.assertEquals((firstRowPositionTop + scrollAmountAbsolute), secondRowPositionTop);
