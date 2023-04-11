@@ -68,6 +68,9 @@ public class MainPageTest {
     boolean productTableInView = wait.until(ExpectedConditionUtils.isVisibleInViewport(mainPage.productTable));
     Assertions.assertTrue(productTableInView);
 
+    // for "dead reckoning scrolling js.executeScript("window.scrollBy(0, 500")
+    // just scroll the desired amount
+
     // assert that list for all the product purchase amounts is not empty then
     // cycle through the data in the table and sum each amount
     Assertions.assertTrue(mainPage.productAmounts.size() > 0);
@@ -75,6 +78,9 @@ public class MainPageTest {
       String amountText = mainPage.productAmounts.get(index).getText();
       totalAmount += Integer.parseInt(amountText);
     }
+
+    // verify alternative CSS matches original CSS
+    Assertions.assertEquals(mainPage.productAmounts.size(), mainPage.alternativeProductAmounts.size());
 
     // go to the div element which contains the table total this should match what
     // is obtained by the loop above
@@ -127,10 +133,10 @@ public class MainPageTest {
     js.executeScript("document.querySelector('div.tableFixHead').scrollTop = arguments[0]",
             scrollAmountAbsolute);
 
-    // this is the absolute position of the second element in the table so the element was scrolled
-    // to the top of the table meaning its new position was that of the first table elements original
+    // this is the absolute position of the second row in the table so the element was scrolled
+    // to the top of the table meaning its new position was that of the first table row's original
     // position we have to get the position again because I do not believe there is a live update
-    // in the List of rows, so we cannot assert on secondRowPositionTop
+    // in the List of rows, so we cannot assert on secondRowPositionTop variable
     int scrolledSecondRowPositionTop = mainPage.secondProductRow.getLocation().getY();
     Assertions.assertEquals(firstRowPositionTop, scrolledSecondRowPositionTop);
   }

@@ -24,6 +24,9 @@ public class MainPage {
     @FindBy(how = How.CSS, using = "div.tableFixHead > table#product > tbody > tr > td:nth-of-type(4)")
     List<WebElement> productAmounts;
 
+    @FindBy(how = How.CSS, using = ".tableFixHead td:nth-child(4)")
+    List<WebElement> alternativeProductAmounts;
+
     @FindBy(how = How.CSS, using = "div.totalAmount")
     WebElement totalAmountElement;
 
