@@ -22,7 +22,8 @@ import java.util.List;
 public class MainPageTest {
   private WebDriver driver;
   private MainPage mainPage;
-
+  private Duration duration;
+  private WebDriverWait wait;
   @BeforeAll
   public static void oneTimeSetup() {
       SetWebDriverLocation.setDriverLocationAndDriverSystemProperty();
@@ -33,6 +34,7 @@ public class MainPageTest {
     // Fix the issue https://github.com/SeleniumHQ/selenium/issues/11750
     String url = "https://rahulshettyacademy.com/AutomationPractice/";
     int implicitTimeWait = 5;
+    int explicitTimeWait = 10;
     ChromeOptions options = new ChromeOptions();
     options.addArguments("--remote-allow-origins=*");
     driver = new ChromeDriver(options);
@@ -41,6 +43,8 @@ public class MainPageTest {
     driver.get(url);
 
     mainPage = new MainPage(driver);
+    duration = Duration.ofSeconds(explicitTimeWait);
+    wait = new WebDriverWait(driver, duration);
   }
 
   @AfterEach
@@ -53,12 +57,9 @@ public class MainPageTest {
     JavascriptExecutor js = (JavascriptExecutor) driver;
     int firstRowPositionTop, firstRowPositionLeft;
     int secondRowPositionTop, secondRowPositionLeft;
-    int explicitTimeWait = 10;
     int totalAmount = 0;
     String[] expectedFirstRowDataEntries = new String[]{"Alex", "Engineer", "Chennai", "28"};
     List<String> resultantFirstRowDataEntries = new ArrayList<>(){};
-    Duration duration = Duration.ofSeconds(explicitTimeWait);
-    WebDriverWait wait = new WebDriverWait(driver, duration);
 
     // assert that the product table exists on the webpage before doing anything
     Assertions.assertNotNull(mainPage.productTable);
@@ -139,5 +140,10 @@ public class MainPageTest {
     // in the List of rows, so we cannot assert on secondRowPositionTop variable
     int scrolledSecondRowPositionTop = mainPage.secondProductRow.getLocation().getY();
     Assertions.assertEquals(firstRowPositionTop, scrolledSecondRowPositionTop);
+  }
+
+  @Test
+  public void testSumOtherTable() {
+
   }
 }
