@@ -30,6 +30,12 @@ public class MainPage {
     @FindBy(how = How.CSS, using = "div.totalAmount")
     WebElement totalAmountElement;
 
+    @FindBy(how = How.CSS, using = "div.left-align table#product")
+    WebElement coursePriceTable;
+
+    @FindBy(how = How.CSS, using = "div.left-align table#product td:nth-child(3)")
+    List<WebElement> coursePrices;
+
     public MainPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }

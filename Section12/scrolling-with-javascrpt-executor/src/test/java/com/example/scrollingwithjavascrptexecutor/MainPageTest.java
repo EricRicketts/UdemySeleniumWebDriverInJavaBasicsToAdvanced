@@ -144,6 +144,23 @@ public class MainPageTest {
 
   @Test
   public void testSumOtherTable() {
+    int expectedTotalPrice = 235;
 
+    // scroll until the table is in view
+    JavascriptExecutor js = (JavascriptExecutor) driver;
+    js.executeScript("arguments[0].scrollIntoView(true)", mainPage.coursePriceTable);
+    boolean coursePriceTableInView =
+        wait.until(ExpectedConditionUtils.isVisibleInViewport(mainPage.coursePriceTable));
+    Assertions.assertTrue(coursePriceTableInView);
+
+
+    // sum up the course prices and assert against the expected value
+    int coursesPriceTotal = 0;
+    for (int index = 0; index < mainPage.coursePrices.size(); index++) {
+      int coursePrice = Integer.parseInt(mainPage.coursePrices.get(index).getText().trim());
+      coursesPriceTotal += coursePrice;
+    }
+
+    Assertions.assertEquals(expectedTotalPrice, coursesPriceTotal);
   }
 }
