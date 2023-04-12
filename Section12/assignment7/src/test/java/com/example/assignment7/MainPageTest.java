@@ -2,13 +2,8 @@ package com.example.assignment7;
 
 import org.example.SetWebDriverLocation;
 import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -51,12 +46,22 @@ public class MainPageTest {
 
   @Test
   public void testAssignmentSeven() {
-    // scroll until the table is in view
+    int expectedCourseTableRows = 11;
+    int expectedCourseTableHeaders = 3;
+
+    // manually count rows and columns for expected
+    // get the actual results from the WebElements
+    int[] expected = new int[]{expectedCourseTableRows, expectedCourseTableHeaders};
+    int[] result = new int[]{mainPage.courseTableRows.size(), mainPage.courseTableColumns.size()};
+
+    // scroll until the table is in view then assert it is in view
     JavascriptExecutor js = (JavascriptExecutor) driver;
     js.executeScript("arguments[0].scrollIntoView(true)", mainPage.courseTable);
     boolean courseTableInView =
         wait.until(ExpectedConditionUtils.isVisibleInViewport(mainPage.courseTable));
     Assertions.assertTrue(courseTableInView);
 
+    // assert on the actual number of course table rows and columns
+    Assertions.assertArrayEquals(expected, result);
   }
 }
