@@ -15,7 +15,8 @@ public class MainPage {
   public List<WebElement> courseTableRows;
   @FindBy(how = How.CSS, using = "div.left-align table#product th")
   public List<WebElement> courseTableColumns;
-
+  @FindBy(how = How.CSS, using = "div.left-align table#product tbody > tr:nth-child(3) > td")
+  public List<WebElement> secondTableRowData;
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }
