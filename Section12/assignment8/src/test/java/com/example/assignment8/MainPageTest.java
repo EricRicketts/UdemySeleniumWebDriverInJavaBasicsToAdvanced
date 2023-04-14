@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -50,9 +51,33 @@ public class MainPageTest {
 
   @Test
   public void testDynamicDropdown() {
+    // first ensure the dynamic dropdown is visible
     boolean dynamicInputIsVisible = wait.until(
         ExpectedConditionUtils.isVisibleInViewport(mainPage.inputForDynamicDropdown)
     );
     Assertions.assertTrue(dynamicInputIsVisible);
+
+    // click in the dynamic dropdown and they type "rus"
+    mainPage.inputForDynamicDropdown.click();
+    mainPage.inputForDynamicDropdown.sendKeys("rus");
+
+    // the entry into the input field triggers the pullDown
+    // assert that it appears, it is a <ul>
+    WebElement pullDownList = wait.until(
+        ExpectedConditions.visibilityOf(mainPage.pulldownList)
+    );
+    Assertions.assertNotNull(pullDownList);
+
+    // search the parent <ul> for the desired child and select it
+    pullDownList.findElement(By.xpath("//div[contains(text(), 'Russian Federation')]")).click();
+
+    // assert the input element has the desired selection
+    boolean russianFederationIsSelected = wait.until(
+        ExpectedConditions.attributeToBe(
+            mainPage.inputForDynamicDropdown,
+            "value",
+            "Russian Federation")
+    );
+    Assertions.assertTrue(russianFederationIsSelected);
   }
 }
