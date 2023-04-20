@@ -5,11 +5,14 @@ import org.junit.jupiter.api.*;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainPageTest {
     private WebDriver driver;
@@ -48,12 +51,22 @@ public class MainPageTest {
     @Test
     public void testBrokenLinks() throws InterruptedException {
         // scroll down to the footer
+        int expectedNonEmptyAnchorLinks = 5;
+        List<WebElement> nonEmptyFooterLinks = new ArrayList<>();
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView(true)", mainPage.footerElement);
 
         // assert the footer is in view
         boolean footerIsInView = wait.until(ExpectedConditionUtils.isVisibleInViewport(mainPage.footerElement));
         Assertions.assertTrue(footerIsInView);
+
+        mainPage.footerLinks.forEach(anchor -> {
+            String href = anchor.getAttribute("href");
+            int hrefLength = href.length();
+            if (!href.substring(hrefLength - 1).equals("#")) nonEmptyFooterLinks.add(anchor);
+        });
+
+        Assertions.assertEquals(expectedNonEmptyAnchorLinks, nonEmptyFooterLinks.size());
         Thread.sleep(2000);
     }
 }
