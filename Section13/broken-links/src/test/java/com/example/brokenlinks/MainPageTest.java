@@ -12,7 +12,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import java.util.List;
 public class MainPageTest {
     private WebDriver driver;
     private MainPage mainPage;
-    private Duration duration;
     private WebDriverWait wait;
 
     @BeforeAll
@@ -34,7 +32,7 @@ public class MainPageTest {
         String url = "https://rahulshettyacademy.com/AutomationPractice/";
         int implicitWaitTime = 5;
         int explicitWaitTime = 10;
-        duration = Duration.ofSeconds(explicitWaitTime);
+        Duration duration = Duration.ofSeconds(explicitWaitTime);
         ChromeOptions options = new ChromeOptions();
         // Fix the issue https://github.com/SeleniumHQ/selenium/issues/11750
         options.addArguments("--remote-allow-origins=*");
@@ -53,7 +51,7 @@ public class MainPageTest {
     }
 
     @Test
-    public void testBrokenLinks() throws MalformedURLException, IOException {
+    public void testBrokenLinks() {
         int expectedNonEmptyAnchorLinks = 5;
         int expectedEmptyAnchorLinks = 15;
         int expectedUnbrokenLinks = 4;
