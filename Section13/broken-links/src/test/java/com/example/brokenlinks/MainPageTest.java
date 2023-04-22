@@ -53,13 +53,18 @@ public class MainPageTest {
     }
 
     @Test
-    public void testBrokenLinks() throws InterruptedException, MalformedURLException, IOException {
-        // scroll down to the footer
+    public void testBrokenLinks() throws MalformedURLException, IOException {
         int expectedNonEmptyAnchorLinks = 5;
         int expectedEmptyAnchorLinks = 15;
+        int expectedUnbrokenLinks = 4;
+        int expectedBrokenLinks = 1;
+
         List<WebElement> nonEmptyFooterLinks = new ArrayList<>();
         List<WebElement> emptyFooterLinks = new ArrayList<>();
+        List<WebElement> unbrokenLinks = new ArrayList<>();
+        List<WebElement> brokenLinks = new ArrayList<>();
 
+        // scroll down to the footer
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView(true)", mainPage.footerElement);
 
@@ -83,8 +88,28 @@ public class MainPageTest {
         Assertions.assertEquals(expectedNonEmptyAnchorLinks, nonEmptyFooterLinks.size());
         Assertions.assertEquals(expectedEmptyAnchorLinks, emptyFooterLinks.size());
 
-        String url = nonEmptyFooterLinks.get(0).getAttribute("href");
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        Thread.sleep(2000);
+        // filter out the unbroken links and broken links
+        nonEmptyFooterLinks.forEach(anchor -> {
+            String url = anchor.getAttribute("href");
+            try {
+                // to save time do not navigate to the website just grab the response header
+                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                connection.setRequestMethod("HEAD");
+                connection.connect();
+                // from the header obtain the response code
+                int responseCode = connection.getResponseCode();
+                if (responseCode >= 200 && responseCode < 400) {
+                    unbrokenLinks.add(anchor);
+                } else {
+                    brokenLinks.add(anchor);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        // verify the number of broken and unbroken links
+        Assertions.assertEquals(expectedBrokenLinks, brokenLinks.size());
+        Assertions.assertEquals(expectedUnbrokenLinks, unbrokenLinks.size());
     }
 }
