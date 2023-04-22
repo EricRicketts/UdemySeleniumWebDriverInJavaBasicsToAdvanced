@@ -10,6 +10,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +53,13 @@ public class MainPageTest {
     }
 
     @Test
-    public void testBrokenLinks() throws InterruptedException {
+    public void testBrokenLinks() throws InterruptedException, MalformedURLException, IOException {
         // scroll down to the footer
         int expectedNonEmptyAnchorLinks = 5;
+        int expectedEmptyAnchorLinks = 15;
         List<WebElement> nonEmptyFooterLinks = new ArrayList<>();
+        List<WebElement> emptyFooterLinks = new ArrayList<>();
+
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView(true)", mainPage.footerElement);
 
@@ -60,13 +67,24 @@ public class MainPageTest {
         boolean footerIsInView = wait.until(ExpectedConditionUtils.isVisibleInViewport(mainPage.footerElement));
         Assertions.assertTrue(footerIsInView);
 
+        // cycle through all the footer links if it is a valid link add it to the non-empty
+        // links if invalid add it to the empty links
         mainPage.footerLinks.forEach(anchor -> {
             String href = anchor.getAttribute("href");
             int hrefLength = href.length();
-            if (!href.substring(hrefLength - 1).equals("#")) nonEmptyFooterLinks.add(anchor);
+            if (href.substring(hrefLength - 1).equals("#")) {
+                emptyFooterLinks.add(anchor);
+            } else {
+                nonEmptyFooterLinks.add(anchor);
+            }
         });
 
+        // assert on the number of non-empty and empty footer links
         Assertions.assertEquals(expectedNonEmptyAnchorLinks, nonEmptyFooterLinks.size());
+        Assertions.assertEquals(expectedEmptyAnchorLinks, emptyFooterLinks.size());
+
+        String url = nonEmptyFooterLinks.get(0).getAttribute("href");
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         Thread.sleep(2000);
     }
 }
