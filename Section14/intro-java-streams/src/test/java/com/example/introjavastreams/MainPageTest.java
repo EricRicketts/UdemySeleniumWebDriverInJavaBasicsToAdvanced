@@ -14,17 +14,18 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class MainPageTest {
   private WebDriver driver;
   private MainPage mainPage;
   private WebDriverWait wait;
   private SoftAssertions softAssertions;
-  private List<String> names = Arrays.asList(new String[]{
+  private String[] namesArray = new String[]{
       "Alpha", "Beta", "Charlie", "Delta", "Abby", "Echo", "Foxtrot",
       "Golf", "Alternate", "Amoral", "Hotel", "India", "Juliet"
-    }
-  );
+  };
+  private List<String> names = Arrays.asList(namesArray);
 
   @BeforeAll
   public static void oneTimeSetup() {
@@ -56,6 +57,7 @@ public class MainPageTest {
 
   @Test
   public void testStreamsPartOne() {
+    List<String> duplicateNames = new ArrayList<>();
     int expectedNumberOfNamesStartingWithA = 4;
     // scroll to the footer element
     JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -67,13 +69,25 @@ public class MainPageTest {
     );
     softAssertions.assertThat(footerIsInView).isTrue();
 
-    List<String> namesStartingWithA =
-        names.stream().filter(name -> name.startsWith("A")).toList();
+    // use streams to find all names starting with "A"
+    Long numberOfNamesStartingWithA =
+      names.stream().filter(name -> name.startsWith("A")).count();
 
-    softAssertions.assertThat(namesStartingWithA.size())
+    softAssertions.assertThat(numberOfNamesStartingWithA)
         .isEqualTo(expectedNumberOfNamesStartingWithA);
 
-    // make all assertions
+    // create a stream in place from an array and then filter
+    // the number names starting with "A"
+    numberOfNamesStartingWithA =
+        Stream.of(namesArray).filter(name -> name.startsWith("A")).count();
+
+    softAssertions.assertThat(numberOfNamesStartingWithA)
+        .isEqualTo(expectedNumberOfNamesStartingWithA);
+
+    // create a duplicate list using streams
+    names.stream().forEach(name -> duplicateNames.add(name));
+
+    softAssertions.assertThat(names).isEqualTo(duplicateNames);
     softAssertions.assertAll();
   }
 }
