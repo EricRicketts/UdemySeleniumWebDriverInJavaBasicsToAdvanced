@@ -14,6 +14,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class MainPageTest {
@@ -59,6 +60,7 @@ public class MainPageTest {
   public void testStreamsPartOne() {
     List<String> duplicateNames = new ArrayList<>();
     int expectedNumberOfNamesStartingWithA = 4;
+    int expectedNamesGreaterThanFourCharacters = 9;
     // scroll to the footer element
     JavascriptExecutor js = (JavascriptExecutor) driver;
     js.executeScript("arguments[0].scrollIntoView(true)", mainPage.footerElement);
@@ -88,6 +90,40 @@ public class MainPageTest {
     names.stream().forEach(name -> duplicateNames.add(name));
 
     softAssertions.assertThat(names).isEqualTo(duplicateNames);
+
+    // number of names with greater than four characters
+    Long namesGreaterThanFourCharacters =
+        names.stream().filter(name -> name.length() > 4).count();
+
+    softAssertions.assertThat(namesGreaterThanFourCharacters)
+            .isEqualTo(expectedNamesGreaterThanFourCharacters);
+
+    // first name greater than four characters
+    Optional<String> firstNameGreaterThanFourCharacters =
+        names.stream().filter(name -> name.length() > 4).findFirst();
+
+    softAssertions.assertThat(firstNameGreaterThanFourCharacters.get())
+            .isEqualTo("Alpha");
     softAssertions.assertAll();
+  }
+
+  @Test
+  public void testStreamsWithMap() {
+    List<String> expectedNamesGreaterThanFourCharactersUpperCase =
+        new ArrayList<>(List.of(new String[]{
+            "Alpha".toUpperCase(), "Charlie".toUpperCase(), "Delta".toUpperCase(),
+            "Echo".toUpperCase(), "Foxtrot".toUpperCase(), "Alternate".toUpperCase(),
+            "Amoral".toUpperCase(), "India".toUpperCase(), "Juliet".toUpperCase()
+        }));
+
+    // use stream to first filter names with more than four letters and then
+    // map the filtered list to upper case
+    Stream<String> namesGreaterThanFourCharactersUpperCaseStream =
+        names.stream().filter(name -> name.length() > 4).map(name -> name.toUpperCase());
+    List<String> namesGreaterThanFourCharactersUpperCase =
+      namesGreaterThanFourCharactersUpperCaseStream.toList();
+
+    softAssertions.assertThat(expectedNamesGreaterThanFourCharactersUpperCase)
+        .isEqualTo(namesGreaterThanFourCharactersUpperCase);
   }
 }
