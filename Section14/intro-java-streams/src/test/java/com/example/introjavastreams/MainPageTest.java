@@ -112,10 +112,12 @@ public class MainPageTest {
     List<String> expectedNamesGreaterThanFourCharactersUpperCase =
         new ArrayList<>(List.of(new String[]{
             "Alpha".toUpperCase(), "Charlie".toUpperCase(), "Delta".toUpperCase(),
-            "Echo".toUpperCase(), "Foxtrot".toUpperCase(), "Alternate".toUpperCase(),
-            "Amoral".toUpperCase(), "India".toUpperCase(), "Juliet".toUpperCase()
+            "Foxtrot".toUpperCase(), "Alternate".toUpperCase(), "Amoral".toUpperCase(),
+            "Hotel".toUpperCase(), "India".toUpperCase(), "Juliet".toUpperCase()
         }));
-
+    List<String> expectedNamesStartingWithASorted = List.of(
+        "Abby", "Alpha", "Alternate", "Amoral"
+    );
     // use stream to first filter names with more than four letters and then
     // map the filtered list to upper case
     Stream<String> namesGreaterThanFourCharactersUpperCaseStream =
@@ -125,5 +127,17 @@ public class MainPageTest {
 
     softAssertions.assertThat(expectedNamesGreaterThanFourCharactersUpperCase)
         .isEqualTo(namesGreaterThanFourCharactersUpperCase);
+
+    // use streams to filter all names beginning with "A" and then sort alphabetically
+    Stream<String> sortedNamesBeginningWithAStream =
+        names.stream().filter(name -> name.startsWith("A")).sorted();
+
+    List<String> sortedNamesBeginningWithAList =
+        sortedNamesBeginningWithAStream.toList();
+
+    softAssertions.assertThat(expectedNamesStartingWithASorted)
+            .isEqualTo(sortedNamesBeginningWithAList);
+
+    softAssertions.assertAll();
   }
 }
