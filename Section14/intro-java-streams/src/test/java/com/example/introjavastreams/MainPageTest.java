@@ -107,6 +107,15 @@ public class MainPageTest {
 
     softAssertions.assertThat(firstNameGreaterThanFourCharacters.get())
             .isEqualTo("Alpha");
+
+    // use streams to search for a String
+    boolean foundDelta = names.stream().anyMatch(
+        name -> name.equalsIgnoreCase("Delta")
+    );
+
+    softAssertions.assertThat(foundDelta).isTrue();
+
+    // run all assertions
     softAssertions.assertAll();
   }
 
