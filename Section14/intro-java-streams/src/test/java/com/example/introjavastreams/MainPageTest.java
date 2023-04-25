@@ -157,12 +157,19 @@ public class MainPageTest {
     softAssertions.assertThat(sortedNamesBeginningWithAList)
         .isEqualTo(expectedNamesStartingWithASorted);
 
-    // join two lists together
+    // join two lists together using Stream.of()
     Stream<String> joinedStream = Stream.of(firstList, secondList).flatMap(List::stream);
     List<String> joinedList = joinedStream.collect(Collectors.toList());
 
     softAssertions.assertThat(joinedList).isEqualTo(expectedJoinedList);
 
+    // join two lists together with Stream concat
+    Stream secondJoinedStream = Stream.concat(firstList.stream(), secondList.stream());
+    List<String> secondJoinedList = (List<String>) secondJoinedStream.collect(Collectors.toList());
+
+    softAssertions.assertThat(secondJoinedList).isEqualTo(expectedJoinedList);
+
+    // run all assertions
     softAssertions.assertAll();
   }
 }
