@@ -15,7 +15,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.*;
 
 public class MainPageTest {
   private WebDriver driver;
@@ -109,6 +112,13 @@ public class MainPageTest {
 
   @Test
   public void testStreamsWithMap() {
+    List<String> firstList = List.of("A", "B", "C", "D");
+    List<String> secondList = List.of("E", "F", "G", "H");
+
+    List<String> expectedJoinedList = List.of(
+        "A", "B", "C", "D",
+        "E", "F", "G", "H"
+    );
     List<String> expectedNamesGreaterThanFourCharactersUpperCase =
         new ArrayList<>(List.of(new String[]{
             "Alpha".toUpperCase(), "Charlie".toUpperCase(), "Delta".toUpperCase(),
@@ -135,8 +145,14 @@ public class MainPageTest {
     List<String> sortedNamesBeginningWithAList =
         sortedNamesBeginningWithAStream.toList();
 
-    softAssertions.assertThat(expectedNamesStartingWithASorted)
-            .isEqualTo(sortedNamesBeginningWithAList);
+    softAssertions.assertThat(sortedNamesBeginningWithAList)
+        .isEqualTo(expectedNamesStartingWithASorted);
+
+    // join two lists together
+    Stream<String> joinedStream = Stream.of(firstList, secondList).flatMap(List::stream);
+    List<String> joinedList = joinedStream.collect(Collectors.toList());
+
+    softAssertions.assertThat(joinedList).isEqualTo(expectedJoinedList);
 
     softAssertions.assertAll();
   }
