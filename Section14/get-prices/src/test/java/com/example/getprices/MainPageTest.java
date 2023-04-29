@@ -1,5 +1,6 @@
 package com.example.getprices;
 
+import org.assertj.core.api.IntegerAssert;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.*;
 
@@ -91,5 +92,14 @@ public class MainPageTest {
                 .containsExactlyEntriesOf(expectedNameAndPriceData);
         // assert on the price of Rice
         softAssertions.assertThat(fruitOrVegetableNamesAndPrices.get("Rice")).isEqualTo(37);
+
+        // finally get the price of Strawberry using streams
+        // filter to find Strawberry, then get the following sibling which contains the price
+        String strawberryPriceText = mainPage.fruitOrVegetableNameElements.stream()
+                .filter(e -> e.getText().contains("Strawberry"))
+                .map(e -> e.findElement(By.xpath("//following-sibling::td")))
+                .toList().get(0).getText();
+        int strawberryPrice = Integer.parseInt(strawberryPriceText);
+        softAssertions.assertThat(strawberryPrice).isEqualTo(23);
     }
 }
