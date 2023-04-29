@@ -12,8 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MainPageTest {
     private WebDriver driver;
@@ -48,12 +47,17 @@ public class MainPageTest {
 
     @Test
     public void testGetPrices() {
-        HashMap<String, Integer> expected = new HashMap<>();
-        expected.put("Wheat", 67);
-        expected.put("Tomato", 37);
-        expected.put("Strawberry", 23);
-        expected.put("Rice", 37);
-        expected.put("Potato", 34);
+        // initialize the expected values
+        List<String> expectedFruitOrVegetableNames =
+                new ArrayList<>(Arrays.asList("Wheat", "Tomato", "Strawberry", "Rice", "Potato"));
+        List<Integer> expectedFruitOrVegetablePrices =
+                new ArrayList<>(Arrays.asList(67, 37, 23, 37, 34));
+        HashMap<String, Integer> expectedNameAndPriceData = new HashMap<>();
+        expectedNameAndPriceData.put("Wheat", 67);
+        expectedNameAndPriceData.put("Tomato", 37);
+        expectedNameAndPriceData.put("Strawberry", 23);
+        expectedNameAndPriceData.put("Rice", 37);
+        expectedNameAndPriceData.put("Potato", 34);
 
         // wait until the table heading for the fruit or vegetable name is in view
         // then assert it was in view
@@ -62,6 +66,16 @@ public class MainPageTest {
                         mainPage.fruitOrVegetableNameColumnHeading, "Veg/fruit name")
         );
         softAssertions.assertThat(fruitOrVegetableNameColumnHeadingIsVisible).isTrue();
+
+        // use streams to get all fruit or vegetable names and assert they are correct
+        List<String> fruitOrVegetableNames =
+                mainPage.fruitOrVegetableNameElements.stream().map(e -> e.getText()).toList();
+        softAssertions.assertThat(fruitOrVegetableNames).isEqualTo(expectedFruitOrVegetableNames);
+
+        // use streams to get all fruit or vegetable prices and assert they are correct
+        List<Integer> fruitOrVegetablePrices =
+                mainPage.fruitOrVegetablePriceElements.stream().map(e -> Integer.parseInt(e.getText())).toList();
+        softAssertions.assertThat(fruitOrVegetablePrices).isEqualTo(expectedFruitOrVegetablePrices);
 
         // cycle through each of the rows and get the fruit or vegetable name and its corresponding price
         mainPage.fruitOrVegetableTableRows.forEach(row -> {
@@ -73,7 +87,8 @@ public class MainPageTest {
         });
 
         // assert the correct values were obtained from the table
-        softAssertions.assertThat(fruitOrVegetableNamesAndPrices).containsExactlyEntriesOf(expected);
+        softAssertions.assertThat(fruitOrVegetableNamesAndPrices)
+                .containsExactlyEntriesOf(expectedNameAndPriceData);
         // assert on the price of Rice
         softAssertions.assertThat(fruitOrVegetableNamesAndPrices.get("Rice")).isEqualTo(37);
     }

@@ -16,6 +16,12 @@ public class MainPage {
     @FindBy(how = How.XPATH, using = "//tbody/tr")
     public List<WebElement> fruitOrVegetableTableRows;
 
+    @FindBy(how = How.XPATH, using = "//tbody/tr/td[1]")
+    public List<WebElement> fruitOrVegetableNameElements;
+
+    @FindBy(how = How.XPATH, using = "//tbody/tr/td[2]")
+    public List<WebElement> fruitOrVegetablePriceElements;
+
     public MainPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
