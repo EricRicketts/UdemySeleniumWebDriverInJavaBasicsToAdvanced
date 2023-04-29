@@ -72,6 +72,9 @@ public class MainPageTest {
             fruitOrVegetableNamesAndPrices.put(fruitOrVegetableName, fruitOrVegetablePrice);
         });
 
+        // assert the correct values were obtained from the table
         softAssertions.assertThat(fruitOrVegetableNamesAndPrices).containsExactlyEntriesOf(expected);
+        // assert on the price of Rice
+        softAssertions.assertThat(fruitOrVegetableNamesAndPrices.get("Rice")).isEqualTo(37);
     }
 }
