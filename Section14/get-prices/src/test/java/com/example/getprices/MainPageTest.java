@@ -97,7 +97,7 @@ public class MainPageTest {
         // filter to find Strawberry, then get the following sibling which contains the price
         String strawberryPriceText = mainPage.fruitOrVegetableNameElements.stream()
                 .filter(e -> e.getText().contains("Strawberry"))
-                .map(e -> e.findElement(By.xpath("//following-sibling::td")))
+                .map(e -> e.findElement(By.xpath("//following-sibling::td[1]")))
                 .toList().get(0).getText();
         int strawberryPrice = Integer.parseInt(strawberryPriceText);
         softAssertions.assertThat(strawberryPrice).isEqualTo(23);
