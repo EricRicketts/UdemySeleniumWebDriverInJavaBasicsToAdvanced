@@ -20,6 +20,7 @@ public class MainPageTest {
   private WebDriver driver;
   private MainPage mainPage;
   private WebDriverWait wait;
+  private String searchItem;
 
   @BeforeClass
   public static void oneTimeSetup() {
@@ -28,6 +29,7 @@ public class MainPageTest {
 
   @BeforeMethod
   public void setUp() {
+    searchItem = "Wheat";
     int implicitWaitTime = 5;
     int explicitWaitTime = 10;
     Duration duration = Duration.ofSeconds(explicitWaitTime);
@@ -51,9 +53,19 @@ public class MainPageTest {
 
   @Test
   public void testPaginationWithStreams() {
+    // fruit and vegetable heading visible and asserted on
     WebElement fruitOrVegetableHeading = wait.until(
         ExpectedConditions.visibilityOf(mainPage.fruitOrVegetableHeading)
     );
     Assert.assertNotNull(fruitOrVegetableHeading);
+
+    // click the heading to alphabetize the entries
+    fruitOrVegetableHeading.click();
+
+    // wait for the list to sort and then find the first element
+    boolean firstElementOfAlphabetizedListIsPresent = wait.until(
+            ExpectedConditions.textToBePresentInElement(mainPage.firstElementOfAlphabetizedList, "Almond")
+    );
+    Assert.assertTrue(firstElementOfAlphabetizedListIsPresent);
   }
 }

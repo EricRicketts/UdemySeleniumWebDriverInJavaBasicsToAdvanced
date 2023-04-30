@@ -18,6 +18,9 @@ public class MainPage {
   @FindBy(how = How.XPATH, using = "//tbody/tr/td")
   public List<WebElement> fruitOrVegetableElements;
 
+  @FindBy(how = How.XPATH, using = "(//tbody/tr/td[1])[1]")
+  public WebElement firstElementOfAlphabetizedList;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }
