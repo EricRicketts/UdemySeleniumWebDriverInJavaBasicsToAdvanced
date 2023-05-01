@@ -15,11 +15,14 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainPageTest {
     private WebDriver driver;
     private MainPage mainPage;
     private WebDriverWait wait;
+    private String searchTerm;
 
     @BeforeClass
     public static void oneTimeSetup() {
@@ -28,6 +31,7 @@ public class MainPageTest {
 
     @BeforeMethod
     public void setUp() {
+        searchTerm = "Rice";
         int implicitWaitTime = 5;
         int explicitWaitTime = 10;
         Duration duration = Duration.ofSeconds(explicitWaitTime);
@@ -51,12 +55,25 @@ public class MainPageTest {
 
     @Test
     public void testSearch() {
+        List<WebElement> searchTermResults = new ArrayList<>();
         // assert that the page has loaded
         WebElement fruitOrVegetableHeading = wait.until(
                 ExpectedConditions.visibilityOf(mainPage.fruitOrVegetableHeading)
         );
         Assert.assertNotNull(fruitOrVegetableHeading);
 
-        fruitOrVegetableHeading.click();
+        // search for an item and validate the search
+        // first get all the vegetable or fruit items in the table
+        // and then search for the item
+        mainPage.fruitOrVegetableNames.forEach(fruitOrVegetableName -> {
+            if (fruitOrVegetableName.getText().contains(searchTerm)) {
+                searchTermResults.add(fruitOrVegetableName);
+            }
+        });
+
+        // there should be only one item and its text should match the
+        // search term
+        Assert.assertEquals(1, searchTermResults.size());
+        Assert.assertEquals("Rice", searchTermResults.get(0).getText());
     }
 }
