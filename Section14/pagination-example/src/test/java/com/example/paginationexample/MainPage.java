@@ -15,8 +15,8 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "a[aria-label$='Next']")
   public WebElement nextButton;
 
-  @FindBy(how = How.XPATH, using = "//tbody/tr/td")
-  public List<WebElement> fruitOrVegetableElements;
+  @FindBy(how = How.XPATH, using = "//tbody/tr/td[1]")
+  public List<WebElement> fruitOrVegetableNameElements;
 
   @FindBy(how = How.XPATH, using = "(//tbody/tr/td[1])[1]")
   public WebElement firstElementOfAlphabetizedList;
