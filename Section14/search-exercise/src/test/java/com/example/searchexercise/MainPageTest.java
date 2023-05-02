@@ -75,5 +75,19 @@ public class MainPageTest {
         // search term
         Assert.assertEquals(1, searchTermResults.size());
         Assert.assertEquals("Rice", searchTermResults.get(0).getText());
+
+        // use the search functionality and see if the table reduces to one element
+        mainPage.searchField.sendKeys(searchTerm);
+        List<WebElement> searchedElement = wait.until(
+            ExpectedConditions.numberOfElementsToBe(
+                By.xpath("//tbody/tr/td[1]"), 1
+            )
+        );
+
+        // assert size and content of table search
+        Assert.assertEquals(1, searchedElement.size());
+        String tableSearchResults = searchedElement
+            .stream().map(e -> e.getText()).toList().get(0);
+        Assert.assertEquals(searchTerm, tableSearchResults);
     }
 }
