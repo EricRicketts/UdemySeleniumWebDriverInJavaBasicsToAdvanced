@@ -78,16 +78,25 @@ public class MainPageTest {
 
         // use the search functionality and see if the table reduces to one element
         mainPage.searchField.sendKeys(searchTerm);
-        List<WebElement> searchedElement = wait.until(
+        List<WebElement> searchedElements = wait.until(
             ExpectedConditions.numberOfElementsToBe(
                 By.xpath("//tbody/tr/td[1]"), 1
             )
         );
 
         // assert size and content of table search
-        Assert.assertEquals(1, searchedElement.size());
-        String tableSearchResults = searchedElement
+        Assert.assertEquals(1, searchedElements.size());
+        String tableSearchResults = searchedElements
             .stream().map(e -> e.getText()).toList().get(0);
         Assert.assertEquals(searchTerm, tableSearchResults);
+
+        // after looking at the Rahul Shetty video a better test
+        // is to cycle through the results of the search list and
+        // validate each list item contains the search term.  This
+        // is a much more generic solution
+        List<String> tableSearchResultsTextList = searchedElements
+            .stream().map(e -> e.getText()).toList();
+        tableSearchResultsTextList.stream()
+            .forEach(str -> Assert.assertEquals(searchTerm, str));
     }
 }
