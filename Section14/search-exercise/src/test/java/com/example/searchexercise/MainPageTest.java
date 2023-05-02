@@ -93,6 +93,16 @@ public class MainPageTest {
             )
         );
 
+        // what Rahul Shetty did after using the search bar get the
+        // filtered list and then get the entire list they should be the same
+        List<WebElement> searchTermResultsUsingStreamsFileredList =
+            mainPage.fruitOrVegetableNames.stream()
+                .filter(e -> e.getText().contains(searchTerm)).toList();
+
+        List<WebElement> tableAfterSearch = mainPage.fruitOrVegetableNames;
+
+        Assert.assertEquals(searchTermResultsUsingStreamsFileredList, tableAfterSearch);
+
         // assert size and content of table search
         Assert.assertEquals(1, searchedElements.size());
         String tableSearchResults = searchedElements
