@@ -71,10 +71,19 @@ public class MainPageTest {
             }
         });
 
+        // derive the expected results using streams
+        List<WebElement> searchTermResultsUsingStreams =
+            mainPage.fruitOrVegetableNames.stream()
+                .filter(e -> e.getText().contains(searchTerm)).toList();
+
         // there should be only one item and its text should match the
         // search term
         Assert.assertEquals(1, searchTermResults.size());
         Assert.assertEquals("Rice", searchTermResults.get(0).getText());
+
+        // assert on the stream results
+        Assert.assertEquals(1, searchTermResultsUsingStreams.size());
+        Assert.assertEquals("Rice", searchTermResultsUsingStreams.get(0).getText());
 
         // use the search functionality and see if the table reduces to one element
         mainPage.searchField.sendKeys(searchTerm);
