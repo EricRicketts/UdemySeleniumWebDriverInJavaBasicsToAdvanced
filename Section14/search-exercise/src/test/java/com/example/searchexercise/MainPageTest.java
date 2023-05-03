@@ -93,14 +93,24 @@ public class MainPageTest {
             )
         );
 
-        // what Rahul Shetty did after using the search bar get the
-        // filtered list and then get the entire list they should be the same
+        // what Rahul Shetty did AFTER using the search bar
+        // was to first filter the list which remained after the search
+        // was completed using the search bar
+
+        // then what he did after that was to grab all the elements
+        // in the list that remained AFTER using the search bar
+        // this lists should be the same
+
+        // here we are using streams to filter the list AFTER the
+        // search was completed
         List<WebElement> searchTermResultsUsingStreamsFileredList =
             mainPage.fruitOrVegetableNames.stream()
                 .filter(e -> e.getText().contains(searchTerm)).toList();
 
+        // get the list as a whole AFTER the search was completed
         List<WebElement> tableAfterSearch = mainPage.fruitOrVegetableNames;
 
+        // assert that the two lists are the same
         Assert.assertEquals(searchTermResultsUsingStreamsFileredList, tableAfterSearch);
 
         // assert size and content of table search
