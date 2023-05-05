@@ -74,6 +74,7 @@ public class MainPageTest {
 
     // get all the existing window handles then chose the new tab window handle
     List<String> windowHandles = new ArrayList<>(driver.getWindowHandles());
+    String originalWindowHandle = windowHandles.get(0);
     String newTabHandle = windowHandles.get(1);
     driver.switchTo().window(newTabHandle);
     // load the desired url
@@ -84,6 +85,12 @@ public class MainPageTest {
         ExpectedConditions.visibilityOf(mainPage.newTabFooter)
     );
     Assert.assertNotNull(newTabFooter);
+
+    // get the text for the first course
+    Assert.assertNotNull(mainPage.firstCourseLink);
+    String firstCourseTextDescription = mainPage.firstCourseLink.getText();
+
+    driver.switchTo().window(originalWindowHandle);
 //    Thread.sleep(2000);
   }
 }

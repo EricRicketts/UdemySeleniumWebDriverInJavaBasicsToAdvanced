@@ -13,6 +13,9 @@ public class MainPage {
   @FindBy(how = How.CSS, using = "div.copyright")
   public WebElement newTabFooter;
 
+  @FindBy(how = How.XPATH, using = "(//div[@id='courses-block']//a)[2]")
+  public WebElement firstCourseLink;
+
   public MainPage(WebDriver driver) {
     PageFactory.initElements(driver, this);
   }
