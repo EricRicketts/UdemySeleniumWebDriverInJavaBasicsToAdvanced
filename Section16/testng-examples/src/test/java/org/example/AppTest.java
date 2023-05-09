@@ -43,4 +43,16 @@ public class AppTest {
         Assert.assertEquals(firstPerson.getLastName(), lastName);
     }
 
+    @Test
+    public void testSecondPersonAge() {
+        int expectedAge = 35;
+        Assert.assertEquals(secondPerson.getAge(), expectedAge);
+    }
+
+    @Test
+    public void testSecondPersonFullName() {
+        String expectedFullName = "Elmer Fudd";
+        Assert.assertEquals(secondPerson.getFullName(), expectedFullName);
+    }
+
 }
