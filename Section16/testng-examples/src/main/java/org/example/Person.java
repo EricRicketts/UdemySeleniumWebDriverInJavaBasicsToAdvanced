@@ -1,5 +1,12 @@
 package org.example;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class Person {
     private int age;
     private String firstName;
@@ -11,43 +18,7 @@ public class Person {
         this.age = age;
     }
 
-    public Person(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public Person(int age) {
-        this.age = age;
-    }
-
-    public Person() {}
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public int getAge() {
-        return this.age;
-    }
-
-    public String getFirstName() {
-        return this.firstName;
-    }
-
-    public String getLastName() {
-        return this.lastName;
-    }
-
     public String getFullName() {
-        return this.firstName + " " + this.lastName;
+        return this.getFirstName() + " " + this.getLastName();
     }
-
 }
