@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
     <test verbose="2" preserve-order="true"
-          name="/Users/ericricketts/Documents/UdemySeleniumWebDriverInJavaBasicsToAdvanced/Section16/testng-examples/src/test/java/org/example">
+          name="StandardExample">
         <classes>
             <class name="org.example.AutomobileTest">
                 <methods>
