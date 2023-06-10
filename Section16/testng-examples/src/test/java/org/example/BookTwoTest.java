@@ -10,7 +10,7 @@ public class BookTwoTest {
 
     private Book firstBook, secondBook;
 
-    @BeforeMethod(groups = {"smoke"})
+    @BeforeMethod(alwaysRun = true)
     public void setUp() {
         firstBook = new Book();
         secondBook = new Book(

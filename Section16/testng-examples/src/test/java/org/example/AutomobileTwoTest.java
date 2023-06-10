@@ -10,7 +10,7 @@ public class AutomobileTwoTest {
 
     private Automobile firstCar, secondCar;
 
-    @BeforeMethod(groups = {"smoke"})
+    @BeforeMethod(alwaysRun = true)
     public void setUp() {
         firstCar = new Automobile();
         secondCar = new Automobile(

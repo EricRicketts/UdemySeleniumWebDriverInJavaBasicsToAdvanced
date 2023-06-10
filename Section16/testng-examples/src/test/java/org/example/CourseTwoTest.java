@@ -10,7 +10,7 @@ public class CourseTwoTest {
 
     private Course firstCourse, secondCourse;
 
-    @BeforeMethod(groups = {"smoke"})
+    @BeforeMethod(alwaysRun = true)
     public void setUp() {
         firstCourse = new Course();
         secondCourse = new Course(

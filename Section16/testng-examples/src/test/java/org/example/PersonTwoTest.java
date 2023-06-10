@@ -11,13 +11,13 @@ public class PersonTwoTest {
         SetWebDriverLocation.setDriverLocationAndDriverSystemProperty();
     }
 
-    @BeforeMethod(groups = {"smoke"})
+    @BeforeMethod(alwaysRun = true)
     public void setUp() {
        firstPerson = new Person();
        secondPerson = new Person("Elmer", "Fudd", 35);
     }
 
-    @Test(groups={"smoke"})
+    @Test(groups = {"smoke"})
     public void testFirstPersonSetAge() {
         int age = 30;
         firstPerson.setAge(age);
