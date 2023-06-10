@@ -18,8 +18,7 @@
             </class>
         </classes>
     </test>
-    <test verbose="2" preserve-order="true"
-          name="BookTest">
+    <test verbose="2" preserve-order="true" name="BookTest">
         <classes>
             <class name="org.example.BookTest">
                 <methods>
@@ -37,8 +36,7 @@
             </class>
         </classes>
     </test>
-    <test verbose="2" preserve-order="true"
-          name="CourseTest">
+    <test verbose="2" preserve-order="true" name="CourseTest">
         <classes>
             <class name="org.example.CourseTest">
                 <methods>
@@ -54,21 +52,22 @@
             </class>
         </classes>
     </test>
-    <test verbose="2" preserve-order="true"
-          name="PersonTest">
+    <test verbose="2" preserve-order="true" name="PersonTest">
         <classes>
             <class name="org.example.PersonTest">
                 <methods>
-                    <include name="testFirstPersonAge"/>
-                    <include name="testFirstPersonSetAge"/>
-                    <include name="testFirstPersonSetFirstName"/>
-                    <include name="testFirstPersonSetLastName"/>
-                    <include name="testSecondPersonGetAge"/>
-                    <include name="testSecondPersonGetFirstName"/>
-                    <include name="testSecondPersonGetLastName"/>
-                    <include name="testSecondPersonFullName"/>
+                    <include name="testFirst.*"/>
+                    <exclude name="testSecond.*"/>
                 </methods>
             </class>
         </classes>
     </test>
 </suite>
+<!--
+    In this case we are using regular expressions to simplify the listing of tests to exclude and include
+    for the PersonTest.  Using regular expressions I need only write one line for each of exclude and include
+    tags.  Note, a great point brought up by Rahul Shetty, naming conventions are essential to be agreed upon,
+    as without an agreed upon naming convention, it would be hard to use regular expressions to include and
+    exclude test methods.
+
+-->

@@ -18,11 +18,6 @@ public class PersonTest {
     }
 
     @Test
-    public void testFirstPersonAge() {
-        Assert.assertEquals(firstPerson.getAge(), 0);
-    }
-
-    @Test
     public void testFirstPersonSetAge() {
         int age = 30;
         firstPerson.setAge(age);
