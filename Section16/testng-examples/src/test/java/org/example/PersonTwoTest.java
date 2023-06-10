@@ -3,7 +3,7 @@ package org.example;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-public class PersonTestTwo {
+public class PersonTwoTest {
 
     private Person firstPerson, secondPerson;
     @BeforeClass
@@ -11,13 +11,13 @@ public class PersonTestTwo {
         SetWebDriverLocation.setDriverLocationAndDriverSystemProperty();
     }
 
-    @BeforeMethod
+    @BeforeMethod(groups = {"smoke"})
     public void setUp() {
        firstPerson = new Person();
        secondPerson = new Person("Elmer", "Fudd", 35);
     }
 
-    @Test
+    @Test(groups={"smoke"})
     public void testFirstPersonSetAge() {
         int age = 30;
         firstPerson.setAge(age);

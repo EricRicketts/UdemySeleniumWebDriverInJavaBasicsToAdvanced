@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <groups>
+        <run>
+            <include name="smoke"/>
+        </run>
+    </groups>
+    <test verbose="2" preserve-order="true"
+          name="AutomobileTwoTest">
+        <classes>
+            <class name="org.example.AutomobileTwoTest"/>
+        </classes>
+    </test>
+    <test verbose="2" preserve-order="true"
+          name="BookTwoTest">
+        <classes>
+            <class name="org.example.BookTwoTest"/>
+        </classes>
+    </test>
+    <test verbose="2" preserve-order="true"
+          name="CourseTwoTest">
+        <classes>
+            <class name="org.example.CourseTwoTest"/>
+        </classes>
+    </test>
+    <test verbose="2" preserve-order="true"
+          name="PersonTwoTest">
+        <classes>
+            <class name="org.example.PersonTwoTest"/>
+        </classes>
+    </test>
+</suite>

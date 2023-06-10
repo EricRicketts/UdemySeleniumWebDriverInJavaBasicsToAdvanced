@@ -6,11 +6,11 @@ import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 
-public class BookTestTwo {
+public class BookTwoTest {
 
     private Book firstBook, secondBook;
 
-    @BeforeMethod
+    @BeforeMethod(groups = {"smoke"})
     public void setUp() {
         firstBook = new Book();
         secondBook = new Book(
@@ -19,7 +19,7 @@ public class BookTestTwo {
         );
     }
 
-    @Test
+    @Test(groups={"smoke"})
     public void testGetSecondBookTitle() {
         String expectedTitle = "Treasure Island";
         Assert.assertEquals(secondBook.getTitle(), expectedTitle);

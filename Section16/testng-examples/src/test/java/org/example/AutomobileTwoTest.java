@@ -6,11 +6,11 @@ import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 
-public class AutomobileTestTwo {
+public class AutomobileTwoTest {
 
     private Automobile firstCar, secondCar;
 
-    @BeforeMethod
+    @BeforeMethod(groups = {"smoke"})
     public void setUp() {
         firstCar = new Automobile();
         secondCar = new Automobile(
@@ -18,7 +18,7 @@ public class AutomobileTestTwo {
         );
     }
 
-    @Test
+    @Test(groups = {"smoke"})
     public void testGetSecondCardMake() {
         String expectedMake = "Ford";
         Assert.assertEquals(secondCar.getMake(), expectedMake);

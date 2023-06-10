@@ -6,11 +6,11 @@ import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 
-public class CourseTestTwo {
+public class CourseTwoTest {
 
     private Course firstCourse, secondCourse;
 
-    @BeforeMethod
+    @BeforeMethod(groups = {"smoke"})
     public void setUp() {
         firstCourse = new Course();
         secondCourse = new Course(
@@ -21,7 +21,7 @@ public class CourseTestTwo {
         );
     }
 
-    @Test
+    @Test(groups={"smoke"})
     public void testGetSecondCourseTitle() {
         String expectedTitle = "Selenium WebDriver with Java - Basics to Advanced + Frameworks";
         Assert.assertEquals(secondCourse.getTitle(), expectedTitle);
