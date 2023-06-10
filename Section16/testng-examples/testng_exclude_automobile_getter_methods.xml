@@ -6,14 +6,17 @@
         <classes>
             <class name="org.example.AutomobileTest">
                 <methods>
-                    <include name="testGetSecondCardMake"/>
-                    <include name="testGetSecondCarModel"/>
-                    <include name="testGetSecondCarYear"/>
-                    <include name="testSecondCarGetPrice"/>
+                    <exclude name="testGetSecondCardMake"/>
+                    <exclude name="testGetSecondCarModel"/>
+                    <exclude name="testGetSecondCarYear"/>
+                    <exclude name="testSecondCarGetPrice"/>
+                    <include name="testSetFirstCarMake"/>
+<!--
                     <include name="testSetFirstCarMake"/>
                     <include name="testSetFirstCarModel"/>
                     <include name="testSetFirstCarYear"/>
                     <include name="testSetFirstCarPrice"/>
+-->
                 </methods>
             </class>
         </classes>
@@ -69,3 +72,11 @@
         </classes>
     </test>
 </suite>
+<!--
+    In this case we are excluding the Automobile Getter methods and only running the Automobile
+    Setter methods.  If I were to comment out the Setter methods for Automobile all the Setter
+    methods would still run.
+
+    As you can see what I have done is to exclude all Getter tests but only include the Setter test
+    for the car make
+-->
