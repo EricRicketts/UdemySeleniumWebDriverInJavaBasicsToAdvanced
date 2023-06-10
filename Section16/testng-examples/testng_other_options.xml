@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true"
+          name="AutomobileTestTwo">
+        <classes>
+            <class name="org.example.AutomobileTestTwo">
+                <methods>
+                    <include name="testGetSecondCardMake"/>
+                    <include name="testGetSecondCarModel"/>
+                    <include name="testGetSecondCarYear"/>
+                    <include name="testSecondCarGetPrice"/>
+                    <include name="testSetFirstCarMake"/>
+                    <include name="testSetFirstCarModel"/>
+                    <include name="testSetFirstCarYear"/>
+                    <include name="testSetFirstCarPrice"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test verbose="2" preserve-order="true"
+          name="BookTestTwo">
+        <classes>
+            <class name="org.example.BookTestTwo">
+                <methods>
+                    <include name="testGetSecondBookTitle"/>
+                    <include name="testGetSecondBookAuthor"/>
+                    <include name="testGetSecondBookPublisher"/>
+                    <include name="testGetSecondBookYear"/>
+                    <include name="testGetSecondBookPrice"/>
+                    <include name="testSetFirstBookTitle"/>
+                    <include name="testSetFirstBookAuthor"/>
+                    <include name="testSetFirstBookPublisher"/>
+                    <include name="testSetFirstBookYear"/>
+                    <include name="testSetFirstBookPrice"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test verbose="2" preserve-order="true"
+          name="CourseTestTwo">
+        <classes>
+            <class name="org.example.CourseTestTwo">
+                <methods>
+                    <include name="testGetSecondCourseTitle"/>
+                    <include name="testGetSecondCourseInstructor"/>
+                    <include name="testGetSecondCourseHours"/>
+                    <include name="testGetSecondCoursePrice"/>
+                    <include name="testSetFirstCourseTitle"/>
+                    <include name="testSetFirstCourseInstructor"/>
+                    <include name="testSetFirstCourseHours"/>
+                    <include name="testSetFirstCourseCost"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test verbose="2" preserve-order="true"
+          name="PersonTestTwo">
+        <classes>
+            <class name="org.example.PersonTestTwo">
+                <methods>
+                    <include name="testFirstPersonAge"/>
+                    <include name="testFirstPersonSetAge"/>
+                    <include name="testFirstPersonSetFirstName"/>
+                    <include name="testFirstPersonSetLastName"/>
+                    <include name="testSecondPersonGetAge"/>
+                    <include name="testSecondPersonGetFirstName"/>
+                    <include name="testSecondPersonGetLastName"/>
+                    <include name="testSecondPersonFullName"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
