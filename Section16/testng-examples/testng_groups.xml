@@ -31,3 +31,8 @@
         </classes>
     </test>
 </suite>
+<!--
+    this worked only the methods marked wth (groups = {"smoke"}) were run, initially I only marked the @Test
+    methods as in the "smoke" group, but I had to include the @BeforeMethod otherwise the objects would not
+    be initialized.
+-->
