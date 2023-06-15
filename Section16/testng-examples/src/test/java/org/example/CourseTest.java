@@ -2,6 +2,7 @@ package org.example;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
@@ -21,9 +22,13 @@ public class CourseTest {
         );
     }
 
+    @Parameters({"URL"})
     @Test
-    public void testGetSecondCourseTitle() {
-        String expectedTitle = "Selenium WebDriver with Java - Basics to Advanced + Frameworks";
+    public void testGetSecondCourseTitle(String url) {
+        String expectedUrl = "https://rahulshettyacademy.com";
+        String expectedTitle =
+                "Selenium WebDriver with Java - Basics to Advanced + Frameworks";
+        Assert.assertEquals(url, expectedUrl);
         Assert.assertEquals(secondCourse.getTitle(), expectedTitle);
     }
 

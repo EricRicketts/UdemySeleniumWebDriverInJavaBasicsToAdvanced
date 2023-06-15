@@ -1,74 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
+    <parameter name="URL" value="https://rahulshettyacademy.com"/>
     <test verbose="2" preserve-order="true"
           name="AutomobileTest">
         <classes>
-            <class name="org.example.AutomobileTest">
-                <methods>
-                    <include name="testGetSecondCardMake"/>
-                    <include name="testGetSecondCarModel"/>
-                    <include name="testGetSecondCarYear"/>
-                    <include name="testSecondCarGetPrice"/>
-                    <include name="testSetFirstCarMake"/>
-                    <include name="testSetFirstCarModel"/>
-                    <include name="testSetFirstCarYear"/>
-                    <include name="testSetFirstCarPrice"/>
-                </methods>
-            </class>
+            <class name="org.example.AutomobileTest"/>
         </classes>
     </test>
     <test verbose="2" preserve-order="true"
           name="BookTest">
+        <parameter name="bookUrl" value="https://barnesandnoble.com"/>
+        <parameter name="bookTitle" value="Kidnapped"/>
         <classes>
-            <class name="org.example.BookTest">
-                <methods>
-                    <include name="testGetSecondBookTitle"/>
-                    <include name="testGetSecondBookAuthor"/>
-                    <include name="testGetSecondBookPublisher"/>
-                    <include name="testGetSecondBookYear"/>
-                    <include name="testGetSecondBookPrice"/>
-                    <include name="testSetFirstBookTitle"/>
-                    <include name="testSetFirstBookAuthor"/>
-                    <include name="testSetFirstBookPublisher"/>
-                    <include name="testSetFirstBookYear"/>
-                    <include name="testSetFirstBookPrice"/>
-                </methods>
-            </class>
+            <class name="org.example.BookTest"/>
         </classes>
     </test>
     <test verbose="2" preserve-order="true"
           name="CourseTest">
         <classes>
-            <class name="org.example.CourseTest">
-                <methods>
-                    <include name="testGetSecondCourseTitle"/>
-                    <include name="testGetSecondCourseInstructor"/>
-                    <include name="testGetSecondCourseHours"/>
-                    <include name="testGetSecondCoursePrice"/>
-                    <include name="testSetFirstCourseTitle"/>
-                    <include name="testSetFirstCourseInstructor"/>
-                    <include name="testSetFirstCourseHours"/>
-                    <include name="testSetFirstCourseCost"/>
-                </methods>
-            </class>
+            <class name="org.example.CourseTest"/>
         </classes>
     </test>
     <test verbose="2" preserve-order="true"
           name="PersonTest">
         <classes>
-            <class name="org.example.PersonTest">
-                <methods>
-                    <include name="testFirstPersonAge"/>
-                    <include name="testFirstPersonSetAge"/>
-                    <include name="testFirstPersonSetFirstName"/>
-                    <include name="testFirstPersonSetLastName"/>
-                    <include name="testSecondPersonGetAge"/>
-                    <include name="testSecondPersonGetFirstName"/>
-                    <include name="testSecondPersonGetLastName"/>
-                    <include name="testSecondPersonFullName"/>
-                </methods>
-            </class>
+            <class name="org.example.PersonTest"/>
         </classes>
     </test>
 </suite>

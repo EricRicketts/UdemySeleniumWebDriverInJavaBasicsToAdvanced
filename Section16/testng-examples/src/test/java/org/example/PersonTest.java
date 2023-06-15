@@ -56,6 +56,7 @@ public class PersonTest {
         Assert.assertEquals(secondPerson.getLastName(), expectedLastName);
     }
 
+    @DataProvider
     @Test
     public void testSecondPersonFullName() {
         String expectedFullName = "Elmer Fudd";

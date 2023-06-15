@@ -18,7 +18,7 @@ public class AutomobileTest {
         );
     }
 
-    @Test
+    @Test(dependsOnMethods = {"testGetSecondCarModel", "testGetSecondCarYear"})
     public void testGetSecondCardMake() {
         String expectedMake = "Ford";
         Assert.assertEquals(secondCar.getMake(), expectedMake);

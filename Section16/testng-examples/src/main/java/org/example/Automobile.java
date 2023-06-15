@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class Automobile {
 
-    private String make;
-    private String model;
+    private String make = "";
+    private String model = "";
     private int year;
     private BigDecimal price;
 

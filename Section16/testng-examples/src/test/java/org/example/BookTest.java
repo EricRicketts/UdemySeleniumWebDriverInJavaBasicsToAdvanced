@@ -2,6 +2,7 @@ package org.example;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
@@ -19,9 +20,14 @@ public class BookTest {
         );
     }
 
+    @Parameters({"bookUrl", "bookTitle"})
     @Test
-    public void testGetSecondBookTitle() {
+    public void testGetSecondBookTitle(String bookUrl, String bookTitle) {
+        String expectedBookUrl = "https://barnesandnoble.com";
+        String expectedBookTitle = "Kidnapped";
         String expectedTitle = "Treasure Island";
+        Assert.assertEquals(bookUrl, expectedBookUrl);
+        Assert.assertEquals(bookTitle, expectedBookTitle);
         Assert.assertEquals(secondBook.getTitle(), expectedTitle);
     }
 
@@ -77,7 +83,7 @@ public class BookTest {
         Assert.assertEquals(firstBook.getYear(), year);
     }
 
-    @Test
+    @Test(enabled = false)
     public void testSetFirstBookPrice() {
         BigDecimal price = new BigDecimal("8.99");
         firstBook.setPrice(price);
