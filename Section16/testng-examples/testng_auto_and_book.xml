@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="DataProviderExample">
+    <test verbose="2" preserve-order="true" name="AutomobileAndBookTest">
+       <classes>
+           <class name="org.example.AutomobileAndBookTest">
+               <methods>
+                   <include name="testCarModelAndMake"/>
+                   <include name="testGetBookAuthor"/>
+               </methods>
+           </class>
+       </classes>
+    </test>
+</suite>
