@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite" parallel="tests" thread-count="4">
+    <parameter name="URL" value="https://rahulshettyacademy.com"/>
+    <test verbose="2" preserve-order="true"
+          name="AutomobileTest">
+        <classes>
+            <class name="org.example.AutomobileTest"/>
+        </classes>
+    </test>
+    <test verbose="2" preserve-order="true"
+          name="BookTest">
+        <parameter name="bookUrl" value="https://barnesandnoble.com"/>
+        <parameter name="bookTitle" value="Kidnapped"/>
+        <classes>
+            <class name="org.example.BookTest"/>
+        </classes>
+    </test>
+    <test verbose="2" preserve-order="true"
+          name="CourseTest">
+        <classes>
+            <class name="org.example.CourseTest"/>
+        </classes>
+    </test>
+    <test verbose="2" preserve-order="true"
+          name="PersonTest">
+        <classes>
+            <class name="org.example.PersonTest"/>
+        </classes>
+    </test>
+</suite>
