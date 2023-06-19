@@ -12,12 +12,9 @@ public class Bear extends Animal {
     private Boolean hibernating;
     private String name;
     private int numberOfBears;
-    public Bear(String species, int numberOfBears) {
-        setPhylum("Chordates");
-        setAnimalClass("Mammals");
-        setOrder("Omnivores");
-        setFamily("Bears");
-        setSpecies(species);
+    public Bear(String phylum, String animalClass, String order,
+                String family, String species, int numberOfBears) {
+        super(phylum, animalClass, order, family, species);
         setNumberOfBears(numberOfBears);
     }
 
