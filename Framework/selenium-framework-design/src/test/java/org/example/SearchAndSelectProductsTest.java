@@ -15,6 +15,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.List;
 
 public class SearchAndSelectProductsTest {
 
@@ -58,5 +59,8 @@ public class SearchAndSelectProductsTest {
         );
 
         Assert.assertTrue(pageHeadingMainTextFound);
+
+        List<WebElement> listedProducts = driver.findElements(By.cssSelector("div.card"));
+        
     }
 }
