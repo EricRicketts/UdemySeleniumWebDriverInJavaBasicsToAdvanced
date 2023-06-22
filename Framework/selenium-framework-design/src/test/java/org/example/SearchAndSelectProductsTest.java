@@ -49,6 +49,8 @@ public class SearchAndSelectProductsTest {
 
     @Test
     public void testSelectAndBuyProducts() {
+        int cartCount = 0;
+        String routerLinkUrl = "button[routerlink=\"/dashboard/cart\"] > label";
         driver.findElement(By.id("userEmail")).sendKeys(userEmail);
         driver.findElement(By.id("userPassword")).sendKeys(userPassword);
         driver.findElement(By.id("login")).click();
@@ -61,6 +63,15 @@ public class SearchAndSelectProductsTest {
         Assert.assertTrue(pageHeadingMainTextFound);
 
         List<WebElement> listedProducts = driver.findElements(By.cssSelector("div.card"));
-        
+
+        for(WebElement product : listedProducts) {
+            product.findElement(By.cssSelector("button.w-10")).click();
+            WebElement cartQuantity = driver.findElement(By.cssSelector(routerLinkUrl));
+            cartCount += 1;
+            Boolean cartCountUpdated = wait.until(
+                    ExpectedConditions.textToBePresentInElement(cartQuantity, String.valueOf(cartCount))
+            );
+            Assert.assertTrue(cartCountUpdated);
+        };
     }
 }
