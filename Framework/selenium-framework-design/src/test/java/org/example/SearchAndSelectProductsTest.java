@@ -49,8 +49,12 @@ public class SearchAndSelectProductsTest {
 
     @Test
     public void testSelectAndBuyProducts() {
-        int cartCount = 0;
-        String routerLinkUrl = "button[routerlink=\"/dashboard/cart\"] > label";
+        int cartCount = 0; // used to track how many products are bought
+        // this is the label element that holds the carCount
+        String cartButtonCss = "button[routerlink=\"/dashboard/cart\"]";
+        String cartLabelCss = "button[routerlink=\"/dashboard/cart\"] > label";
+        WebElement cartButton = driver.findElement(By.cssSelector(cartButtonCss));
+
         driver.findElement(By.id("userEmail")).sendKeys(userEmail);
         driver.findElement(By.id("userPassword")).sendKeys(userPassword);
         driver.findElement(By.id("login")).click();
@@ -66,12 +70,14 @@ public class SearchAndSelectProductsTest {
 
         for(WebElement product : listedProducts) {
             product.findElement(By.cssSelector("button.w-10")).click();
-            WebElement cartQuantity = driver.findElement(By.cssSelector(routerLinkUrl));
+            WebElement cartQuantity = driver.findElement(By.cssSelector(cartLabelCss));
             cartCount += 1;
             Boolean cartCountUpdated = wait.until(
                     ExpectedConditions.textToBePresentInElement(cartQuantity, String.valueOf(cartCount))
             );
             Assert.assertTrue(cartCountUpdated);
-        };
+        }
+
+        cartButton.click();
     }
 }
