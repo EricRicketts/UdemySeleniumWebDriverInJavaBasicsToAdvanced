@@ -3,10 +3,12 @@ package org.example;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -26,7 +28,7 @@ public class SearchAndSelectProductsTest {
     @BeforeMethod
     public void setUp() {
         Duration duration;
-        int implicitWaitTime = 5;
+        int implicitWaitTime = 10;
         int explicitWaitTime = 10;
         WebDriverManager.chromedriver().setup();
         String URL = "https://rahulshettyacademy.com/client";
@@ -53,7 +55,6 @@ public class SearchAndSelectProductsTest {
         // this is the label element that holds the carCount
         String cartButtonCss = "button[routerlink=\"/dashboard/cart\"]";
         String cartLabelCss = "button[routerlink=\"/dashboard/cart\"] > label";
-        WebElement cartButton = driver.findElement(By.cssSelector(cartButtonCss));
 
         driver.findElement(By.id("userEmail")).sendKeys(userEmail);
         driver.findElement(By.id("userPassword")).sendKeys(userPassword);
@@ -78,6 +79,24 @@ public class SearchAndSelectProductsTest {
             Assert.assertTrue(cartCountUpdated);
         }
 
+
+        WebElement cartButton = driver.findElement(By.cssSelector(cartButtonCss));
         cartButton.click();
+        WebElement checkoutButton = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.xpath("//button[contains(text(),'Checkout')]")
+                )
+        );
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor)driver;
+        javascriptExecutor.executeScript("arguments[0].scrollIntoView()", checkoutButton);
+        javascriptExecutor.executeScript("arguments[0].click()", checkoutButton);
+
+        WebElement paymentMethodElement = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//div[contains(text(),'Payment Method')]")
+                )
+        );
+
+        Assert.assertNotNull(paymentMethodElement);
     }
 }
