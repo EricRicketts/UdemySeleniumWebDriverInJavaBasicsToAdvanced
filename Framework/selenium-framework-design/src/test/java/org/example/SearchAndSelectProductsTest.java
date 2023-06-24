@@ -61,6 +61,7 @@ public class SearchAndSelectProductsTest {
         String headingElementsForItemsSelectedOnMyCartPage = ".items h3";
         String selectCountryCss = ".form-group > input";
         String selectCountryOptions = ".form-group button";
+        String placeOrderButtonCss = ".action__submit";
         String desiredCountry = "India";
 
         // find and enter login elements user email, password, and the login button
@@ -129,14 +130,13 @@ public class SearchAndSelectProductsTest {
         javascriptExecutor.executeScript("arguments[0].scrollIntoView()", checkoutButton);
         javascriptExecutor.executeScript("arguments[0].click()", checkoutButton);
 
-        // assert I am on the checkout page
-        WebElement paymentMethodElement = wait.until(
+        // assert I am on the checkout page get the Place Order button to click it later
+        WebElement placeOrderButton = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("//div[contains(text(),'Payment Method')]")
+                        By.cssSelector(placeOrderButtonCss)
                 )
         );
-
-        Assert.assertNotNull(paymentMethodElement);
+        Assert.assertNotNull(placeOrderButton);
 
         // to finish up the exercise checkout
         // the only required field is the country
@@ -159,5 +159,15 @@ public class SearchAndSelectProductsTest {
         // verify the input element has the selected country as its value
         String countryInputValue = countryInput.getAttribute("value");
         Assert.assertTrue(countryInputValue.contains(desiredCountry));
+
+        // click the Place Order Button and then assert we have landed on the order confirmation page
+        // by asserting on the title text of the page
+        placeOrderButton.click();
+        WebElement headingConfirmationOrdersPage = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.tagName("h1"))
+        );
+        String expectedHeadingText = "Thankyou for the order.".toLowerCase();
+        String resultantHeadingText = headingConfirmationOrdersPage.getText().trim().toLowerCase();
+        Assert.assertEquals(resultantHeadingText, expectedHeadingText);
     }
 }
