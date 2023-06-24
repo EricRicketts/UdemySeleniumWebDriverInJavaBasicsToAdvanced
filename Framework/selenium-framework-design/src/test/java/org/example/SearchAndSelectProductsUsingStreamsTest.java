@@ -115,9 +115,9 @@ public class SearchAndSelectProductsUsingStreamsTest {
         // selected by the user
         List<WebElement> allHeadingsOnMyCartPage =
                 driver.findElements(By.cssSelector(".items h3"));
-        allHeadingsOnMyCartPage.forEach((heading) -> {
-            Assert.assertTrue(selectedProductTitles.contains(heading.getText()));
-        });
+        allHeadingsOnMyCartPage.forEach((heading) ->
+                Assert.assertTrue(selectedProductTitles.contains(heading.getText()))
+        );
         // manually scroll to the checkout button as an immediate click on the button threw an exception
         // this happened because when clicked the button was not yet in view
         JavascriptExecutor javascriptExecutor = (JavascriptExecutor)driver;
