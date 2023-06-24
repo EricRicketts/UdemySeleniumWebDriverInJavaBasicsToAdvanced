@@ -60,6 +60,8 @@ public class SearchAndSelectProductsUsingStreamsTest {
         String countryInputCss = ".form-group > input";
         String countryButtonOptionsCss = ".form-group button";
         String desiredCountry = "India";
+        String placeOrderButtonCss = ".action__submit";
+
 
         // find and enter values for sign in and then click the login button
         driver.findElement(By.id("userEmail")).sendKeys(userEmail);
@@ -124,13 +126,13 @@ public class SearchAndSelectProductsUsingStreamsTest {
         javascriptExecutor.executeScript("arguments[0].scrollIntoView()", checkoutButton);
         javascriptExecutor.executeScript("arguments[0].click()", checkoutButton);
 
-        // assert one has landed on the checkout page
-        WebElement paymentMethodElement = wait.until(
+        // assert one has landed on the checkout page it will be used later
+        WebElement placeOrderButton = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("//div[contains(text(),'Payment Method')]")
+                        By.cssSelector(placeOrderButtonCss)
                 )
         );
-        Assert.assertNotNull(paymentMethodElement);
+        Assert.assertNotNull(placeOrderButton);
 
         // now that we are on the Place Order page we need to select the required field which is
         // the country
@@ -153,5 +155,15 @@ public class SearchAndSelectProductsUsingStreamsTest {
         }
         // now that the option has been selected ensure the country input has the correct value
         Assert.assertTrue(countryInput.getAttribute("value").contains(desiredCountry));
+        placeOrderButton.click();
+
+        // verify landing on the confirmation orders page
+        WebElement headingConfirmationOrdersPage = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.tagName("h1"))
+        );
+        String expectedHeadingText = "Thankyou for the order.";
+        Assert.assertTrue(
+            headingConfirmationOrdersPage.getText().trim().equalsIgnoreCase(expectedHeadingText)
+        );
     }
 }
