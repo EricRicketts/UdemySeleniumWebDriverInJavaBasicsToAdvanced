@@ -52,14 +52,18 @@ public class SearchAndSelectProductsTest {
     @Test
     public void testSelectAndBuyProducts() {
         int cartCount = 0; // used to track how many products are bought
-        // this is the label element that holds the carCount
+        // this is the cart button which takes the user to the cart page
         String cartButtonCss = "button[routerlink=\"/dashboard/cart\"]";
-        String cartLabelCss = "button[routerlink=\"/dashboard/cart\"] > label";
+        // this is the label element that holds the car count, ie, how many products
+        // the user has decided to buy
+        String cartButtonLabelCss = "button[routerlink=\"/dashboard/cart\"] > label";
 
+        // find and enter login elements user email, password, and the login button
         driver.findElement(By.id("userEmail")).sendKeys(userEmail);
         driver.findElement(By.id("userPassword")).sendKeys(userPassword);
         driver.findElement(By.id("login")).click();
 
+        // ensure you have landed on the main page by asserting on what appears to be the title element
         WebElement headingForPageTitle = driver.findElement(By.cssSelector("div.mt-1 > h3"));
         Boolean pageHeadingMainTextFound = wait.until(
                 ExpectedConditions.textToBePresentInElement(headingForPageTitle, "AUTOMATION")
@@ -67,11 +71,13 @@ public class SearchAndSelectProductsTest {
 
         Assert.assertTrue(pageHeadingMainTextFound);
 
+        // go through all the listed products select each one button.w-10 is the "Add to Cart" button
+        // as each item is selected update the cart count and assert on the updated quantity
         List<WebElement> listedProducts = driver.findElements(By.cssSelector("div.card"));
-
         for(WebElement product : listedProducts) {
             product.findElement(By.cssSelector("button.w-10")).click();
-            WebElement cartQuantity = driver.findElement(By.cssSelector(cartLabelCss));
+            // this is the text of the cart button label which shows the number of items selected to buy
+            WebElement cartQuantity = driver.findElement(By.cssSelector(cartButtonLabelCss));
             cartCount += 1;
             Boolean cartCountUpdated = wait.until(
                     ExpectedConditions.textToBePresentInElement(cartQuantity, String.valueOf(cartCount))
@@ -79,18 +85,25 @@ public class SearchAndSelectProductsTest {
             Assert.assertTrue(cartCountUpdated);
         }
 
-
+        // select the cart button to go to "my cart" page
         WebElement cartButton = driver.findElement(By.cssSelector(cartButtonCss));
         cartButton.click();
+
+        // Look for the checkout button
         WebElement checkoutButton = wait.until(
                 ExpectedConditions.elementToBeClickable(
                         By.xpath("//button[contains(text(),'Checkout')]")
                 )
         );
+
+        // in this case I had to use JavascriptExecutor to manually scroll to the checkout button
+        // as just clicking on it threw an exception, as the button was not in view when
+        // originally clicked
         JavascriptExecutor javascriptExecutor = (JavascriptExecutor)driver;
         javascriptExecutor.executeScript("arguments[0].scrollIntoView()", checkoutButton);
         javascriptExecutor.executeScript("arguments[0].click()", checkoutButton);
 
+        // assert I am on the checkout page
         WebElement paymentMethodElement = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
                         By.xpath("//div[contains(text(),'Payment Method')]")
