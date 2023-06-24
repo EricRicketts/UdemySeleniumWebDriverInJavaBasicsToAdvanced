@@ -59,6 +59,10 @@ public class SearchAndSelectProductsTest {
         // the user has decided to buy
         String cartButtonLabelCss = "button[routerlink=\"/dashboard/cart\"] > label";
         String headingElementsForItemsSelectedOnMyCartPage = ".items h3";
+        String selectCountryCss = ".form-group > input";
+        String selectCountryOptions = ".form-group button";
+        String desiredCountry = "India";
+
         // find and enter login elements user email, password, and the login button
         driver.findElement(By.id("userEmail")).sendKeys(userEmail);
         driver.findElement(By.id("userPassword")).sendKeys(userPassword);
@@ -133,5 +137,27 @@ public class SearchAndSelectProductsTest {
         );
 
         Assert.assertNotNull(paymentMethodElement);
+
+        // to finish up the exercise checkout
+        // the only required field is the country
+        WebElement countryInput = driver.findElement(By.cssSelector(selectCountryCss));
+        countryInput.sendKeys(desiredCountry);
+
+        // once we enter the country we have to select the proper pull down option
+        List<WebElement> countryPullDownOptions = wait.until(
+                ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                        By.cssSelector(selectCountryOptions)
+                )
+        );
+        for(WebElement button : countryPullDownOptions) {
+            if (button.getText().contains(desiredCountry)) {
+                button.click();
+                break;
+            }
+        }
+
+        // verify the input element has the selected country as its value
+        String countryInputValue = countryInput.getAttribute("value");
+        Assert.assertTrue(countryInputValue.contains(desiredCountry));
     }
 }
