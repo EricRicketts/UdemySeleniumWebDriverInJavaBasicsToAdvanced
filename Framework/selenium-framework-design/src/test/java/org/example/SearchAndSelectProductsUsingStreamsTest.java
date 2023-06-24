@@ -17,7 +17,6 @@ import org.testng.annotations.Test;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Stream;
 
 public class SearchAndSelectProductsUsingStreamsTest {
 
@@ -73,9 +72,13 @@ public class SearchAndSelectProductsUsingStreamsTest {
 
         Assert.assertTrue(pageHeadingMainTextFound);
 
+        // grab the product title text of all products
+        List<WebElement> listedProducts = driver.findElements(By.cssSelector("div.card"));
+        List<String> selectedProductTitles = listedProducts.stream()
+                .map(product -> product.findElement(By.tagName("b")).getText()).toList();
+
         // grab the top level product element and use streams to map this list to the Add To Cart buttons
         // within a product element the Add to Cart button is the last of the two buttons
-        List<WebElement> listedProducts = driver.findElements(By.cssSelector("div.card"));
         List<WebElement> addToCartButtons = driver.findElements(By.cssSelector("div.card")).stream()
                 .map(product -> product.findElement(By.cssSelector("button:last-of-type"))).toList();
 
@@ -104,6 +107,16 @@ public class SearchAndSelectProductsUsingStreamsTest {
                         By.xpath("//button[contains(text(),'Checkout')]")
                 )
         );
+
+        // now that we have landed on the My Cart page ensure all the products on the page were those
+        // selected by the user
+        List<WebElement> allHeadingsOnMyCartPage =
+                driver.findElements(By.cssSelector(".items h3"));
+        allHeadingsOnMyCartPage.forEach((heading) -> {
+            Assert.assertTrue(selectedProductTitles.contains(heading.getText()));
+        });
+        // manually scroll to the checkout button as an immediate click on the button threw an exception
+        // this happened because when clicked the button was not yet in view
         JavascriptExecutor javascriptExecutor = (JavascriptExecutor)driver;
         javascriptExecutor.executeScript("arguments[0].scrollIntoView()", checkoutButton);
         javascriptExecutor.executeScript("arguments[0].click()", checkoutButton);
