@@ -57,6 +57,9 @@ public class SearchAndSelectProductsUsingStreamsTest {
         // this is the label element that holds the car count ie the number of products the user has selected
         String cartButtonCss = "button[routerlink=\"/dashboard/cart\"]";
         String cartLabelCss = "button[routerlink=\"/dashboard/cart\"] > label";
+        String countryInputCss = ".form-group > input";
+        String countryButtonOptionsCss = ".form-group button";
+        String desiredCountry = "India";
 
         // find and enter values for sign in and then click the login button
         driver.findElement(By.id("userEmail")).sendKeys(userEmail);
@@ -127,7 +130,28 @@ public class SearchAndSelectProductsUsingStreamsTest {
                         By.xpath("//div[contains(text(),'Payment Method')]")
                 )
         );
-
         Assert.assertNotNull(paymentMethodElement);
+
+        // now that we are on the Place Order page we need to select the required field which is
+        // the country
+
+        // enter desired country for the input element
+        WebElement countryInput = driver.findElement(By.cssSelector(countryInputCss));
+        countryInput.sendKeys(desiredCountry);
+
+        // find the button that contains the desired country and click it
+        List<WebElement> countryOptions = wait.until(
+                ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                        By.cssSelector(countryButtonOptionsCss)
+                )
+        );
+        for(WebElement button : countryOptions) {
+            if (button.getText().contains(desiredCountry)) {
+                button.click();
+                break;
+            }
+        }
+        // now that the option has been selected ensure the country input has the correct value
+        Assert.assertTrue(countryInput.getAttribute("value").contains(desiredCountry));
     }
 }
