@@ -18,30 +18,21 @@ public class Products {
     List<Integer> productNumbers;
 
     public int numberOfProductsToBuy(int totalNumberOfProducts) {
-        int minimumNumberOfProductsToBuy = 1;
+        // in order to match the array indices we number starting from zero
+        int adjustedTotalNumberOfProducts = totalNumberOfProducts - 1;
         Random randomNumber = new Random();
-        return randomNumber.nextInt(
-                totalNumberOfProducts - minimumNumberOfProductsToBuy + 1
-        ) + minimumNumberOfProductsToBuy;
+        return randomNumber.nextInt(adjustedTotalNumberOfProducts);
     }
 
     public int randomSelectionOfProduct(int totalNumberOfProducts) {
         int minimumProductNumberFromList = 0;
         int maximumProductNumberFromList = totalNumberOfProducts - 1;
         Random randomNumber = new Random();
-        return randomNumber.nextInt(
-                maximumProductNumberFromList - minimumProductNumberFromList + 1
-        ) + maximumProductNumberFromList;
+        return randomNumber.nextInt(maximumProductNumberFromList);
     }
 
     @FindBy(how = How.CLASS_NAME, using = "card-body")
     public List<WebElement> allProducts;
-
-    @FindBy(how = How.TAG_NAME, using = "h5")
-    public WebElement productHeading;
-
-    @FindBy(how = How.CSS, using = "button:nth-of-type(2)")
-    public WebElement addToCartButton;
 
     public Products(WebDriver driver) {
         productNumbers = new ArrayList<>();
