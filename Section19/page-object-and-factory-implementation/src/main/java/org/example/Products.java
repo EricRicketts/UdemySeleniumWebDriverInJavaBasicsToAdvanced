@@ -17,7 +17,7 @@ public class Products {
 
     List<Integer> productNumbers;
 
-    public int numberOfProductsToBuy(int totalNumberOfProducts) {
+    public int randomNumberOfProductsToBuy(int totalNumberOfProducts) {
         // in order to match the array indices we number starting from zero
         int minimumNumberOfProducts = 1;
         Random randomNumber = new Random();
