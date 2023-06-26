@@ -19,16 +19,10 @@ public class Products {
 
     public int numberOfProductsToBuy(int totalNumberOfProducts) {
         // in order to match the array indices we number starting from zero
-        int adjustedTotalNumberOfProducts = totalNumberOfProducts - 1;
+        int minimumNumberOfProducts = 1;
         Random randomNumber = new Random();
-        return randomNumber.nextInt(adjustedTotalNumberOfProducts);
-    }
-
-    public int randomSelectionOfProduct(int totalNumberOfProducts) {
-        int minimumProductNumberFromList = 0;
-        int maximumProductNumberFromList = totalNumberOfProducts - 1;
-        Random randomNumber = new Random();
-        return randomNumber.nextInt(maximumProductNumberFromList);
+        return randomNumber.nextInt(totalNumberOfProducts - minimumNumberOfProducts + 1) +
+                minimumNumberOfProducts;
     }
 
     @FindBy(how = How.CLASS_NAME, using = "card-body")
