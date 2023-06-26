@@ -21,8 +21,10 @@ public class Products {
         // in order to match the array indices we number starting from zero
         int minimumNumberOfProducts = 1;
         Random randomNumber = new Random();
-        return randomNumber.nextInt(totalNumberOfProducts - minimumNumberOfProducts + 1) +
-                minimumNumberOfProducts;
+        int chosenRandomNumber = randomNumber.nextInt(
+                totalNumberOfProducts - minimumNumberOfProducts + 1
+        ) + minimumNumberOfProducts;
+        return chosenRandomNumber;
     }
 
     @FindBy(how = How.CLASS_NAME, using = "card-body")

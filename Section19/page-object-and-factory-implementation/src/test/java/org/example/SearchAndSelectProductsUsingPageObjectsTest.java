@@ -20,13 +20,10 @@ import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static java.lang.Thread.*;
-
-public class SearchAndSelectProductsUsingPageObjects {
+public class SearchAndSelectProductsUsingPageObjectsTest {
 
     private WebDriver driver;
     private WebDriverWait wait;
-    private Login login;
 
     @BeforeClass
     public void oneTimeSetup() {
@@ -54,12 +51,12 @@ public class SearchAndSelectProductsUsingPageObjects {
     public void teardown() { driver.quit(); }
 
     @Test
-    public void testSearchAndSelectProductsUsingPageObjects() throws InterruptedException {
+    public void testSearchAndSelectProductsUsingPageObjects() {
         // use AtomicInteger for the convenience methods
         AtomicInteger carCountCounter = new AtomicInteger(0);
 
         // login using the Login PageObject
-        login = new Login(driver);
+        Login login = new Login(driver);
         login.emailInput.sendKeys(Login.USERNAME);
         login.passwordInput.sendKeys(Login.PASSWORD);
         login.loginButton.click();
@@ -86,11 +83,22 @@ public class SearchAndSelectProductsUsingPageObjects {
             }
         }
 
-        // first we need to see that each number is within the expected range
+        // first we need to see that each product number is within the expected range
         Range<Integer> validProductNumberRange = Range.closed(1, totalNumberOfProducts);
         for (int index = 0; index <= numberOfProductsToBuy - 1; index++) {
             int productNumber = products.productNumbers.get(index);
             Assert.assertTrue(validProductNumberRange.contains(productNumber));
+        }
+
+        CartCount carCount = new CartCount(driver);
+        for (int index = 0; index < products.productNumbers.size(); index++) {
+            WebElement product = allProducts.get(index);
+            product.findElement(By.cssSelector("button:nth-of-type(2)")).click();
+            carCountCounter.getAndIncrement();
+            Boolean carCountUpdated = wait.until(
+                ExpectedConditions.textToBePresentInElement(carCount.cartQuantity, String.valueOf(carCountCounter))
+            );
+            Assert.assertTrue(carCountUpdated);
         }
     }
 }
