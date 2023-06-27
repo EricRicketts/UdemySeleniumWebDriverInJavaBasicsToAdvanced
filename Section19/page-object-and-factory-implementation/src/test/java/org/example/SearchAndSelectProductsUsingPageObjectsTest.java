@@ -52,10 +52,8 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
     @Test
     public void testSearchAndSelectProductsUsingPageObjects() {
-        // use AtomicInteger for the convenience methods
         AtomicInteger carCountCounter = new AtomicInteger(0);
 
-        // login using the Login PageObject
         Login login = new Login(driver);
         login.emailInput.sendKeys(Login.USERNAME);
         login.passwordInput.sendKeys(Login.PASSWORD);
@@ -84,13 +82,13 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
             Assert.assertTrue(validProductNumberRange.contains(productNumber));
         }
 
-        CartCount carCount = new CartCount(driver);
+        Cart cart = new Cart(driver);
         for (int index = 0; index < products.productNumbers.size(); index++) {
             WebElement product = allProducts.get(index);
             product.findElement(By.cssSelector("button:nth-of-type(2)")).click();
             carCountCounter.getAndIncrement();
             Boolean carCountUpdated = wait.until(
-                ExpectedConditions.textToBePresentInElement(carCount.cartQuantity, String.valueOf(carCountCounter))
+                ExpectedConditions.textToBePresentInElement(cart.cartQuantity, String.valueOf(carCountCounter))
             );
             Assert.assertTrue(carCountUpdated);
         }
