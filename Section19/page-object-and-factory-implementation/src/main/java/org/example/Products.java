@@ -17,15 +17,7 @@ public class Products {
 
     List<Integer> productNumbers;
 
-    public int randomNumberOfProductsToBuy(int totalNumberOfProducts) {
-        // in order to match the array indices we number starting from zero
-        int minimumNumberOfProducts = 1;
-        Random randomNumber = new Random();
-        int chosenRandomNumber = randomNumber.nextInt(
-                totalNumberOfProducts - minimumNumberOfProducts + 1
-        ) + minimumNumberOfProducts;
-        return chosenRandomNumber;
-    }
+
 
     @FindBy(how = How.CLASS_NAME, using = "card-body")
     public List<WebElement> allProducts;

@@ -61,30 +61,24 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         login.passwordInput.sendKeys(Login.PASSWORD);
         login.loginButton.click();
 
-        // select items to buy on the main page
         Products products = new Products(driver);
-        // randomly chose how many products to buy
-        int totalNumberOfProducts = products.allProducts.size();
-        // randomly generate number of products to buy from 1 to total number of products inclusive
-        int numberOfProductsToBuy = products.randomNumberOfProductsToBuy(totalNumberOfProducts);
+        int maxNumberOfProductsToBuy = products.allProducts.size();
+        int minNumberOfProductsToBuy = 1;
+        RandomNumber randomNumber = new RandomNumber(maxNumberOfProductsToBuy, minNumberOfProductsToBuy);
+        int numberOfProductsToBuy = randomNumber.generateRandomNumber();
         List<WebElement> allProducts = wait.until(
                 ExpectedConditions.visibilityOfAllElements(products.allProducts)
         );
-        // assert that the expected number of products matches the actual number of products
-        Assert.assertEquals(allProducts.size(), totalNumberOfProducts);
+        Assert.assertEquals(allProducts.size(), products.allProducts.size());
 
-        // from 1 to the number of products to buy generate a random number for each index.  The random numbers
-        // cannot be duplicated, because of the necessity to repeat the loop until a non-duplicate number is
-        // selected a while loop must be used
         while (products.productNumbers.size() < numberOfProductsToBuy) {
-            int randomProductNumber = products.randomNumberOfProductsToBuy(totalNumberOfProducts);
+            int randomProductNumber = randomNumber.generateRandomNumber();
             if (!products.productNumbers.contains(randomProductNumber)) {
                 products.productNumbers.add(randomProductNumber);
             }
         }
 
-        // first we need to see that each product number is within the expected range
-        Range<Integer> validProductNumberRange = Range.closed(1, totalNumberOfProducts);
+        Range<Integer> validProductNumberRange = Range.closed(minNumberOfProductsToBuy, maxNumberOfProductsToBuy);
         for (int index = 0; index <= numberOfProductsToBuy - 1; index++) {
             int productNumber = products.productNumbers.get(index);
             Assert.assertTrue(validProductNumberRange.contains(productNumber));
