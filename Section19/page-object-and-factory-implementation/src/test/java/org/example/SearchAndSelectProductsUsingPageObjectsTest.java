@@ -59,25 +59,28 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         login.passwordInput.sendKeys(Login.PASSWORD);
         login.loginButton.click();
 
-        Products products = new Products(driver);
-        int maxNumberOfProductsToBuy = products.allProducts.size();
-        int minNumberOfProductsToBuy = 1;
-        RandomNumber randomNumber = new RandomNumber(maxNumberOfProductsToBuy, minNumberOfProductsToBuy);
-        int numberOfProductsToBuy = randomNumber.generateRandomNumber();
+        Products products = new Products(driver, 1);
+        products.setMaxNumberOfProductsToBuy(products.allProducts.size());
+        RandomNumber randomNumber = new RandomNumber(
+                products.getMaxNumberOfProductsToBuy(), products.getMinNumberOfProductsToBuy()
+        );
+        products.setNumberOfProductsToBuy(randomNumber.generateRandomNumber());
         List<WebElement> allProducts = wait.until(
                 ExpectedConditions.visibilityOfAllElements(products.allProducts)
         );
         Assert.assertEquals(allProducts.size(), products.allProducts.size());
 
-        while (products.productNumbers.size() < numberOfProductsToBuy) {
+        while (products.productNumbers.size() < products.getNumberOfProductsToBuy()) {
             int randomProductNumber = randomNumber.generateRandomNumber();
             if (!products.productNumbers.contains(randomProductNumber)) {
                 products.productNumbers.add(randomProductNumber);
             }
         }
 
-        Range<Integer> validProductNumberRange = Range.closed(minNumberOfProductsToBuy, maxNumberOfProductsToBuy);
-        for (int index = 0; index <= numberOfProductsToBuy - 1; index++) {
+        Range<Integer> validProductNumberRange = Range.closed(
+                products.getMinNumberOfProductsToBuy(), products.getMaxNumberOfProductsToBuy()
+        );
+        for (int index = 0; index <= products.getNumberOfProductsToBuy() - 1; index++) {
             int productNumber = products.productNumbers.get(index);
             Assert.assertTrue(validProductNumberRange.contains(productNumber));
         }

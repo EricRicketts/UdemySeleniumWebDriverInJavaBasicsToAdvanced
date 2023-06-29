@@ -11,18 +11,23 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class Products {
 
     List<Integer> productNumbers;
 
-
+    private int maxNumberOfProductsToBuy;
+    private int minNumberOfProductsToBuy;
+    private int numberOfProductsToBuy;
 
     @FindBy(how = How.CLASS_NAME, using = "card-body")
     public List<WebElement> allProducts;
 
-    public Products(WebDriver driver) {
+    public Products(WebDriver driver, int minNumberOfProductsToBuy) {
+        setMinNumberOfProductsToBuy(minNumberOfProductsToBuy);
         productNumbers = new ArrayList<>();
         PageFactory.initElements(driver, this);
     }
