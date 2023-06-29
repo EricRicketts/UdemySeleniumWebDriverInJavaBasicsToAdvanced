@@ -70,13 +70,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         );
         Assert.assertEquals(allProducts.size(), products.allProducts.size());
 
-        while (products.productNumbers.size() < products.getNumberOfProductsToBuy()) {
-            int randomProductNumber = randomNumber.generateRandomNumber();
-            if (!products.productNumbers.contains(randomProductNumber)) {
-                products.productNumbers.add(randomProductNumber);
-            }
-        }
-
+        products.fillProductNumbersList(randomNumber);
         Range<Integer> validProductNumberRange = Range.closed(
                 products.getMinNumberOfProductsToBuy(), products.getMaxNumberOfProductsToBuy()
         );

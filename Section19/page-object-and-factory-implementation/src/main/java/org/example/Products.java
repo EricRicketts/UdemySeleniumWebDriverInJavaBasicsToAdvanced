@@ -26,6 +26,14 @@ public class Products {
     @FindBy(how = How.CLASS_NAME, using = "card-body")
     public List<WebElement> allProducts;
 
+    public void fillProductNumbersList(RandomNumber randomNumber) {
+        while (this.productNumbers.size() < this.getNumberOfProductsToBuy()) {
+            int randomProductNumber = randomNumber.generateRandomNumber();
+            if (!this.productNumbers.contains(randomProductNumber)) {
+                this.productNumbers.add(randomProductNumber);
+            }
+        }
+    }
     public Products(WebDriver driver, int minNumberOfProductsToBuy) {
         setMinNumberOfProductsToBuy(minNumberOfProductsToBuy);
         productNumbers = new ArrayList<>();
