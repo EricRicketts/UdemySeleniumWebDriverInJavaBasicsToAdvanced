@@ -25,6 +25,17 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
     private WebDriver driver;
     private WebDriverWait wait;
 
+    private void fillAndVerifyProductNumberRange(Products products, RandomNumber randomNumber) {
+        products.fillProductNumbersList(randomNumber);
+        Range<Integer> validProductNumberRange = Range.closed(
+                products.getMinNumberOfProductsToBuy(), products.getMaxNumberOfProductsToBuy()
+        );
+        for (int index = 0; index <= products.getNumberOfProductsToBuy() - 1; index++) {
+            int productNumber = products.productNumbers.get(index);
+            Assert.assertTrue(validProductNumberRange.contains(productNumber));
+        }
+    }
+
     @BeforeClass
     public void oneTimeSetup() {
         WebDriverManager.chromedriver().setup();
@@ -70,14 +81,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         );
         Assert.assertEquals(allProducts.size(), products.allProducts.size());
 
-        products.fillProductNumbersList(randomNumber);
-        Range<Integer> validProductNumberRange = Range.closed(
-                products.getMinNumberOfProductsToBuy(), products.getMaxNumberOfProductsToBuy()
-        );
-        for (int index = 0; index <= products.getNumberOfProductsToBuy() - 1; index++) {
-            int productNumber = products.productNumbers.get(index);
-            Assert.assertTrue(validProductNumberRange.contains(productNumber));
-        }
+        fillAndVerifyProductNumberRange(products, randomNumber);
 
         Cart cart = new Cart(driver);
         for (int index = 0; index < products.productNumbers.size(); index++) {
