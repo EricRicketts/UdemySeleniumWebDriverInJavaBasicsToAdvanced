@@ -93,5 +93,13 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
         fillAndVerifyProductNumberRangeForEachProduct(products, randomNumber);
         selectAndVerifyEachProductAddedToCart(products, new CartButton(driver));
+
+        CartButton cartButton = new CartButton(driver);
+        cartButton.button.click();
+        Cart myCart = new Cart(driver);
+        WebElement checkoutButton = wait.until(
+                ExpectedConditions.visibilityOf(myCart.checkoutButton)
+        );
+        Assert.assertNotNull(checkoutButton);
     }
 }

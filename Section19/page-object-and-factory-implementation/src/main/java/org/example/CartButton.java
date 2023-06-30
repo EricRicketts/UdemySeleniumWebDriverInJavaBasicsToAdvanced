@@ -8,6 +8,9 @@ import org.openqa.selenium.support.PageFactory;
 
 public class CartButton {
 
+    @FindBy(how = How.CSS, using = "button[routerlink='/dashboard/cart']")
+    public WebElement button;
+
     @FindBy(how = How.CSS, using = "button[routerlink='/dashboard/cart'] > label")
     public WebElement cartQuantity;
 
