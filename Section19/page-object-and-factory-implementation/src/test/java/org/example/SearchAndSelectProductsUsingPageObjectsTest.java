@@ -25,7 +25,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    private void fillAndVerifyProductNumberRange(Products products, RandomNumber randomNumber) {
+    private void fillAndVerifyProductNumberRangeForEachProduct(Products products, RandomNumber randomNumber) {
         products.fillProductNumbersList(randomNumber);
         Range<Integer> validProductNumberRange = Range.closed(
                 products.getMinNumberOfProductsToBuy(), products.getMaxNumberOfProductsToBuy()
@@ -36,6 +36,18 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         }
     }
 
+    private void selectAndVerifyEachProductAddedToCart(Products products, Cart cart) {
+        AtomicInteger carCountCounter = new AtomicInteger(0);
+        for (int index = 0; index < products.productNumbers.size(); index++) {
+            WebElement product = products.allProducts.get(index);
+            product.findElement(By.cssSelector("button:nth-of-type(2)")).click();
+            carCountCounter.getAndIncrement();
+            Boolean carCountUpdated = wait.until(
+                    ExpectedConditions.textToBePresentInElement(cart.cartQuantity, String.valueOf(carCountCounter))
+            );
+            Assert.assertTrue(carCountUpdated);
+        }
+    }
     @BeforeClass
     public void oneTimeSetup() {
         WebDriverManager.chromedriver().setup();
@@ -63,8 +75,6 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
     @Test
     public void testSearchAndSelectProductsUsingPageObjects() {
-        AtomicInteger carCountCounter = new AtomicInteger(0);
-
         Login login = new Login(driver);
         login.emailInput.sendKeys(Login.USERNAME);
         login.passwordInput.sendKeys(Login.PASSWORD);
@@ -81,17 +91,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         );
         Assert.assertEquals(allProducts.size(), products.allProducts.size());
 
-        fillAndVerifyProductNumberRange(products, randomNumber);
-
-        Cart cart = new Cart(driver);
-        for (int index = 0; index < products.productNumbers.size(); index++) {
-            WebElement product = allProducts.get(index);
-            product.findElement(By.cssSelector("button:nth-of-type(2)")).click();
-            carCountCounter.getAndIncrement();
-            Boolean carCountUpdated = wait.until(
-                ExpectedConditions.textToBePresentInElement(cart.cartQuantity, String.valueOf(carCountCounter))
-            );
-            Assert.assertTrue(carCountUpdated);
-        }
+        fillAndVerifyProductNumberRangeForEachProduct(products, randomNumber);
+        selectAndVerifyEachProductAddedToCart(products, new Cart(driver));
     }
 }
