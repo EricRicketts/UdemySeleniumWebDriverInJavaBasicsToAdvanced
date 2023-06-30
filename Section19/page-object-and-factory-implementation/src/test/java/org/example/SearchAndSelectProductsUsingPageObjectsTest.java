@@ -36,14 +36,14 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         }
     }
 
-    private void selectAndVerifyEachProductAddedToCart(Products products, Cart cart) {
+    private void selectAndVerifyEachProductAddedToCart(Products products, CartButton cartButton) {
         AtomicInteger carCountCounter = new AtomicInteger(0);
         for (int index = 0; index < products.productNumbers.size(); index++) {
             WebElement product = products.allProducts.get(index);
             product.findElement(By.cssSelector("button:nth-of-type(2)")).click();
             carCountCounter.getAndIncrement();
             Boolean carCountUpdated = wait.until(
-                    ExpectedConditions.textToBePresentInElement(cart.cartQuantity, String.valueOf(carCountCounter))
+                    ExpectedConditions.textToBePresentInElement(cartButton.cartQuantity, String.valueOf(carCountCounter))
             );
             Assert.assertTrue(carCountUpdated);
         }
@@ -92,6 +92,6 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         Assert.assertEquals(allProducts.size(), products.allProducts.size());
 
         fillAndVerifyProductNumberRangeForEachProduct(products, randomNumber);
-        selectAndVerifyEachProductAddedToCart(products, new Cart(driver));
+        selectAndVerifyEachProductAddedToCart(products, new CartButton(driver));
     }
 }
