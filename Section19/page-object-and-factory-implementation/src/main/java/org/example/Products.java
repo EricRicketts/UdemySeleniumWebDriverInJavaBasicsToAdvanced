@@ -26,6 +26,9 @@ public class Products {
     @FindBy(how = How.CLASS_NAME, using = "card-body")
     public List<WebElement> allProducts;
 
+    @FindBy(how = How.XPATH, using = "(//h4)[2]")
+    public WebElement filterHeading;
+
     public void fillProductNumbersList(RandomNumber randomNumber) {
         while (this.productNumbers.size() < this.getNumberOfProductsToBuy()) {
             int randomProductNumber = randomNumber.generateRandomNumber();

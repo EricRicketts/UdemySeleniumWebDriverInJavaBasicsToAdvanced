@@ -72,6 +72,28 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
     public void verifyContinueShoppingButton(WebDriver driver, Products products) {
         Cart cart = new Cart(driver);
+        cart.continueShoppingButton.click();
+        Boolean filterHeadingPresent = wait.until(
+                ExpectedConditions.textToBePresentInElement(products.filterHeading, "Filter")
+        );
+        Assert.assertTrue(filterHeadingPresent);
+        CartButton cartButton = new CartButton(driver);
+        cartButton.button.click();
+        WebElement checkoutButton = wait.until(
+                ExpectedConditions.visibilityOf(cart.checkoutButton)
+        );
+        Assert.assertNotNull(checkoutButton);
+
+    }
+
+    public void verifyPlaceOrder(WebDriver driver) {
+        Cart myCart = new Cart(driver);
+        myCart.checkoutButton.click();
+        Checkout checkout = new Checkout(driver);
+        WebElement placeOrderButton = wait.until(
+                ExpectedConditions.visibilityOf(checkout.placeOrderButton)
+        );
+        Assert.assertNotNull(placeOrderButton);
     }
 
     private void verifyPurchasesAddUpToTotalAmount(WebDriver driver) {
@@ -134,5 +156,6 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         navigateToMyCartPageAndVerifyPurchases(driver, products);
         verifyPurchasesAddUpToTotalAmount(driver);
         verifyContinueShoppingButton(driver, products);
+        verifyPlaceOrder(driver);
     }
 }
