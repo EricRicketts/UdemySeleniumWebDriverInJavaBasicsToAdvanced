@@ -13,6 +13,12 @@ public class Cart {
     @FindBy(how = How.CLASS_NAME, using = "infoWrap")
     public List<WebElement> allProductsList;
 
+    @FindBy(how = How.CSS, using = ".infoWrap h3")
+    public List<WebElement> allProductTitles;
+
+    @FindBy(how = How.CSS, using = ".prodTotal > p")
+    public List<WebElement> allProductPrices;
+
     @FindBy(how = How.XPATH, using = "//button[contains(text(),'Checkout')]")
     public WebElement checkoutButton;
 

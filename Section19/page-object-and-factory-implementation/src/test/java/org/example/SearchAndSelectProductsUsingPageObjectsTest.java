@@ -17,6 +17,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -33,6 +34,26 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         for (int index = 0; index <= products.getNumberOfProductsToBuy() - 1; index++) {
             int productNumber = products.productNumbers.get(index);
             Assert.assertTrue(validProductNumberRange.contains(productNumber));
+        }
+    }
+
+    public void navigateToMyCartPageAndVerifyPurchases(Products products) {
+        List<String> allProductPrices = new ArrayList<>();
+        List<String> allProductTitles = new ArrayList<>();
+        Cart myCart = new Cart(driver);
+        CartButton cartButton = new CartButton(driver);
+        cartButton.button.click();
+        WebElement checkoutButton = wait.until(
+                ExpectedConditions.visibilityOf(myCart.checkoutButton)
+        );
+        Assert.assertNotNull(checkoutButton);
+        myCart.allProductPrices.forEach((priceElement) -> allProductPrices.add(priceElement.getText()));
+        myCart.allProductTitles.forEach((priceElement) -> allProductTitles.add(priceElement.getText()));
+        for (WebElement product : products.allProducts) {
+            String productTitle = product.findElement(By.tagName("b")).getText();
+            Assert.assertTrue(allProductTitles.contains(productTitle));
+            String productPrice = product.findElement(By.className("text-muted")).getText();
+            Assert.assertTrue(allProductPrices.contains(productPrice));
         }
     }
 
@@ -93,13 +114,6 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
         fillAndVerifyProductNumberRangeForEachProduct(products, randomNumber);
         selectAndVerifyEachProductAddedToCart(products, new CartButton(driver));
-
-        CartButton cartButton = new CartButton(driver);
-        cartButton.button.click();
-        Cart myCart = new Cart(driver);
-        WebElement checkoutButton = wait.until(
-                ExpectedConditions.visibilityOf(myCart.checkoutButton)
-        );
-        Assert.assertNotNull(checkoutButton);
+        navigateToMyCartPageAndVerifyPurchases(products);
     }
 }
