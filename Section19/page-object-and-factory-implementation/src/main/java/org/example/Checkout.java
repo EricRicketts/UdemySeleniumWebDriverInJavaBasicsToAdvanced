@@ -1,13 +1,17 @@
 package org.example;
 
+import lombok.Getter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 
+@Getter
 public class Checkout {
 
+    private final String visaCreditCardNumberForTest = "4111 1111 1111 1111";
+    private final String visaCreditCardCvvNumberForTest = "999";
     @FindBy(how = How.XPATH, using = "//button[contains(text(), 'Apply Coupon')]")
     public WebElement getApplyCouponButton;
 

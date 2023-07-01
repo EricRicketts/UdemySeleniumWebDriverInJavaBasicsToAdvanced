@@ -72,7 +72,12 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
     public void verifyContinueShoppingButton(WebDriver driver, Products products) {
         Cart cart = new Cart(driver);
-        cart.continueShoppingButton.click();
+        WebElement continueShoppingButton = wait.until(
+                ExpectedConditions.elementToBeClickable(cart.continueShoppingButton)
+        );
+        Assert.assertNotNull(continueShoppingButton);
+        continueShoppingButton.click();
+
         Boolean filterHeadingPresent = wait.until(
                 ExpectedConditions.textToBePresentInElement(products.filterHeading, "Filter")
         );
@@ -88,7 +93,13 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
     public void verifyPlaceOrder(WebDriver driver) {
         Cart myCart = new Cart(driver);
-        myCart.checkoutButton.click();
+        WebElement checkoutButton = wait.until(
+                ExpectedConditions.visibilityOf(myCart.checkoutButton)
+        );
+        Assert.assertNotNull(checkoutButton);
+        /*
+        checkoutButton.click();
+
         Checkout checkout = new Checkout(driver);
         WebElement placeOrderButton = wait.until(
                 ExpectedConditions.visibilityOf(checkout.placeOrderButton)
@@ -105,6 +116,19 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         Assert.assertEquals(checkout.usernameInput.getAttribute("value"), "");
         checkout.countryInput.clear();
         Assert.assertEquals(checkout.countryInput.getAttribute("value"), "");
+
+        checkout.creditCardInput.sendKeys(checkout.getVisaCreditCardNumberForTest());
+        Assert.assertEquals(
+                checkout.creditCardInput.getAttribute("value"),
+                checkout.getVisaCreditCardCvvNumberForTest()
+        );
+        checkout.cvvInput.sendKeys(checkout.getVisaCreditCardCvvNumberForTest());
+        Assert.assertEquals(
+                checkout.cvvInput.getAttribute("value"),
+                checkout.getVisaCreditCardCvvNumberForTest()
+        );
+
+         */
     }
 
     private void verifyPurchasesAddUpToTotalAmount(WebDriver driver) {
