@@ -98,6 +98,9 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 ExpectedConditions.visibilityOf(checkout.creditCardPaymentMethod)
         );
         Assert.assertNotNull(creditCardPayment);
+        // clear inputs
+        checkout.creditCardInput.clear();
+        Assert.assertEquals(checkout.creditCardInput.getAttribute("value"), "");
     }
 
     private void verifyPurchasesAddUpToTotalAmount(WebDriver driver) {
