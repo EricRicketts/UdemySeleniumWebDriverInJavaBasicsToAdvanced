@@ -10,7 +10,7 @@ public class Checkout {
 
     @FindBy(how = How.XPATH, using = "//button[contains(text(), 'Apply Coupon')]")
     public WebElement getApplyCouponButton;
-    
+
     @FindBy(how = How.XPATH, using = "//div[contains(text(), 'Apply Coupon')]/following-sibling::input")
     public WebElement applyCouponInput;
 

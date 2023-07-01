@@ -94,6 +94,10 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 ExpectedConditions.visibilityOf(checkout.placeOrderButton)
         );
         Assert.assertNotNull(placeOrderButton);
+        WebElement creditCardPayment = wait.until(
+                ExpectedConditions.visibilityOf(checkout.creditCardPaymentMethod)
+        );
+        Assert.assertNotNull(creditCardPayment);
     }
 
     private void verifyPurchasesAddUpToTotalAmount(WebDriver driver) {
