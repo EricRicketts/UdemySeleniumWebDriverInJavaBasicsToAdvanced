@@ -25,10 +25,7 @@ public class Cart {
     @FindBy(how = How.CSS, using = "button[routerlink='/dashboard']")
     public WebElement continueShoppingButton;
 
-    @FindBy(how = How.CSS, using = ".totalRow:nth-of-type(1)")
-    public WebElement subTotal;
-
-    @FindBy(how = How.CSS, using = ".totalRow:nth-of-type(2)")
+    @FindBy(how = How.XPATH, using = "(//li[contains(@class, 'totalRow')])[2]//span[2]")
     public WebElement total;
 
     public Cart(WebDriver driver) {

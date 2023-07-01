@@ -69,6 +69,19 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
             Assert.assertTrue(carCountUpdated);
         }
     }
+
+    private void verifyPurchasesAddUpToTotalAmount() {
+        Cart cart = new Cart(driver);
+        int calculatedTotalPrice = 0;
+        int filterOutMonetarySymbolAndSpace = 2;
+        for (WebElement productPriceElement : cart.allProductPrices) {
+            String productPriceText = productPriceElement.getText();
+            String productPriceNumericalAmount = productPriceText.substring(filterOutMonetarySymbolAndSpace);
+            calculatedTotalPrice += Integer.parseInt(productPriceNumericalAmount);
+        }
+        int actualTotalPrice = Integer.parseInt(cart.total.getText().substring(1));
+        Assert.assertEquals(calculatedTotalPrice, actualTotalPrice);
+    }
     @BeforeClass
     public void oneTimeSetup() {
         WebDriverManager.chromedriver().setup();
@@ -115,5 +128,6 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         fillAndVerifyProductNumberRangeForEachProduct(products, randomNumber);
         selectAndVerifyEachProductAddedToCart(products, new CartButton(driver));
         navigateToMyCartPageAndVerifyPurchases(products);
+        verifyPurchasesAddUpToTotalAmount();
     }
 }
