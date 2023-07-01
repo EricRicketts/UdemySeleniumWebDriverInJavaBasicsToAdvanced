@@ -37,7 +37,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         }
     }
 
-    public void navigateToMyCartPageAndVerifyPurchases(Products products) {
+    public void navigateToMyCartPageAndVerifyPurchases(WebDriver driver, Products products) {
         List<String> allProductPrices = new ArrayList<>();
         List<String> allProductTitles = new ArrayList<>();
         Cart myCart = new Cart(driver);
@@ -70,7 +70,11 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         }
     }
 
-    private void verifyPurchasesAddUpToTotalAmount() {
+    public void verifyContinueShoppingButton(WebDriver driver, Products products) {
+        Cart cart = new Cart(driver);
+    }
+
+    private void verifyPurchasesAddUpToTotalAmount(WebDriver driver) {
         Cart cart = new Cart(driver);
         int calculatedTotalPrice = 0;
         int filterOutMonetarySymbolAndSpace = 2;
@@ -127,7 +131,8 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
         fillAndVerifyProductNumberRangeForEachProduct(products, randomNumber);
         selectAndVerifyEachProductAddedToCart(products, new CartButton(driver));
-        navigateToMyCartPageAndVerifyPurchases(products);
-        verifyPurchasesAddUpToTotalAmount();
+        navigateToMyCartPageAndVerifyPurchases(driver, products);
+        verifyPurchasesAddUpToTotalAmount(driver);
+        verifyContinueShoppingButton(driver, products);
     }
 }
