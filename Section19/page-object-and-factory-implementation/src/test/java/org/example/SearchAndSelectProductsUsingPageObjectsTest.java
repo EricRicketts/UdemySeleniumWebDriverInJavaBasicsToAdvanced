@@ -4,10 +4,12 @@ package org.example;
 import com.google.common.collect.Range;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -93,16 +95,14 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
     public void verifyPlaceOrder(WebDriver driver) {
         Cart myCart = new Cart(driver);
-        WebElement checkoutButton = wait.until(
-                ExpectedConditions.visibilityOf(myCart.checkoutButton)
-        );
-        Assert.assertNotNull(checkoutButton);
-        /*
-        checkoutButton.click();
+
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+        javascriptExecutor.executeScript("arguments[0].scrollIntoView(true)", myCart.checkoutButton);
+        myCart.checkoutButton.click();
 
         Checkout checkout = new Checkout(driver);
         WebElement placeOrderButton = wait.until(
-                ExpectedConditions.visibilityOf(checkout.placeOrderButton)
+                ExpectedConditions.elementToBeClickable(checkout.placeOrderButton)
         );
         Assert.assertNotNull(placeOrderButton);
         WebElement creditCardPayment = wait.until(
@@ -120,15 +120,13 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         checkout.creditCardInput.sendKeys(checkout.getVisaCreditCardNumberForTest());
         Assert.assertEquals(
                 checkout.creditCardInput.getAttribute("value"),
-                checkout.getVisaCreditCardCvvNumberForTest()
+                checkout.getVisaCreditCardNumberForTest()
         );
         checkout.cvvInput.sendKeys(checkout.getVisaCreditCardCvvNumberForTest());
         Assert.assertEquals(
                 checkout.cvvInput.getAttribute("value"),
                 checkout.getVisaCreditCardCvvNumberForTest()
         );
-
-         */
     }
 
     private void verifyPurchasesAddUpToTotalAmount(WebDriver driver) {
