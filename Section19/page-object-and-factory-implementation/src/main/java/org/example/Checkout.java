@@ -15,7 +15,7 @@ public class Checkout {
     public WebElement applyCouponInput;
 
     @FindBy(how = How.CSS, using = "div.user__address  input")
-    public WebElement country;
+    public WebElement countryInput;
 
     @FindBy(how = How.XPATH, using = "//div[contains(text(), 'Credit Card Number')]/following-sibling::input")
     public WebElement creditCardInput;

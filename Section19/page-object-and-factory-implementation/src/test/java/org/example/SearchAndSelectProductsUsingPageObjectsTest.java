@@ -101,6 +101,10 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         // clear inputs
         checkout.creditCardInput.clear();
         Assert.assertEquals(checkout.creditCardInput.getAttribute("value"), "");
+        checkout.usernameInput.clear();
+        Assert.assertEquals(checkout.usernameInput.getAttribute("value"), "");
+        checkout.countryInput.clear();
+        Assert.assertEquals(checkout.countryInput.getAttribute("value"), "");
     }
 
     private void verifyPurchasesAddUpToTotalAmount(WebDriver driver) {
