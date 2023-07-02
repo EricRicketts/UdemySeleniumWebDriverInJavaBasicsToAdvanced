@@ -134,6 +134,22 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 checkout.cvvInput.getAttribute("value"),
                 checkout.getVisaCreditCardCvvNumberForTest()
         );
+
+        checkout.usernameInput.sendKeys(checkout.getUsernameForTest());
+        Assert.assertEquals(
+                checkout.usernameInput.getAttribute("value"),
+                checkout.getUsernameForTest()
+        );
+
+        checkout.countryInput.sendKeys(checkout.getCountryForTest());
+        WebElement desiredCountry = wait.until(
+                ExpectedConditions.elementToBeClickable(checkout.desiredCountry)
+        );
+        desiredCountry.click();
+        Boolean desiredCountrySelected = wait.until(
+                ExpectedConditions.attributeToBe(checkout.countryInput, "value", "United States")
+        );
+        Assert.assertTrue(desiredCountrySelected);
     }
 
     private void verifyPurchasesAddUpToTotalAmount(WebDriver driver) {

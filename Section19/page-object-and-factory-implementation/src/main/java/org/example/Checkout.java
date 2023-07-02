@@ -12,6 +12,9 @@ public class Checkout {
 
     private final String visaCreditCardNumberForTest = "4111 1111 1111 1111";
     private final String visaCreditCardCvvNumberForTest = "999";
+    private final String usernameForTest = "elmer.fudd@warnerbros.com";
+    private final String countryForTest = "United States";
+
     @FindBy(how = How.XPATH, using = "//button[contains(text(), 'Apply Coupon')]")
     public WebElement getApplyCouponButton;
 
@@ -29,6 +32,9 @@ public class Checkout {
 
     @FindBy(how = How.XPATH, using = "//div[contains(text(), 'CVV Code')]/following-sibling::input")
     public WebElement cvvInput;
+
+    @FindBy(how = How.CSS, using = "section button:first-of-type")
+    public WebElement desiredCountry;
 
     @FindBy(how = How.XPATH, using = "//div[contains(text(), 'Name on Card')]/following-sibling::input")
     public WebElement nameOnCardInput;
