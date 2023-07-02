@@ -111,6 +111,10 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         Assert.assertNotNull(creditCardPayment);
     }
 
+    public void verifyOrderNotification(WebDriver driver) {
+
+    }
+
     public void verifyPlaceOrder(WebDriver driver) {
         Checkout checkout = new Checkout(driver);
 
@@ -159,6 +163,8 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                         checkout.getNameOnCardForTest())
         );
         Assert.assertTrue(correctNameOnCard);
+
+        checkout.placeOrderButton.click();
     }
 
     private void verifyPurchasesAddUpToTotalAmount(WebDriver driver) {
@@ -223,5 +229,6 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         verifyContinueShoppingButton(driver, products);
         verifyNavigateToPlaceOrderPage(driver);
         verifyPlaceOrder(driver);
+        verifyOrderNotification(driver);
     }
 }
