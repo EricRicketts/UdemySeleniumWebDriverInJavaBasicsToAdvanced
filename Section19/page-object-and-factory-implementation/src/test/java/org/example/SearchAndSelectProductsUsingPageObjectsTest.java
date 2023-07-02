@@ -150,6 +150,15 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 ExpectedConditions.attributeToBe(checkout.countryInput, "value", "United States")
         );
         Assert.assertTrue(desiredCountrySelected);
+
+        checkout.nameOnCardInput.sendKeys(checkout.getNameOnCardForTest());
+        Boolean correctNameOnCard = wait.until(
+                ExpectedConditions.attributeToBe(
+                        checkout.nameOnCardInput,
+                        "value",
+                        checkout.getNameOnCardForTest())
+        );
+        Assert.assertTrue(correctNameOnCard);
     }
 
     private void verifyPurchasesAddUpToTotalAmount(WebDriver driver) {

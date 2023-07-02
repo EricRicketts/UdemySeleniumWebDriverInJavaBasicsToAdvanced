@@ -14,6 +14,7 @@ public class Checkout {
     private final String visaCreditCardCvvNumberForTest = "999";
     private final String usernameForTest = "elmer.fudd@warnerbros.com";
     private final String countryForTest = "United States";
+    private final String nameOnCardForTest = "ELMER J FUDD";
 
     @FindBy(how = How.XPATH, using = "//button[contains(text(), 'Apply Coupon')]")
     public WebElement getApplyCouponButton;
