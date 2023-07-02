@@ -16,7 +16,7 @@ public class Notification {
     private final String orderDetailsInExcelString = "Click To Download Order Details in Excel";
 
     @FindBy(how = How.CSS, using = "button.mb-3")
-    public List<WebElement> orderDetailsButtons;
+    public List<WebElement> notificationButtons;
 
     public Notification(WebDriver driver) {
         PageFactory.initElements(driver, this);

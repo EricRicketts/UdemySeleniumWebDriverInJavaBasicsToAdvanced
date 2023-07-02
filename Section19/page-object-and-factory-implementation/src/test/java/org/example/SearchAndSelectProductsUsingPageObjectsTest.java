@@ -11,6 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -112,7 +113,11 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
     }
 
     public void verifyOrderNotification(WebDriver driver) {
-
+        Notification notification = new Notification(driver);
+        List<WebElement> notificationButtons = wait.until(
+                ExpectedConditions.visibilityOfAllElements(notification.notificationButtons)
+        );
+        Assert.assertFalse(notificationButtons.isEmpty());
     }
 
     public void verifyPlaceOrder(WebDriver driver) {
@@ -138,6 +143,13 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 checkout.cvvInput.getAttribute("value"),
                 checkout.getVisaCreditCardCvvNumberForTest()
         );
+
+        Select selectExpirationMonth = new Select(checkout.selectExpirationMonth);
+        selectExpirationMonth.selectByVisibleText("12");
+        Boolean expirationMonthSelected = wait.until(
+                ExpectedConditions.textToBePresentInElement(checkout.selectExpirationMonth, "12")
+        );
+        Assert.assertTrue(expirationMonthSelected);
 
         checkout.usernameInput.sendKeys(checkout.getUsernameForTest());
         Assert.assertEquals(
