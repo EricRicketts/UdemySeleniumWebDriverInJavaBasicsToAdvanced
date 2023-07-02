@@ -93,12 +93,12 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
     }
 
-    public void verifyPlaceOrder(WebDriver driver) {
+    public void verifyNavigateToPlaceOrderPage(WebDriver driver) {
         Cart myCart = new Cart(driver);
 
         JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
         javascriptExecutor.executeScript("arguments[0].scrollIntoView(true)", myCart.checkoutButton);
-        myCart.checkoutButton.click();
+        javascriptExecutor.executeScript("arguments[0].click()", myCart.checkoutButton);
 
         Checkout checkout = new Checkout(driver);
         WebElement placeOrderButton = wait.until(
@@ -109,11 +109,17 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 ExpectedConditions.visibilityOf(checkout.creditCardPaymentMethod)
         );
         Assert.assertNotNull(creditCardPayment);
-        // clear inputs
+    }
+
+    public void verifyPlaceOrder(WebDriver driver) {
+        Checkout checkout = new Checkout(driver);
+
         checkout.creditCardInput.clear();
         Assert.assertEquals(checkout.creditCardInput.getAttribute("value"), "");
+
         checkout.usernameInput.clear();
         Assert.assertEquals(checkout.usernameInput.getAttribute("value"), "");
+
         checkout.countryInput.clear();
         Assert.assertEquals(checkout.countryInput.getAttribute("value"), "");
 
@@ -122,6 +128,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 checkout.creditCardInput.getAttribute("value"),
                 checkout.getVisaCreditCardNumberForTest()
         );
+
         checkout.cvvInput.sendKeys(checkout.getVisaCreditCardCvvNumberForTest());
         Assert.assertEquals(
                 checkout.cvvInput.getAttribute("value"),
@@ -189,6 +196,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         navigateToMyCartPageAndVerifyPurchases(driver, products);
         verifyPurchasesAddUpToTotalAmount(driver);
         verifyContinueShoppingButton(driver, products);
+        verifyNavigateToPlaceOrderPage(driver);
         verifyPlaceOrder(driver);
     }
 }
