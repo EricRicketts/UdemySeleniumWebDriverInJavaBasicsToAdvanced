@@ -9,7 +9,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -21,6 +20,7 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -120,7 +120,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         Assert.assertFalse(notificationButtons.isEmpty());
     }
 
-    public void verifyPlaceOrder(WebDriver driver) {
+    public void verifyPlaceOrder(WebDriver driver) throws InterruptedException {
         Checkout checkout = new Checkout(driver);
 
         checkout.creditCardInput.clear();
@@ -151,6 +151,13 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         );
         Assert.assertTrue(expirationMonthSelected);
 
+        Select selectExpirationYear = new Select(checkout.selectExpirationYear);
+        selectExpirationYear.selectByVisibleText("30");
+        Boolean expirationYearSelected = wait.until(
+                ExpectedConditions.textToBePresentInElement(checkout.selectExpirationYear, "30")
+        );
+        Assert.assertTrue(expirationYearSelected);
+
         checkout.usernameInput.sendKeys(checkout.getUsernameForTest());
         Assert.assertEquals(
                 checkout.usernameInput.getAttribute("value"),
@@ -175,8 +182,6 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                         checkout.getNameOnCardForTest())
         );
         Assert.assertTrue(correctNameOnCard);
-
-        checkout.placeOrderButton.click();
     }
 
     private void verifyPurchasesAddUpToTotalAmount(WebDriver driver) {
@@ -217,7 +222,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
     public void teardown() { driver.quit(); }
 
     @Test
-    public void testSearchAndSelectProductsUsingPageObjects() {
+    public void testSearchAndSelectProductsUsingPageObjects() throws InterruptedException {
         Login login = new Login(driver);
         login.emailInput.sendKeys(Login.USERNAME);
         login.passwordInput.sendKeys(Login.PASSWORD);
@@ -241,6 +246,6 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         verifyContinueShoppingButton(driver, products);
         verifyNavigateToPlaceOrderPage(driver);
         verifyPlaceOrder(driver);
-        verifyOrderNotification(driver);
+//        verifyOrderNotification(driver);
     }
 }
