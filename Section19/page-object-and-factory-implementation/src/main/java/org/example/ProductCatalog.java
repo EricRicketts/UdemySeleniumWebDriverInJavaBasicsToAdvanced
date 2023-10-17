@@ -1,45 +1,42 @@
 package org.example;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.example.AbstractComponents.AbstractComponent;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class Products {
+import static java.util.spi.ToolProvider.findFirst;
 
-    List<Integer> productNumbers;
 
-    private int maxNumberOfProductsToBuy;
-    private int minNumberOfProductsToBuy;
-    private int numberOfProductsToBuy;
+public class ProductCatalog extends AbstractComponent {
 
-    @FindBy(how = How.CLASS_NAME, using = "card-body")
+    @FindBy(how = How.CSS, using = ".mb-3")
     public List<WebElement> allProducts;
 
-    @FindBy(how = How.XPATH, using = "(//h4)[2]")
-    public WebElement filterHeading;
-
-    public void fillProductNumbersList(RandomNumber randomNumber) {
-        while (this.productNumbers.size() < this.getNumberOfProductsToBuy()) {
-            int randomProductNumber = randomNumber.generateRandomNumber();
-            if (!this.productNumbers.contains(randomProductNumber)) {
-                this.productNumbers.add(randomProductNumber);
-            }
-        }
+    public void addProductToCart(String productName) {
+        WebElement product = getProductByName(productName);
+        WebElement addToCartButton = product.findElement(By.cssSelector(".card-body button:last-of-type"));
+        addToCartButton.click();
     }
-    public Products(WebDriver driver, int minNumberOfProductsToBuy) {
-        setMinNumberOfProductsToBuy(minNumberOfProductsToBuy);
-        productNumbers = new ArrayList<>();
+
+    public WebElement getProductByName(String productName) {
+        return getProductList().stream().filter(product ->
+        product.findElement(By.cssSelector("b")).getText().trim().equals(productName)).findFirst().orElse(null);
+    }
+
+    public List<WebElement> getProductList() {
+        By findBy = By.cssSelector(".mb-3");
+        waitForElementsToAppear(findBy);
+        return allProducts;
+    }
+
+    public ProductCatalog(WebDriver driver) {
+        super(driver);
         PageFactory.initElements(driver, this);
     }
 }
