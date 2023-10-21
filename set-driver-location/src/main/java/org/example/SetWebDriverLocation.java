@@ -3,10 +3,10 @@ package org.example;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SetWebDriverLocation {
-  private static final String chromeDriverProperty = "webdriver.chrome.driver";
+public class SetWebDriverLocation {  private static final String chromeDriverProperty = "webdriver.chrome.driver";
   private static final String webDriversFolderPC = "C:\\Program Files\\WebDrivers\\";
   private static final String chromeDriverWindows = "chromedriver.exe";
+
 
   private static final String getWebDriversFolderMac = "/usr/local/bin/";
   private static final String chromeDriverMac = "chromedriver";

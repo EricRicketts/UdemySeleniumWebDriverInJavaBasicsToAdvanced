@@ -1,8 +1,7 @@
 package org.example;
 
-
+import org.example.SetWebDriverLocation;
 import com.google.common.collect.Range;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -30,7 +29,10 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
     @BeforeClass
     public void oneTimeSetup() {
-        WebDriverManager.chromedriver().setup();
+        // this should be a one time setup as this particular version of chrome at the time
+        // of this test, 118.0.5993.89, does not have a native driver.  In the future, Selenium
+        // can now get the driver automatically
+        SetWebDriverLocation.setDriverLocationAndDriverSystemProperty();
     }
 
     @BeforeMethod
@@ -60,7 +62,6 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         List<WebElement> allProducts = productCatalog.getProductList();
         Assert.assertNotNull(allProducts);
         productCatalog.addProductToCart(productName);
-        /*
         Products products = new Products(driver, 1);
         products.setMaxNumberOfProductsToBuy(products.allProducts.size());
         RandomNumber randomNumber = new RandomNumber(
@@ -71,6 +72,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 ExpectedConditions.visibilityOfAllElements(products.allProducts)
         );
         Assert.assertEquals(allProducts.size(), products.allProducts.size());
+        /*
 
         fillAndVerifyProductNumberRangeForEachProduct(products, randomNumber);
         selectAndVerifyEachProductAddedToCart(products, new CartButton(driver));

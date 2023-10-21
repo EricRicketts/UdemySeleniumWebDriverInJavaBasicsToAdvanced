@@ -1,0 +1,8 @@
+org\example\RandomNumber.class
+org\example\AbstractComponents\AbstractComponent.class
+org\example\Notification.class
+org\example\Login.class
+org\example\ProductCatalog.class
+org\example\CartButton.class
+org\example\Cart.class
+org\example\Checkout.class
