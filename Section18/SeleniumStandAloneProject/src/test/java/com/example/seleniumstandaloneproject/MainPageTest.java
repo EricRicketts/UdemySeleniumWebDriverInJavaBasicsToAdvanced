@@ -5,8 +5,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-import static org.testng.Assert.*;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -51,6 +49,7 @@ public class MainPageTest {
     @Test
     public void findAndBuyProduct() {
         // login to the e-commerce website
+        WebElement coat = null;
         int numberOfProducts = 3;
         driver.findElement(By.id("userEmail")).sendKeys("elmer.fudd@warnerbros.com");
         driver.findElement(By.id("userPassword")).sendKeys("Bugs123@bunny");
@@ -62,8 +61,16 @@ public class MainPageTest {
         );
         Assert.assertTrue(landOnECommercePage);
 
-        List<WebElement> allProducts = driver.findElements(By.className("mb-3"));
-        Assert.assertEquals(allProducts.size(), numberOfProducts);
-
+        List<WebElement> products = driver.findElements(By.className("mb-3"));
+        Assert.assertEquals(products.size(), numberOfProducts);
+        for (WebElement product: products) {
+            WebElement desiredProduct = product.findElement(By.className("card-body"));
+            String desiredProductText = desiredProduct.findElement(By.tagName("h5")).getText();
+            if (desiredProductText.equalsIgnoreCase("zara coat 3")) {
+                coat = desiredProduct;
+                break;
+            }
+        }
+        Assert.assertNotNull(coat);
     }
 }
