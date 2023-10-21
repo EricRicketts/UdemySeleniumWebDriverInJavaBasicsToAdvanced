@@ -49,7 +49,8 @@ public class MainPageTest {
     @Test
     public void findAndBuyProduct() {
         // login to the e-commerce website
-        WebElement coat = null;
+        WebElement firstCoatFind = null;
+        String coatText = "zara coat 3";
         int numberOfProducts = 3;
         driver.findElement(By.id("userEmail")).sendKeys("elmer.fudd@warnerbros.com");
         driver.findElement(By.id("userPassword")).sendKeys("Bugs123@bunny");
@@ -57,20 +58,27 @@ public class MainPageTest {
 
         // ensure we have landed on the e-commerce page
         Boolean landOnECommercePage = wait.until(
-                ExpectedConditions.textToBePresentInElementLocated(By.id("sidebar"),"Filters")
+                ExpectedConditions.textToBePresentInElementLocated(By.id("sidebar"), "Filters")
         );
         Assert.assertTrue(landOnECommercePage);
 
         List<WebElement> products = driver.findElements(By.className("mb-3"));
         Assert.assertEquals(products.size(), numberOfProducts);
-        for (WebElement product: products) {
+        for (WebElement product : products) {
             WebElement desiredProduct = product.findElement(By.className("card-body"));
             String desiredProductText = desiredProduct.findElement(By.tagName("h5")).getText();
-            if (desiredProductText.equalsIgnoreCase("zara coat 3")) {
-                coat = desiredProduct;
+            if (desiredProductText.equalsIgnoreCase(coatText)) {
+                firstCoatFind = desiredProduct;
                 break;
             }
         }
-        Assert.assertNotNull(coat);
+        Assert.assertNotNull(firstCoatFind);
+        WebElement secondCoatFind = products.stream().filter(product ->
+                product.findElement(By.tagName("b")).getText().equalsIgnoreCase(coatText))
+                .findFirst()
+                .orElse(null);
+        Assert.assertNotNull(secondCoatFind);
+        WebElement addToCartButton = secondCoatFind.findElement(By.cssSelector("button:last-child"));
+        Assert.assertEquals(addToCartButton.getText().toLowerCase(), "add to cart");
     }
 }
