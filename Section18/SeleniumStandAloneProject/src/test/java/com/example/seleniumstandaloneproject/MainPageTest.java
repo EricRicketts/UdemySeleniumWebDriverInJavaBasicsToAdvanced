@@ -14,6 +14,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.time.Duration;
+import java.util.List;
 
 public class MainPageTest {
     private static final String chromeDriverProperty = "webdriver.chrome.driver";
@@ -50,6 +51,7 @@ public class MainPageTest {
     @Test
     public void findAndBuyProduct() {
         // login to the e-commerce website
+        int numberOfProducts = 3;
         driver.findElement(By.id("userEmail")).sendKeys("elmer.fudd@warnerbros.com");
         driver.findElement(By.id("userPassword")).sendKeys("Bugs123@bunny");
         driver.findElement(By.id("login")).click();
@@ -59,5 +61,9 @@ public class MainPageTest {
                 ExpectedConditions.textToBePresentInElementLocated(By.id("sidebar"),"Filters")
         );
         Assert.assertTrue(landOnECommercePage);
+
+        List<WebElement> allProducts = driver.findElements(By.className("mb-3"));
+        Assert.assertEquals(allProducts.size(), numberOfProducts);
+
     }
 }
