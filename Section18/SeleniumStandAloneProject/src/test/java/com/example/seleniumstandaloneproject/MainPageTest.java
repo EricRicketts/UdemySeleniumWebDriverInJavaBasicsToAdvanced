@@ -89,6 +89,21 @@ public class MainPageTest {
         Assert.assertEquals(addToCartButton.getText().toLowerCase(), "add to cart");
         addToCartButton.click();
 
+        // the first part of validating an item has been added to the cart is if the toast-container
+        // appears, this is the alert that says the item has been added to cart
+        // it is also necessary to check that the overlay disappear, rahul shetty has provided
+        // the class name, "ng-animating".  Assert that the overlay disappears first and then the alter
+        // appears this seems to be the normal sequence
+        Boolean overlayDisappears = wait.until(
+                ExpectedConditions.invisibilityOfElementLocated(By.className("ng-animating"))
+        );
+        Assert.assertTrue(overlayDisappears);
+
+        WebElement addToCartAlert = wait.until(
+            ExpectedConditions.visibilityOfElementLocated(By.id("toast-container"))
+        );
+        Assert.assertNotNull(addToCartAlert);
+
         // check that the cart is updated, should have 1 item in the cart
         List<WebElement> dashboardButtons = driver.findElements(By.className("btn-custom"));
         WebElement cartButton = dashboardButtons.stream().filter(button ->
@@ -100,6 +115,14 @@ public class MainPageTest {
                 ExpectedConditions.textToBePresentInElement(cartButton.findElement(By.tagName("label")), "1")
         );
         Assert.assertTrue(cartUpdated);
+
+        // now that the wait for the overlay to clear and the alter has been checked as preset, and we have
+        // asserted the cart button is updated, it is now time to go to the cart and run assertions on the cart page
+        cartButton.click();
+        WebElement myCartHeading = wait.until(
+            ExpectedConditions.visibilityOfElementLocated(By.tagName("h1"))
+        );
+        Assert.assertTrue(myCartHeading.getText().equalsIgnoreCase("my cart"));
 
         try {
             sleep(2000);
