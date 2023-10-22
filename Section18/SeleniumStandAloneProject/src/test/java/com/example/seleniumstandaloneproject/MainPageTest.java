@@ -14,6 +14,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import java.time.Duration;
 import java.util.List;
 
+import static java.lang.Thread.sleep;
+
 public class MainPageTest {
     private static final String chromeDriverProperty = "webdriver.chrome.driver";
     private static final String webDriversFolderPC = "C:\\Program Files\\WebDrivers\\";
@@ -62,6 +64,7 @@ public class MainPageTest {
         );
         Assert.assertTrue(landOnECommercePage);
 
+        // find the coat which will be purchased do it by a for loop
         List<WebElement> products = driver.findElements(By.className("mb-3"));
         Assert.assertEquals(products.size(), numberOfProducts);
         for (WebElement product : products) {
@@ -73,12 +76,36 @@ public class MainPageTest {
             }
         }
         Assert.assertNotNull(firstCoatFind);
+
+        // find the coat which will be purchased do it by using streams
         WebElement secondCoatFind = products.stream().filter(product ->
                 product.findElement(By.tagName("b")).getText().equalsIgnoreCase(coatText))
                 .findFirst()
                 .orElse(null);
         Assert.assertNotNull(secondCoatFind);
+
+        // add the coat to the cart
         WebElement addToCartButton = secondCoatFind.findElement(By.cssSelector("button:last-child"));
         Assert.assertEquals(addToCartButton.getText().toLowerCase(), "add to cart");
+        addToCartButton.click();
+
+        // check that the cart is updated, should have 1 item in the cart
+        List<WebElement> dashboardButtons = driver.findElements(By.className("btn-custom"));
+        WebElement cartButton = dashboardButtons.stream().filter(button ->
+                button.getText().contains("Cart"))
+                .findFirst()
+                .orElse(null);
+        Assert.assertNotNull(cartButton);
+        Boolean cartUpdated = wait.until(
+                ExpectedConditions.textToBePresentInElement(cartButton.findElement(By.tagName("label")), "1")
+        );
+        Assert.assertTrue(cartUpdated);
+
+        try {
+            sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 }
