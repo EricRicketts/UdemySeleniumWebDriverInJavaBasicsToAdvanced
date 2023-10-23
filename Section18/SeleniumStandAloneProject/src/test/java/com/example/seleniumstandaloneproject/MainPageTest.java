@@ -94,14 +94,15 @@ public class MainPageTest {
         // it is also necessary to check that the overlay disappear, rahul shetty has provided
         // the class name, "ng-animating".  Assert that the overlay disappears first and then the alter
         // appears this seems to be the normal sequence
+        WebElement addToCartAlert = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("toast-container"))
+        );
+
         Boolean overlayDisappears = wait.until(
                 ExpectedConditions.invisibilityOfElementLocated(By.className("ng-animating"))
         );
         Assert.assertTrue(overlayDisappears);
 
-        WebElement addToCartAlert = wait.until(
-            ExpectedConditions.visibilityOfElementLocated(By.id("toast-container"))
-        );
         Assert.assertNotNull(addToCartAlert);
 
         // check that the cart is updated, should have 1 item in the cart
@@ -124,6 +125,17 @@ public class MainPageTest {
         );
         Assert.assertTrue(myCartHeading.getText().equalsIgnoreCase("my cart"));
 
+        // check that there is only one item in the cart and that it is the coat
+        // class for cart is .cartWrap
+
+        WebElement cart = driver.findElements(By.className("cartWrap")).get(0);
+        String cartTagName = cart.getTagName();
+        Assert.assertEquals(cartTagName, "ul");
+
+        List<WebElement> cartListItems = cart.findElements(By.tagName("li"));
+        Assert.assertEquals(cartListItems.size(), 1);
+        String cartText = cart.getText();
+        Assert.assertTrue(cartText.toLowerCase().contains("zara coat 3"));
         try {
             sleep(2000);
         } catch (InterruptedException e) {
