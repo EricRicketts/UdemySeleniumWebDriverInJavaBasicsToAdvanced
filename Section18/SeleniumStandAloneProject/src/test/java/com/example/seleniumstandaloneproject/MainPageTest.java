@@ -99,7 +99,7 @@ public class MainPageTest {
         );
 
         Boolean overlayDisappears = wait.until(
-                ExpectedConditions.invisibilityOfElementLocated(By.className("ng-animating"))
+                ExpectedConditions.invisibilityOf(driver.findElement(By.className("ng-animating")))
         );
         Assert.assertTrue(overlayDisappears);
 
