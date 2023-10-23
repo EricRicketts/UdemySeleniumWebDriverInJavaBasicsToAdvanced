@@ -128,14 +128,21 @@ public class MainPageTest {
         // check that there is only one item in the cart and that it is the coat
         // class for cart is .cartWrap
 
-        WebElement cart = driver.findElements(By.className("cartWrap")).get(0);
-        String cartTagName = cart.getTagName();
+        WebElement cart = driver.findElement(By.className("cart"));
+        WebElement cartList = driver.findElements(By.className("cartWrap")).get(0);
+        String cartTagName = cartList.getTagName();
         Assert.assertEquals(cartTagName, "ul");
 
         List<WebElement> cartListItems = cart.findElements(By.tagName("li"));
         Assert.assertEquals(cartListItems.size(), 1);
         String cartText = cart.getText();
-        Assert.assertTrue(cartText.toLowerCase().contains("zara coat 3"));
+        Assert.assertTrue(cartText.toLowerCase().contains(coatText));
+
+        // rahul shetty advises using streams to check that the coat has been added to the cart
+        List<WebElement> cartItems = cart.findElements(By.cssSelector(".cartSection"));
+        WebElement cartItemHeader = cartItems.stream().filter(item ->
+                item.findElement(By.cssSelector("h3")).getText().equalsIgnoreCase(cartText)).findFirst().orElse(null);
+        Assert.assertEquals(cartItemHeader.getText().toLowerCase(), coatText);
         try {
             sleep(2000);
         } catch (InterruptedException e) {
