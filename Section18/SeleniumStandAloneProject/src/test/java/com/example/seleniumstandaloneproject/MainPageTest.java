@@ -139,15 +139,11 @@ public class MainPageTest {
         Assert.assertTrue(cartText.toLowerCase().contains(coatText));
 
         // rahul shetty advises using streams to check that the coat has been added to the cart
-        List<WebElement> cartItems = cart.findElements(By.cssSelector(".cartSection"));
-        WebElement cartItemHeader = cartItems.stream().filter(item ->
-                item.findElement(By.cssSelector("h3")).getText().equalsIgnoreCase(cartText)).findFirst().orElse(null);
-        Assert.assertEquals(cartItemHeader.getText().toLowerCase(), coatText);
-        try {
-            sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        List<WebElement> cartItems = driver.findElements(By.cssSelector(".cartSection h3"));
+        Assert.assertTrue(cartItems.size() > 0);
+        WebElement h3ForCoat = cartItems.stream().filter(h3 -> h3.getText().equalsIgnoreCase(coatText))
+                .findFirst()
+                .orElse(null);
+        Assert.assertTrue(h3ForCoat.getText().equalsIgnoreCase(coatText));
     }
 }
