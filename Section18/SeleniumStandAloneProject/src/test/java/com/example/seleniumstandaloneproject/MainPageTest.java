@@ -145,5 +145,9 @@ public class MainPageTest {
                 .findFirst()
                 .orElse(null);
         Assert.assertTrue(h3ForCoat.getText().equalsIgnoreCase(coatText));
+
+        // in rahul shetty's code he just checks for the presence of the item via a boolean check
+        Boolean coatPresent = cartItems.stream().anyMatch(item -> item.getText().equalsIgnoreCase(coatText));
+        Assert.assertTrue(coatPresent);
     }
 }
