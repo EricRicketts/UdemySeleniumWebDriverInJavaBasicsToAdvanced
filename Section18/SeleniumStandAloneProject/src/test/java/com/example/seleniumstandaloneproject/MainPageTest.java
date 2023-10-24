@@ -149,5 +149,35 @@ public class MainPageTest {
         // in rahul shetty's code he just checks for the presence of the item via a boolean check
         Boolean coatPresent = cartItems.stream().anyMatch(item -> item.getText().equalsIgnoreCase(coatText));
         Assert.assertTrue(coatPresent);
+
+        // now checkout and assert you have landed on the checkout page
+        driver.findElement(By.cssSelector(".subtotal button")).click();
+        List<WebElement> paymentTitles = wait.until(
+            ExpectedConditions.visibilityOfAllElements(driver.findElements(By.cssSelector(".payment__title")))
+        );
+        Assert.assertTrue(paymentTitles.size() > 0);
+
+        // this is going to be a large code section, much larger than what Rahul Shetty requires, I want
+        // to fill out as many items on the checkout page as I can.
+
+        // first get all the titles then we can get the adjacent elements
+        List<WebElement> checkoutTitles = driver.findElements(By.className("title"));
+        Assert.assertTrue(checkoutTitles.size() > 0);
+        // get the credit card title
+        WebElement creditCardTitle = checkoutTitles.stream().filter(title ->
+                title.getText().equalsIgnoreCase("credit card number"))
+                .findFirst()
+                .orElse(null);
+        Assert.assertNotNull(creditCardTitle);
+        WebElement creditCardInput = creditCardTitle.findElement(By.xpath("following-sibling::*"));
+        creditCardInput.clear();
+        Assert.assertTrue(creditCardInput.getAttribute("value").equals(""));
+        creditCardInput.sendKeys("4542 9931 9292 2293");
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            System.err.format("InterruptedException : %s%n", e);
+        }
     }
 }
