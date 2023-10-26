@@ -166,7 +166,7 @@ public class MainPageTest {
         Assert.assertTrue(checkoutTitles.size() > 0);
         // get the credit card title
         WebElement creditCardTitle = checkoutTitles.stream().filter(title ->
-                title.getText().equalsIgnoreCase("credit card number"))
+                title.getText().strip().equalsIgnoreCase("credit card number"))
                 .findFirst()
                 .orElse(null);
         Assert.assertNotNull(creditCardTitle);
@@ -178,12 +178,28 @@ public class MainPageTest {
         // get the Select lists for the expiration date
         List<WebElement> expirationDate = driver.findElements(By.cssSelector("select.input"));
         Assert.assertEquals(expirationDate.size(), 2);
-        /*
+        Select expirationMonth = new Select(expirationDate.get(0));
+        Select expirationDay = new Select(expirationDate.get(1));
+
+        expirationMonth.selectByIndex(5);
+        expirationDay.selectByIndex(20);
+
+        String selectedMonth = expirationMonth.getFirstSelectedOption().getText();
+        String selectedDay = expirationDay.getFirstSelectedOption().getText();
+
+        Assert.assertTrue(selectedMonth.equals("06"));
+        Assert.assertTrue(selectedDay.equals("21"));
+
+        // new find the CVV number
+        WebElement CVVTitle = checkoutTitles.stream().filter(title ->
+                title.getText().strip().equalsIgnoreCase("cvv code ?"))
+                .findFirst()
+                .orElse(null);
+        Assert.assertNotNull(CVVTitle);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             System.err.format("InterruptedException : %s%n", e);
         }
-        */
     }
 }
