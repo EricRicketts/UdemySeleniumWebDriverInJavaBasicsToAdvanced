@@ -1,6 +1,7 @@
 package com.example.seleniumstandaloneproject;
 
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -174,10 +175,15 @@ public class MainPageTest {
         Assert.assertTrue(creditCardInput.getAttribute("value").equals(""));
         creditCardInput.sendKeys("4542 9931 9292 2293");
 
+        // get the Select lists for the expiration date
+        List<WebElement> expirationDate = driver.findElements(By.cssSelector("select.input"));
+        Assert.assertEquals(expirationDate.size(), 2);
+        /*
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             System.err.format("InterruptedException : %s%n", e);
         }
+        */
     }
 }
