@@ -16,6 +16,7 @@ import java.time.Duration;
 import java.util.List;
 
 import static java.lang.Thread.sleep;
+import static org.openqa.selenium.support.locators.RelativeLocator.with;
 
 public class MainPageTest {
     private static final String chromeDriverProperty = "webdriver.chrome.driver";
@@ -196,10 +197,15 @@ public class MainPageTest {
                 .findFirst()
                 .orElse(null);
         Assert.assertNotNull(CVVTitle);
+        WebElement CVVInput = driver.findElement(with(By.tagName("input")).below(CVVTitle));
+        CVVInput.sendKeys("456");
+        Assert.assertTrue(CVVInput.getAttribute("value").equals("456"));
+        /*
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             System.err.format("InterruptedException : %s%n", e);
         }
+        */
     }
 }
