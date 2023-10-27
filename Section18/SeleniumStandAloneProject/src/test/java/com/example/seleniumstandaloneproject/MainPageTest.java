@@ -248,12 +248,5 @@ public class MainPageTest {
             ExpectedConditions.visibilityOfElementLocated(By.tagName("h1"))
         );
         Assert.assertTrue(confirmationPageTitle.getText().equalsIgnoreCase(titleText));
-        /*
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        */
     }
 }
