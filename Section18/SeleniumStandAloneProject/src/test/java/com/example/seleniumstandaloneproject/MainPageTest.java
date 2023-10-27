@@ -1,5 +1,6 @@
 package com.example.seleniumstandaloneproject;
 
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -226,6 +227,19 @@ public class MainPageTest {
         );
         countrySelected.click();
         Assert.assertTrue(countryInput.getAttribute("value").equalsIgnoreCase("United States"));
+        countryInput.clear();
+
+        // enter and verify country with Actions class
+        Actions setCountryAction = new Actions(driver);
+        setCountryAction.sendKeys(
+                driver.findElement(By.cssSelector("[placeholder='Select Country']")), "United States")
+                .build()
+                .perform();
+        countrySelected = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.xpath(xpathToFindUnitedStates))
+        );
+        countrySelected.click();
+        Assert.assertTrue(countryInput.getAttribute("value").equalsIgnoreCase("United States"));
 
         // place the order and assert that on the confirmation page
         String titleText = "Thankyou for the order.";
@@ -234,5 +248,12 @@ public class MainPageTest {
             ExpectedConditions.visibilityOfElementLocated(By.tagName("h1"))
         );
         Assert.assertTrue(confirmationPageTitle.getText().equalsIgnoreCase(titleText));
+        /*
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        */
     }
 }
