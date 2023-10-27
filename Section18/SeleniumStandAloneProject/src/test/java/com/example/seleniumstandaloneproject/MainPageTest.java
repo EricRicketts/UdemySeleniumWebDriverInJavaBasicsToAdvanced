@@ -55,6 +55,7 @@ public class MainPageTest {
         // login to the e-commerce website
         WebElement firstCoatFind = null;
         String coatText = "zara coat 3";
+        String email = "elmer.fudd@warnerbros.com";
         int numberOfProducts = 3;
         driver.findElement(By.id("userEmail")).sendKeys("elmer.fudd@warnerbros.com");
         driver.findElement(By.id("userPassword")).sendKeys("Bugs123@bunny");
@@ -210,12 +211,17 @@ public class MainPageTest {
         WebElement nameOnCardInput = driver.findElement(with(By.tagName("input")).below(nameOnCardTitle));
         nameOnCardInput.sendKeys("Elmer Fudd");
         Assert.assertTrue(nameOnCardInput.getAttribute("value").equalsIgnoreCase("Elmer Fudd"));
-        /*
+
+        // verify Elmer Fudd's email is entered
+        List<WebElement> userInputs = driver.findElements(By.cssSelector(".user__name input"));
+        WebElement emailInput = userInputs.get(0);
+        Assert.assertTrue(emailInput.getAttribute("value").equalsIgnoreCase(email));
+
+        // enter and verify country
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             System.err.format("InterruptedException : %s%n", e);
         }
-        */
     }
 }
