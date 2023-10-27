@@ -226,10 +226,13 @@ public class MainPageTest {
         );
         countrySelected.click();
         Assert.assertTrue(countryInput.getAttribute("value").equalsIgnoreCase("United States"));
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            System.err.format("InterruptedException : %s%n", e);
-        }
+
+        // place the order and assert that on the confirmation page
+        String titleText = "Thankyou for the order.";
+        driver.findElement(By.cssSelector("div.actions a")).click();
+        WebElement confirmationPageTitle = wait.until(
+            ExpectedConditions.visibilityOfElementLocated(By.tagName("h1"))
+        );
+        Assert.assertTrue(confirmationPageTitle.getText().equalsIgnoreCase(titleText));
     }
 }
