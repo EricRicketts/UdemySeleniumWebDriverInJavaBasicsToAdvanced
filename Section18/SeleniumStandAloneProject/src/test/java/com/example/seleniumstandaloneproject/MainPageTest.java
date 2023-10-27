@@ -191,7 +191,7 @@ public class MainPageTest {
         Assert.assertTrue(selectedMonth.equals("06"));
         Assert.assertTrue(selectedDay.equals("21"));
 
-        // new find the CVV number
+        // new find the CVV number and enter it
         WebElement CVVTitle = checkoutTitles.stream().filter(title ->
                 title.getText().strip().equalsIgnoreCase("cvv code ?"))
                 .findFirst()
@@ -200,6 +200,16 @@ public class MainPageTest {
         WebElement CVVInput = driver.findElement(with(By.tagName("input")).below(CVVTitle));
         CVVInput.sendKeys("456");
         Assert.assertTrue(CVVInput.getAttribute("value").equals("456"));
+
+        // find and enter the name on the card
+        WebElement nameOnCardTitle = checkoutTitles.stream().filter(title ->
+                title.getText().strip().equalsIgnoreCase("name on card"))
+                .findFirst()
+                .orElse(null);
+        Assert.assertNotNull(nameOnCardTitle);
+        WebElement nameOnCardInput = driver.findElement(with(By.tagName("input")).below(nameOnCardTitle));
+        nameOnCardInput.sendKeys("Elmer Fudd");
+        Assert.assertTrue(nameOnCardInput.getAttribute("value").equalsIgnoreCase("Elmer Fudd"));
         /*
         try {
             Thread.sleep(2000);
