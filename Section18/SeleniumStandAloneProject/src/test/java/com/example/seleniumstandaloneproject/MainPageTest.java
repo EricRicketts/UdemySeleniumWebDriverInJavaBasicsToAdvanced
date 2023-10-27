@@ -218,6 +218,14 @@ public class MainPageTest {
         Assert.assertTrue(emailInput.getAttribute("value").equalsIgnoreCase(email));
 
         // enter and verify country
+        WebElement countryInput = userInputs.get(1);
+        countryInput.sendKeys("United");
+        String xpathToFindUnitedStates = "//section[contains(@class, 'list-group')]//span[text() = ' United States']";
+        WebElement countrySelected = wait.until(
+            ExpectedConditions.visibilityOfElementLocated(By.xpath(xpathToFindUnitedStates))
+        );
+        countrySelected.click();
+        Assert.assertTrue(countryInput.getAttribute("value").equalsIgnoreCase("United States"));
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
