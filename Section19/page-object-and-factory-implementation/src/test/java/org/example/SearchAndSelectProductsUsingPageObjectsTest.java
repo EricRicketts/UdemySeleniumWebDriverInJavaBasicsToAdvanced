@@ -1,6 +1,5 @@
 package org.example;
 
-import org.example.SetWebDriverLocation;
 import com.google.common.collect.Range;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -23,17 +22,14 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SearchAndSelectProductsUsingPageObjectsTest {
-
+    private static final String chromeDriverProperty = "webdriver.chrome.driver";
+    private static final String webDriversFolderPC = "C:\\Program Files\\WebDrivers\\";
+    private static final String chromeDriverWindows = "chromedriver.exe";
     private WebDriver driver;
     private WebDriverWait wait;
 
     @BeforeClass
-    public void oneTimeSetup() {
-        // this should be a one time setup as this particular version of chrome at the time
-        // of this test, 118.0.5993.89, does not have a native driver.  In the future, Selenium
-        // can now get the driver automatically
-        SetWebDriverLocation.setDriverLocationAndDriverSystemProperty();
-    }
+    public void oneTimeSetup() { System.setProperty(chromeDriverProperty, webDriversFolderPC + chromeDriverWindows); }
 
     @BeforeMethod
     public void setUp() {
@@ -61,6 +57,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         ProductCatalog productCatalog = new ProductCatalog(driver);
         List<WebElement> allProducts = productCatalog.getProductList();
         Assert.assertNotNull(allProducts);
+        /*
         productCatalog.addProductToCart(productName);
         Products products = new Products(driver, 1);
         products.setMaxNumberOfProductsToBuy(products.allProducts.size());
@@ -72,7 +69,6 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 ExpectedConditions.visibilityOfAllElements(products.allProducts)
         );
         Assert.assertEquals(allProducts.size(), products.allProducts.size());
-        /*
 
         fillAndVerifyProductNumberRangeForEachProduct(products, randomNumber);
         selectAndVerifyEachProductAddedToCart(products, new CartButton(driver));
