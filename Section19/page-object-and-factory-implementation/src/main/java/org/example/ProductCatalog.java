@@ -31,8 +31,7 @@ public class ProductCatalog extends AbstractComponent {
 
     public List<WebElement> getProductList() {
         By findBy = By.cssSelector(".mb-3");
-        waitForElementsToAppear(findBy);
-        return allProducts;
+        return waitForElementsToAppear(findBy);
     }
 
     public ProductCatalog(WebDriver driver) {

@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.openqa.selenium.devtools.v85.debugger.Debugger.pause;
+
 public class SearchAndSelectProductsUsingPageObjectsTest {
     private static final String chromeDriverProperty = "webdriver.chrome.driver";
     private static final String webDriversFolderPC = "C:\\Program Files\\WebDrivers\\";
@@ -34,7 +36,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
     @BeforeMethod
     public void setUp() {
         String url = "https://rahulshettyacademy.com/client";
-        int implicitWaitTime = 10;
+        int implicitWaitTime = 5;
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
 
@@ -43,6 +45,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWaitTime));
 
         driver.get(url);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
     }
 
     @AfterMethod
@@ -50,13 +53,36 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
     @Test
     public void testSearchAndSelectProductsUsingPageObjects() throws InterruptedException {
+        // login
         String productName = "ZARA COAT 3";
         Login login = new Login(driver);
         login.loginApplication("elmer.fudd@warnerbros.com", "Bugs123@bunny");
 
+        // gather all the products on the product page
         ProductCatalog productCatalog = new ProductCatalog(driver);
-        List<WebElement> allProducts = productCatalog.getProductList();
-        Assert.assertNotNull(allProducts);
+        List<WebElement> allProductsInProductCatalog = productCatalog.getProductList();
+        Assert.assertNotNull(allProductsInProductCatalog);
+
+        // in the past I randomly chose the amount of products to buy but at the time of writing this test
+        // the product choice is very limited, I will buy all products.
+        CartButton cartButton = new CartButton(driver);
+        Product product = new Product(driver);
+        List<WebElement> allProducts = wait.until(
+                ExpectedConditions.visibilityOfAllElements(product.allProducts)
+        );
+        int numberOfProducts = allProducts.size();
+        for (int index = 0; index < numberOfProducts; index++) {
+            WebElement clickableProduct = allProducts.get(index);
+            WebElement addToCartButton = clickableProduct.findElement(By.cssSelector("button:last-of-type"));
+            Assert.assertTrue(addToCartButton.getTagName().strip().equalsIgnoreCase("button"));
+            addToCartButton.click();
+            Boolean addToCartUpdated = wait.until(
+                ExpectedConditions.textToBePresentInElement(cartButton.cartQuantity, Integer.toString(index + 1))
+            );
+            Assert.assertTrue(addToCartUpdated);
+        }
+
+//        Assert.assertEquals(Integer.toString(numberOfProducts), cartButton.cartQuantity.getText());
         /*
         productCatalog.addProductToCart(productName);
         Products products = new Products(driver, 1);
