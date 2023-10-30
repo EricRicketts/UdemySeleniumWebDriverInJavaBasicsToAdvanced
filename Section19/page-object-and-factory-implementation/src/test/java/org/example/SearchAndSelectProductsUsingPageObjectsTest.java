@@ -88,6 +88,10 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
             ExpectedConditions.textToBePresentInElementLocated(By.tagName("h1"), "My Cart")
         );
         Assert.assertTrue(onMyCartPage);
+        List<WebElement> cartItems = wait.until(
+                ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".cart > .cartWrap"))
+        );
+        Assert.assertEquals(cartItems.size(), 3);
 
 //        Assert.assertEquals(Integer.toString(numberOfProducts), cartButton.cartQuantity.getText());
         /*
