@@ -82,6 +82,13 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
             Assert.assertTrue(addToCartUpdated);
         }
 
+        // go to the cart button and verify that all items purchased are included in your cart
+        cartButton.button.click();
+        Boolean onMyCartPage = wait.until(
+            ExpectedConditions.textToBePresentInElementLocated(By.tagName("h1"), "My Cart")
+        );
+        Assert.assertTrue(onMyCartPage);
+
 //        Assert.assertEquals(Integer.toString(numberOfProducts), cartButton.cartQuantity.getText());
         /*
         productCatalog.addProductToCart(productName);
