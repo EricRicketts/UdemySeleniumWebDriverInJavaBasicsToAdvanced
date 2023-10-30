@@ -92,6 +92,11 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".cart > .cartWrap"))
         );
         Assert.assertEquals(cartItems.size(), 3);
+        // verify everything about each item, image, item number, minimum retail price, if in stock, actual price
+        // Buy Now button, and delete button
+
+        // verify everything about each item, image, item number, minimum retail price, if in stock, actual price
+
 
 //        Assert.assertEquals(Integer.toString(numberOfProducts), cartButton.cartQuantity.getText());
         /*
