@@ -109,8 +109,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
         // verify everything about each item, image, item number, minimum retail price, if in stock, actual price
         for (int index = 0; index < numberOfCartItems; index++) {
-            WebElement cartItemImage = cartItemImages.get(index);
-            Assert.assertNotNull(cartItemImage.getAttribute("src"));
+            Assert.assertEquals(imageSRCs.get(index), cartItemImages.get(index).getAttribute("src"));
         }
 
 
