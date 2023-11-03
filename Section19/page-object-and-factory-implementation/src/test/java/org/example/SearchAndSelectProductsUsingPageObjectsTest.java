@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.Cart;
 import com.google.common.collect.Range;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -70,6 +71,13 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         List<WebElement> allProducts = wait.until(
                 ExpectedConditions.visibilityOfAllElements(product.allProducts)
         );
+
+        // for future comparison with MyCart section get some information on the products
+        List<WebElement> allProductImages = product.allProductImages;
+        ArrayList<String> imageSRCs = new ArrayList<String>();
+        for (WebElement productImage : allProductImages) imageSRCs.add(productImage.getAttribute("src"));
+
+
         int numberOfProducts = allProducts.size();
         for (int index = 0; index < numberOfProducts; index++) {
             WebElement clickableProduct = allProducts.get(index);
@@ -87,15 +95,24 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         Boolean onMyCartPage = wait.until(
             ExpectedConditions.textToBePresentInElementLocated(By.tagName("h1"), "My Cart")
         );
-        Assert.assertTrue(onMyCartPage);
-        List<WebElement> cartItems = wait.until(
-                ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".cart > .cartWrap"))
-        );
-        Assert.assertEquals(cartItems.size(), 3);
-        // verify everything about each item, image, item number, minimum retail price, if in stock, actual price
-        // Buy Now button, and delete button
+
+        // assert the number in cart is the same as the total number of products
+        Cart cart = new Cart(driver);
+        List<WebElement> cartItems = cart.allCartItems;
+        int numberOfCartItems = cartItems.size();
+        Assert.assertEquals(numberOfCartItems, numberOfProducts);
+        List<WebElement> cartItemImages = cart.itemImages;
+        List<WebElement> cartItemNumbers = cart.itemNumbers;
+        List<WebElement> cartItemTitles = cart.itemTitles;
+        List<WebElement> cartItemMRPs = cart.itemMRPs;
+        List<WebElement> cartItemsStockStatus = cart.allItemsStockStatus;
 
         // verify everything about each item, image, item number, minimum retail price, if in stock, actual price
+        for (int index = 0; index < numberOfCartItems; index++) {
+            WebElement cartItemImage = cartItemImages.get(index);
+            Assert.assertNotNull(cartItemImage.getAttribute("src"));
+        }
+
 
 
 //        Assert.assertEquals(Integer.toString(numberOfProducts), cartButton.cartQuantity.getText());

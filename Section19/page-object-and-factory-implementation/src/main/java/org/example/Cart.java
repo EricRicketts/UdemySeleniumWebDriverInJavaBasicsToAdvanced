@@ -10,14 +10,23 @@ import java.util.List;
 
 public class Cart {
 
-    @FindBy(how = How.CLASS_NAME, using = "infoWrap")
-    public List<WebElement> allProductsList;
+    @FindBy(how = How.CSS, using = ".cart > .cartWrap")
+    public List<WebElement> allCartItems;
 
-    @FindBy(how = How.CSS, using = ".infoWrap h3")
-    public List<WebElement> allProductTitles;
+    @FindBy(how = How.CSS, using = ".cartSection > .itemImg")
+    public List<WebElement> itemImages;
 
-    @FindBy(how = How.CSS, using = ".prodTotal > p")
-    public List<WebElement> allProductPrices;
+    @FindBy(how = How.CSS, using = ".cartSection > .itemNumber")
+    public List<WebElement> itemNumbers;
+
+    @FindBy(how = How.CSS, using = ".cartSection > h3")
+    public List<WebElement> itemTitles;
+
+    @FindBy(how = How.CSS, using = ".cartSection > p:nth-of-type(2)")
+    public List<WebElement> itemMRPs;
+
+    @FindBy(how = How.CSS, using = ".cartSection > .stockStatus")
+    public List<WebElement> allItemsStockStatus;
 
     @FindBy(how = How.XPATH, using = "//button[contains(text(),'Checkout')]")
     public WebElement checkoutButton;
