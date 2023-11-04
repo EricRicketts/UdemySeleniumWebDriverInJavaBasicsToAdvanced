@@ -110,6 +110,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         // verify everything about each item, image, item number, minimum retail price, if in stock, actual price
         for (int index = 0; index < numberOfCartItems; index++) {
             Assert.assertEquals(imageSRCs.get(index), cartItemImages.get(index).getAttribute("src"));
+            Assert.assertTrue(cartItemNumbers.get(index).getText().startsWith("#626"));
         }
 
 
