@@ -17,6 +17,9 @@ public class Product extends AbstractComponent {
     @FindBy(how = How.CSS, using = ".card-img-top")
     public List<WebElement> allProductImages;
 
+    @FindBy(how = How.CSS, using = ".card-body b")
+    public List<WebElement> allProductTitles;
+
     public Product(WebDriver driver) {
         super(driver);
         PageFactory.initElements(driver, this);

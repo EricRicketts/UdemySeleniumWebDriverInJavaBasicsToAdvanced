@@ -74,8 +74,11 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
         // for future comparison with MyCart section get some information on the products
         List<WebElement> allProductImages = product.allProductImages;
+        List<WebElement> allProductTitles = product.allProductTitles;
         ArrayList<String> imageSRCs = new ArrayList<String>();
+        ArrayList<String> productTitles = new ArrayList<String>();
         for (WebElement productImage : allProductImages) imageSRCs.add(productImage.getAttribute("src"));
+        for (WebElement productTitle : allProductTitles) productTitles.add(productTitle.getText());
 
 
         int numberOfProducts = allProducts.size();
@@ -111,6 +114,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         for (int index = 0; index < numberOfCartItems; index++) {
             Assert.assertEquals(imageSRCs.get(index), cartItemImages.get(index).getAttribute("src"));
             Assert.assertTrue(cartItemNumbers.get(index).getText().startsWith("#626"));
+            Assert.assertTrue(productTitles.get(index).equalsIgnoreCase(cartItemTitles.get(index).getText()));
         }
 
 
