@@ -125,6 +125,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
             String cartItemMRPText = entireCartItemMRPText.substring(lastIndexOfMRPText + 2);
             // new compare the productMRP to the cart item MRP
             Assert.assertEquals(productMRPs.get(index), cartItemMRPText);
+            Assert.assertTrue(cartItemsStockStatus.get(index).getText().equalsIgnoreCase("in stock"));
         }
 
 
