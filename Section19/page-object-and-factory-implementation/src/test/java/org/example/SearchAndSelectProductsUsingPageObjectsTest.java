@@ -75,10 +75,13 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         // for future comparison with MyCart section get some information on the products
         List<WebElement> allProductImages = product.allProductImages;
         List<WebElement> allProductTitles = product.allProductTitles;
+        List<WebElement> allProductMRPs = product.allProductMRPs;
         ArrayList<String> imageSRCs = new ArrayList<String>();
         ArrayList<String> productTitles = new ArrayList<String>();
+        ArrayList<String> productMRPs = new ArrayList<String>();
         for (WebElement productImage : allProductImages) imageSRCs.add(productImage.getAttribute("src"));
         for (WebElement productTitle : allProductTitles) productTitles.add(productTitle.getText());
+        for (WebElement productMRP : allProductMRPs) productMRPs.add(productMRP.getText());
 
 
         int numberOfProducts = allProducts.size();
@@ -115,6 +118,13 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
             Assert.assertEquals(imageSRCs.get(index), cartItemImages.get(index).getAttribute("src"));
             Assert.assertTrue(cartItemNumbers.get(index).getText().startsWith("#626"));
             Assert.assertTrue(productTitles.get(index).equalsIgnoreCase(cartItemTitles.get(index).getText()));
+            // need to isolate the MRP price from the MyCart item
+            WebElement cartItemMRP = cartItemMRPs.get(index);
+            String entireCartItemMRPText = cartItemMRP.getText();
+            int lastIndexOfMRPText = entireCartItemMRPText.indexOf("P");
+            String cartItemMRPText = entireCartItemMRPText.substring(lastIndexOfMRPText + 2);
+            // new compare the productMRP to the cart item MRP
+            Assert.assertEquals(productMRPs.get(index), cartItemMRPText);
         }
 
 

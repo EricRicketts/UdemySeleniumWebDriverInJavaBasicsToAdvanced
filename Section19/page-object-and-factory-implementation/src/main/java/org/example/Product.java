@@ -20,6 +20,9 @@ public class Product extends AbstractComponent {
     @FindBy(how = How.CSS, using = ".card-body b")
     public List<WebElement> allProductTitles;
 
+    @FindBy(how = How.CSS, using =".card-body .text-muted")
+    public List<WebElement> allProductMRPs;
+
     public Product(WebDriver driver) {
         super(driver);
         PageFactory.initElements(driver, this);
