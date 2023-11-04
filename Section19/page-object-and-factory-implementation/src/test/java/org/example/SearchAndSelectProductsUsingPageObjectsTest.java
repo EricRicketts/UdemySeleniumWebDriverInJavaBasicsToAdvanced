@@ -135,6 +135,9 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
             Pattern pattern = Pattern.compile("\\$\\s\\d+");
             Matcher matcher = pattern.matcher(cartItemsProductTotals.get(index).getText());
             Assert.assertTrue(matcher.find());
+            Assert.assertTrue(cartItemBuyNowButtons.get(index).getText().toLowerCase().trim().contains("buy now"));
+            String trashIconClass = cartItemTrashIcons.get(index).getAttribute("class");
+            Assert.assertTrue(trashIconClass.contains("fa-trash-o"));
         }
 
 
