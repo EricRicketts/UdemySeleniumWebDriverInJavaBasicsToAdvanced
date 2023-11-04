@@ -40,11 +40,11 @@ public class Cart {
     @FindBy(how = How.CSS, using = ".cartSection i")
     public List<WebElement> allItemTrashIcons;
 
+    @FindBy(how = How.CSS, using = ".totalRow:nth-of-type(2) .value")
+    public WebElement totalPrice;
+
     @FindBy(how = How.CSS, using = "button[routerlink='/dashboard']")
     public WebElement continueShoppingButton;
-
-    @FindBy(how = How.XPATH, using = "(//li[contains(@class, 'totalRow')])[2]//span[2]")
-    public WebElement total;
 
     public Cart(WebDriver driver) {
         PageFactory.initElements(driver, this);

@@ -140,6 +140,19 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
             Assert.assertTrue(trashIconClass.contains("fa-trash-o"));
         }
 
+        // verify the total purchase amount adds up to the sum of the product prices
+        String totalPriceText = null;
+        int calculatedTotalPrice = 0;
+        for (WebElement cartItemPrice : cartItemsProductTotals) {
+            String[] priceArray = cartItemPrice.getText().split("\\$");
+            String priceString = priceArray[1].trim();
+            int price = Integer.parseInt(priceString);
+            calculatedTotalPrice += price;
+        }
+        String calculatedTotalPriceText = "$".concat(String.valueOf(calculatedTotalPrice));
+        Assert.assertEquals(calculatedTotalPriceText, cart.totalPrice.getText());
+
+
 
 
 //        Assert.assertEquals(Integer.toString(numberOfProducts), cartButton.cartQuantity.getText());
