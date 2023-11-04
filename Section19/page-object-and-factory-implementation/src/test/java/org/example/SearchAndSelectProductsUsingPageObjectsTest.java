@@ -21,6 +21,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.openqa.selenium.devtools.v85.debugger.Debugger.pause;
 
@@ -112,6 +114,9 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         List<WebElement> cartItemTitles = cart.itemTitles;
         List<WebElement> cartItemMRPs = cart.itemMRPs;
         List<WebElement> cartItemsStockStatus = cart.allItemsStockStatus;
+        List<WebElement> cartItemsProductTotals = cart.allItemProductTotals;
+        List<WebElement> cartItemBuyNowButtons = cart.allItemBuyNowButtons;
+        List<WebElement> cartItemTrashIcons = cart.allItemTrashIcons;
 
         // verify everything about each item, image, item number, minimum retail price, if in stock, actual price
         for (int index = 0; index < numberOfCartItems; index++) {
@@ -126,6 +131,10 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
             // new compare the productMRP to the cart item MRP
             Assert.assertEquals(productMRPs.get(index), cartItemMRPText);
             Assert.assertTrue(cartItemsStockStatus.get(index).getText().equalsIgnoreCase("in stock"));
+            // assert the product totals begin with a '$' and consist only of digits
+            Pattern pattern = Pattern.compile("\\$\\s\\d+");
+            Matcher matcher = pattern.matcher(cartItemsProductTotals.get(index).getText());
+            Assert.assertTrue(matcher.find());
         }
 
 

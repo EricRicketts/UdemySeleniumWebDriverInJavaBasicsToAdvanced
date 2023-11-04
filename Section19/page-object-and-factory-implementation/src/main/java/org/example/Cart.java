@@ -31,6 +31,15 @@ public class Cart {
     @FindBy(how = How.XPATH, using = "//button[contains(text(),'Checkout')]")
     public WebElement checkoutButton;
 
+    @FindBy(how = How.CSS, using = ".prodTotal > p")
+    public List<WebElement> allItemProductTotals;
+
+    @FindBy(how = How.CSS, using = ".cartSection .btn-primary")
+    public List<WebElement> allItemBuyNowButtons;
+
+    @FindBy(how = How.CSS, using = ".cartSection i")
+    public List<WebElement> allItemTrashIcons;
+
     @FindBy(how = How.CSS, using = "button[routerlink='/dashboard']")
     public WebElement continueShoppingButton;
 
