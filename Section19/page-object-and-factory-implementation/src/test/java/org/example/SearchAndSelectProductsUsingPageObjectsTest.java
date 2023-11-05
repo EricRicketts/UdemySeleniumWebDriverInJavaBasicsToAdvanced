@@ -59,6 +59,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
     public void testSearchAndSelectProductsUsingPageObjects() throws InterruptedException {
         // login
         String productName = "ZARA COAT 3";
+        String creditCardNumber = "4542 9931 9292 2293";
         Login login = new Login(driver);
         login.loginApplication("elmer.fudd@warnerbros.com", "Bugs123@bunny");
 
@@ -162,11 +163,23 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         JavascriptExecutor executor = (JavascriptExecutor) driver;
         executor.executeScript("arguments[0].click()", checkoutButton);
 
-        // assert that I have landed on the payment page
+        // assert that I have landed on the payment page, assert on the title and the place order button
         Payment payment = new Payment(driver);
         WebElement paymentMethodTitle = wait.until(
-                ExpectedConditions.visibilityOf(payment.paymentMethodTitle)
+            ExpectedConditions.visibilityOf(payment.paymentMethodTitle)
         );
         Assert.assertNotNull(paymentMethodTitle);
+        WebElement placeOrderButton = wait.until(
+            ExpectedConditions.visibilityOf(payment.placeOrderButton)
+        );
+        Assert.assertNotNull(placeOrderButton);
+
+        // Assert the payment type is a credit card
+        Assert.assertTrue(payment.paymentType.getText().equalsIgnoreCase("credit card"));
+
+        // validate credit card number
+        Assert.assertEquals(
+            payment.creditCardNumber.getAttribute("value"), creditCardNumber
+        );
     }
 }

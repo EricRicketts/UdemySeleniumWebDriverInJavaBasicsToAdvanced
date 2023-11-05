@@ -11,6 +11,15 @@ public class Payment {
     @FindBy(how = How.CSS, using = ".payment > .payment__title")
     WebElement paymentMethodTitle;
 
+    @FindBy(how = How.CSS, using = ".payment > .payment__types .active")
+    WebElement paymentType;
+
+    @FindBy(how = How.CSS, using = ".actions .action__submit")
+    WebElement placeOrderButton;
+
+    @FindBy(how = How.XPATH, using = "//input[@value='4542 9931 9292 2293']")
+    WebElement creditCardNumber;
+
     public Payment(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
