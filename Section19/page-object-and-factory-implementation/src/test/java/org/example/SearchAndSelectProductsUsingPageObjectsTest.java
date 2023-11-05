@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -152,32 +153,20 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         String calculatedTotalPriceText = "$".concat(String.valueOf(calculatedTotalPrice));
         Assert.assertEquals(calculatedTotalPriceText, cart.totalPrice.getText());
 
-
-
-
-//        Assert.assertEquals(Integer.toString(numberOfProducts), cartButton.cartQuantity.getText());
-        /*
-        productCatalog.addProductToCart(productName);
-        Products products = new Products(driver, 1);
-        products.setMaxNumberOfProductsToBuy(products.allProducts.size());
-        RandomNumber randomNumber = new RandomNumber(
-                products.getMaxNumberOfProductsToBuy(), products.getMinNumberOfProductsToBuy()
+        // get the checkout button and checkout, we must first make sure it is visible
+        // note the checkout button was not clickable at the given coordinates
+        WebElement checkoutButton = wait.until(
+                ExpectedConditions.elementToBeClickable(cart.checkoutButton)
         );
-        products.setNumberOfProductsToBuy(randomNumber.generateRandomNumber());
-        List<WebElement> allProducts = wait.until(
-                ExpectedConditions.visibilityOfAllElements(products.allProducts)
+        Assert.assertNotNull(checkoutButton);
+        JavascriptExecutor executor = (JavascriptExecutor) driver;
+        executor.executeScript("arguments[0].click()", checkoutButton);
+
+        // assert that I have landed on the payment page
+        Payment payment = new Payment(driver);
+        WebElement paymentMethodTitle = wait.until(
+                ExpectedConditions.visibilityOf(payment.paymentMethodTitle)
         );
-        Assert.assertEquals(allProducts.size(), products.allProducts.size());
-
-        fillAndVerifyProductNumberRangeForEachProduct(products, randomNumber);
-        selectAndVerifyEachProductAddedToCart(products, new CartButton(driver));
-        navigateToMyCartPageAndVerifyPurchases(driver, products);
-        verifyPurchasesAddUpToTotalAmount(driver);
-        verifyContinueShoppingButton(driver, products);
-        verifyNavigateToPlaceOrderPage(driver);
-        verifyPlaceOrder(driver);
-//        verifyOrderNotification(driver);
-
-         */
+        Assert.assertNotNull(paymentMethodTitle);
     }
 }
