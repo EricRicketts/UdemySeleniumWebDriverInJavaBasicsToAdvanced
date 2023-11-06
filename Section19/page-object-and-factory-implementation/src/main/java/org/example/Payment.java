@@ -20,6 +20,12 @@ public class Payment {
     @FindBy(how = How.XPATH, using = "//input[@value='4542 9931 9292 2293']")
     WebElement creditCardNumber;
 
+    @FindBy(how = How.XPATH, using = "//div[contains(text(), 'Expiry Date')]/following-sibling::select[1]")
+    WebElement expirationMonth;
+
+    @FindBy(how = How.XPATH, using = "//div[contains(text(), 'Expiry Date')]/following-sibling::select[2]")
+    WebElement expirationDay;
+
     public Payment(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }

@@ -181,5 +181,19 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         Assert.assertEquals(
             payment.creditCardNumber.getAttribute("value"), creditCardNumber
         );
+
+        // Choose expiration month
+        String selectMonth = "10";
+        String selectDay = "21";
+        Select expirationMonth = new Select(payment.expirationMonth);
+        expirationMonth.selectByVisibleText(selectMonth);
+
+        // Choose expiration Day
+        Select expirationDay = new Select(payment.expirationDay);
+        expirationDay.selectByVisibleText(selectDay);
+
+        // verify the above values have been selected
+        Assert.assertEquals(expirationMonth.getFirstSelectedOption().getText(), selectMonth);
+        Assert.assertEquals(expirationDay.getFirstSelectedOption().getText(), selectDay);
     }
 }
