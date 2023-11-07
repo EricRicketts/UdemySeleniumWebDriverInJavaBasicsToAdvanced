@@ -38,6 +38,9 @@ public class Payment {
     @FindBy(how = How.XPATH, using = "//button[contains(@class, 'ta-item')][1]")
     WebElement desiredCountry;
 
+    @FindBy(how = How.XPATH, using = "//div[contains(@class, 'actions')]//a[1]")
+    WebElement placeOrder;
+
     public Payment(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }

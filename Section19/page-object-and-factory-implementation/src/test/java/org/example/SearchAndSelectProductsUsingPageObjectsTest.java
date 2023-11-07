@@ -202,10 +202,19 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         payment.CVVCode.sendKeys(CVVCode);
         payment.NameOnCard.sendKeys(nameOnCard);
 
+        // select and verify the desired country
         payment.selectCountry.sendKeys("United States");
         WebElement desiredCountry = wait.until(
             ExpectedConditions.visibilityOf(payment.desiredCountry)
         );
         Assert.assertNotNull(desiredCountry);
+        desiredCountry.click();
+
+        // place order and verify on completed order page
+        payment.placeOrder.click();
+        WebElement orderComplete = wait.until(
+            ExpectedConditions.visibilityOf(driver.findElement(By.tagName("h1")))
+        );
+        Assert.assertTrue(orderComplete.getText().trim().equalsIgnoreCase("thankyou for the order."));
     }
 }
