@@ -26,6 +26,18 @@ public class Payment {
     @FindBy(how = How.XPATH, using = "//div[contains(text(), 'Expiry Date')]/following-sibling::select[2]")
     WebElement expirationDay;
 
+    @FindBy(how = How.XPATH, using = "//div[contains(text(), 'CVV Code')]/following-sibling::input")
+    WebElement CVVCode;
+
+    @FindBy(how = How.XPATH, using = "//div[contains(text(), 'Name on Card')]/following-sibling::input")
+    WebElement NameOnCard;
+
+    @FindBy(how = How.XPATH, using = "//input[@placeholder = 'Select Country']")
+    WebElement selectCountry;
+
+    @FindBy(how = How.XPATH, using = "//button[contains(@class, 'ta-item')][1]")
+    WebElement desiredCountry;
+
     public Payment(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }

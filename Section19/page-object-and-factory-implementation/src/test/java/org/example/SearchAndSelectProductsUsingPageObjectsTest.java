@@ -195,5 +195,17 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         // verify the above values have been selected
         Assert.assertEquals(expirationMonth.getFirstSelectedOption().getText(), selectMonth);
         Assert.assertEquals(expirationDay.getFirstSelectedOption().getText(), selectDay);
+
+        // set CVV code and Name on Card, then verify both
+        String CVVCode = "456";
+        String nameOnCard = "Elmer Fudd";
+        payment.CVVCode.sendKeys(CVVCode);
+        payment.NameOnCard.sendKeys(nameOnCard);
+
+        payment.selectCountry.sendKeys("United States");
+        WebElement desiredCountry = wait.until(
+            ExpectedConditions.visibilityOf(payment.desiredCountry)
+        );
+        Assert.assertNotNull(desiredCountry);
     }
 }
