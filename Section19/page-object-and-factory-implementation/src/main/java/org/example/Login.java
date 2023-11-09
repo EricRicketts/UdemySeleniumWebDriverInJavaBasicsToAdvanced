@@ -23,7 +23,7 @@ public class Login extends AbstractComponent {
     @FindBy(how = How.ID, using = "login")
     public WebElement loginButton;
 
-    public void loginApplication(String email, String password) {
+    public ProductCatalog loginApplication(String email, String password) {
         emailInput.sendKeys(email);
         passwordInput.sendKeys(password);
         loginButton.click();
@@ -31,6 +31,7 @@ public class Login extends AbstractComponent {
         wait.until(
                 ExpectedConditions.invisibilityOf(loginButton)
         );
+        return new ProductCatalog(driver);
     }
 
     public Login(WebDriver driver) {

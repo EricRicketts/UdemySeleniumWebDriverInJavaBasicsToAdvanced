@@ -57,16 +57,16 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
     @Test
     public void testSearchAndSelectProductsUsingPageObjects() throws InterruptedException {
-        // login
+        // login and verify the number of products on the product catalog page
         String productName = "ZARA COAT 3";
         String creditCardNumber = "4542 9931 9292 2293";
         Login login = new Login(driver);
-        login.loginApplication("elmer.fudd@warnerbros.com", "Bugs123@bunny");
 
-        // gather all the products on the product page
-        ProductCatalog productCatalog = new ProductCatalog(driver);
-        List<WebElement> allProductsInProductCatalog = productCatalog.getProductList();
-        Assert.assertNotNull(allProductsInProductCatalog);
+        ProductCatalog productCatalog = login.loginApplication(
+                "elmer.fudd@warnerbros.com",
+                "Bugs123@bunny"
+        );
+        Assert.assertEquals(productCatalog.allProducts.size(), 3);
 
         // in the past I randomly chose the amount of products to buy but at the time of writing this test
         // the product choice is very limited, I will buy all products.
@@ -87,7 +87,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         for (WebElement productTitle : allProductTitles) productTitles.add(productTitle.getText());
         for (WebElement productMRP : allProductMRPs) productMRPs.add(productMRP.getText());
 
-
+        // cycle through the products and add them to the cart
         int numberOfProducts = allProducts.size();
         for (int index = 0; index < numberOfProducts; index++) {
             WebElement clickableProduct = allProducts.get(index);
@@ -111,6 +111,8 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         List<WebElement> cartItems = cart.allCartItems;
         int numberOfCartItems = cartItems.size();
         Assert.assertEquals(numberOfCartItems, numberOfProducts);
+
+        // setup for the next test were we verify all features of a cart item
         List<WebElement> cartItemImages = cart.itemImages;
         List<WebElement> cartItemNumbers = cart.itemNumbers;
         List<WebElement> cartItemTitles = cart.itemTitles;
