@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.Cart;
 import com.google.common.collect.Range;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -14,8 +15,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
@@ -28,14 +29,13 @@ import java.util.regex.Pattern;
 import static org.openqa.selenium.devtools.v85.debugger.Debugger.pause;
 
 public class SearchAndSelectProductsUsingPageObjectsTest {
-    private static final String chromeDriverProperty = "webdriver.chrome.driver";
-    private static final String webDriversFolderPC = "C:\\Program Files\\WebDrivers\\";
-    private static final String chromeDriverWindows = "chromedriver.exe";
     private WebDriver driver;
     private WebDriverWait wait;
 
-    @BeforeClass
-    public void oneTimeSetup() { System.setProperty(chromeDriverProperty, webDriversFolderPC + chromeDriverWindows); }
+    @BeforeTest
+    public void oneTimeSetup() {
+        WebDriverManager.chromedriver().setup();
+    }
 
     @BeforeMethod
     public void setUp() {

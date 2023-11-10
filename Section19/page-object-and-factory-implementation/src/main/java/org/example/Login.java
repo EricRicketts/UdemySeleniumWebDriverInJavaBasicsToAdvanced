@@ -1,6 +1,5 @@
 package org.example;
 
-import lombok.Getter;
 import org.example.AbstractComponents.AbstractComponent;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
