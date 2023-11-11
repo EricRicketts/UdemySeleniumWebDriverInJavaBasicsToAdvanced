@@ -80,7 +80,8 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
             WebElement clickableProduct = allProducts.get(index);
             WebElement addToCartButton = clickableProduct.findElement(By.cssSelector("button:last-of-type"));
             addToCartButton.click();
-            Boolean addToCartUpdated = wait.until(
+            // I cannot get the element to be clickable unless I put this wait in
+            wait.until(
                 ExpectedConditions.textToBePresentInElement(cartButton.cartQuantity, Integer.toString(index + 1))
             );
         }
