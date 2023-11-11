@@ -15,13 +15,13 @@ public class Product extends AbstractComponent {
     public List<WebElement> allProducts;
 
     @FindBy(how = How.CSS, using = ".card-img-top")
-    public List<WebElement> allProductImages;
+    public List<WebElement> productImages;
 
     @FindBy(how = How.CSS, using = ".card-body b")
-    public List<WebElement> allProductTitles;
+    public List<WebElement> productTitles;
 
     @FindBy(how = How.CSS, using =".card-body .text-muted")
-    public List<WebElement> allProductMRPs;
+    public List<WebElement> productMRPs;
 
     public Product(WebDriver driver) {
         super(driver);

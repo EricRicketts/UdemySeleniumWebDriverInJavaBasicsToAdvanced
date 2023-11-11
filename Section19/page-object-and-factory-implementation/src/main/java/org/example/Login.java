@@ -23,9 +23,9 @@ public class Login extends AbstractComponent {
     public WebElement loginButton;
 
     public ProductCatalog loginApplication(String email, String password) {
-        emailInput.sendKeys(email);
-        passwordInput.sendKeys(password);
-        loginButton.click();
+        this.emailInput.sendKeys(email);
+        this.passwordInput.sendKeys(password);
+        this.loginButton.click();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         wait.until(
                 ExpectedConditions.invisibilityOf(loginButton)

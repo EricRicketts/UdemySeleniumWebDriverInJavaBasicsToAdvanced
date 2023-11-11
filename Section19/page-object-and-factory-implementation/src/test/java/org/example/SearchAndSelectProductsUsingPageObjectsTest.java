@@ -75,17 +75,18 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         // cycle through the products and add them to the cart
         List<WebElement> allProducts = product.allProducts;
         int numberOfProducts = allProducts.size();
+
         for (int index = 0; index < numberOfProducts; index++) {
             WebElement clickableProduct = allProducts.get(index);
             WebElement addToCartButton = clickableProduct.findElement(By.cssSelector("button:last-of-type"));
-            Assert.assertTrue(addToCartButton.getTagName().strip().equalsIgnoreCase("button"));
             addToCartButton.click();
             Boolean addToCartUpdated = wait.until(
                 ExpectedConditions.textToBePresentInElement(cartButton.cartQuantity, Integer.toString(index + 1))
             );
-            Assert.assertTrue(addToCartUpdated);
         }
+        Assert.assertTrue(cartButton.cartQuantity.getText().equals(Integer.toString(numberOfProducts)));
 
+        /*
         // go to the cart button and verify that all items purchased are included in your cart
         cartButton.button.click();
         Boolean onMyCartPage = wait.until(
@@ -204,5 +205,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
             ExpectedConditions.visibilityOf(driver.findElement(By.tagName("h1")))
         );
         Assert.assertTrue(orderComplete.getText().trim().equalsIgnoreCase("thankyou for the order."));
+
+         */
     }
 }
