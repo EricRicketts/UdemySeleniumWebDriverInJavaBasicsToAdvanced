@@ -76,19 +76,16 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         product.addAllProductsToCart(cartButton, wait);
         Assert.assertTrue(cartButton.cartQuantity.getText().equals(Integer.toString(numberOfProducts)));
 
-        /*
         // go to the cart button and verify that all items purchased are included in your cart
-        cartButton.button.click();
-        Boolean onMyCartPage = wait.until(
-            ExpectedConditions.textToBePresentInElementLocated(By.tagName("h1"), "My Cart")
-        );
 
-        // assert the number in cart is the same as the total number of products
+        // first navigate to my cart page
         Cart cart = new Cart(driver);
-        List<WebElement> cartItems = cart.allCartItems;
-        int numberOfCartItems = cartItems.size();
-        Assert.assertEquals(numberOfCartItems, numberOfProducts);
+        cart.navigateToMyCartPage(cartButton, wait);
 
+        // assert the number in my cart is the same as the total number of products
+        Assert.assertEquals(cart.allItemBuyNowButtons.size(), numberOfProducts);
+
+        /*
         // setup for the next test were we verify all features of a cart item
         List<WebElement> cartItemImages = cart.itemImages;
         List<WebElement> cartItemNumbers = cart.itemNumbers;

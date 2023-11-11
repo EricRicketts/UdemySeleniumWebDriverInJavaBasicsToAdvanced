@@ -1,17 +1,21 @@
 package org.example;
 
+import org.example.CartButton;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
 public class Cart {
 
     @FindBy(how = How.CSS, using = ".cart > .cartWrap")
-    public List<WebElement> allCartItems;
+    public List<WebElement> cartItems;
 
     @FindBy(how = How.CSS, using = ".cartSection > .itemImg")
     public List<WebElement> itemImages;
@@ -45,6 +49,13 @@ public class Cart {
 
     @FindBy(how = How.CSS, using = "button[routerlink='/dashboard']")
     public WebElement continueShoppingButton;
+
+    public void navigateToMyCartPage(CartButton cartButton, WebDriverWait wait) {
+        cartButton.button.click();
+        wait.until(
+            ExpectedConditions.textToBePresentInElementLocated(By.tagName("h1"), "My Cart")
+        );
+    }
 
     public Cart(WebDriver driver) {
         PageFactory.initElements(driver, this);
