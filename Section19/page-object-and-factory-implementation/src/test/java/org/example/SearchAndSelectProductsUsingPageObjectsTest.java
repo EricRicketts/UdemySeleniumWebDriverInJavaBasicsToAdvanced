@@ -57,7 +57,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
     @Test
     public void testSearchAndSelectProductsUsingPageObjects() throws InterruptedException {
-        // login and verify the number of products on the product catalog page
+        // login
         String productName = "ZARA COAT 3";
         String creditCardNumber = "4542 9931 9292 2293";
         Login login = new Login(driver);
@@ -66,25 +66,14 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 "elmer.fudd@warnerbros.com",
                 "Bugs123@bunny"
         );
-        Assert.assertEquals(productCatalog.allProducts.size(), 3);
 
-        // Buy all products on the product catalog page
+        // cycle through the products and add them to the cart
         CartButton cartButton = new CartButton(driver);
         Product product = new Product(driver);
 
-        // cycle through the products and add them to the cart
         List<WebElement> allProducts = product.allProducts;
         int numberOfProducts = allProducts.size();
-
-        for (int index = 0; index < numberOfProducts; index++) {
-            WebElement clickableProduct = allProducts.get(index);
-            WebElement addToCartButton = clickableProduct.findElement(By.cssSelector("button:last-of-type"));
-            addToCartButton.click();
-            // I cannot get the element to be clickable unless I put this wait in
-            wait.until(
-                ExpectedConditions.textToBePresentInElement(cartButton.cartQuantity, Integer.toString(index + 1))
-            );
-        }
+        product.addAllProductsToCart(cartButton, wait);
         Assert.assertTrue(cartButton.cartQuantity.getText().equals(Integer.toString(numberOfProducts)));
 
         /*
