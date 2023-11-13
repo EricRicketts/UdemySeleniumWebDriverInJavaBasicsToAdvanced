@@ -94,9 +94,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         Assert.assertEquals(cart.cartItems.size(), numberOfProducts);
 
         // setup for the next test were we verify all features of a cart item
-        List<WebElement> cartItemsStockStatus = cart.allItemsStockStatus;
         List<WebElement> cartItemsProductTotals = cart.allItemProductTotals;
-        List<WebElement> cartItemBuyNowButtons = cart.allItemBuyNowButtons;
         List<WebElement> cartItemTrashIcons = cart.allItemTrashIcons;
 
         // verify everything about each item, image, item number, minimum retail price, if in stock, actual price
@@ -113,6 +111,9 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
             Assert.assertTrue(
                 MRP.substring(MRP.indexOf("$"))
                     .equalsIgnoreCase(PRODUCT_MRPs.get(index))
+            );
+            Assert.assertTrue(
+                cart.buyNowButtons.get(index).getText().toLowerCase().contains("buy now")
             );
         }
         /*

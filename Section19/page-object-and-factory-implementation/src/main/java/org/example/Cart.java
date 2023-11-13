@@ -36,7 +36,7 @@ public class Cart {
     public List<WebElement> allItemProductTotals;
 
     @FindBy(how = How.CSS, using = ".cartSection .btn-primary")
-    public List<WebElement> allItemBuyNowButtons;
+    public List<WebElement> buyNowButtons;
 
     @FindBy(how = How.CSS, using = ".cartSection i")
     public List<WebElement> allItemTrashIcons;
