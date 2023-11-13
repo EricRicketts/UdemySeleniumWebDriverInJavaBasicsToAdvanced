@@ -20,14 +20,11 @@ public class Cart {
     @FindBy(how = How.CSS, using = ".cartSection > .itemImg")
     public List<WebElement> images;
 
-    @FindBy(how = How.CSS, using = ".cartSection > .itemNumber")
-    public List<WebElement> itemNumbers;
-
     @FindBy(how = How.CSS, using = ".cartSection > h3")
-    public List<WebElement> itemTitles;
+    public List<WebElement> titles;
 
     @FindBy(how = How.CSS, using = ".cartSection > p:nth-of-type(2)")
-    public List<WebElement> itemMRPs;
+    public List<WebElement> MRPs;
 
     @FindBy(how = How.CSS, using = ".cartSection > .stockStatus")
     public List<WebElement> allItemsStockStatus;

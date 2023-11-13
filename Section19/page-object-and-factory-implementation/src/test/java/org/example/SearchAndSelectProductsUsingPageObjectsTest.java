@@ -72,11 +72,15 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         CartButton cartButton = new CartButton(driver);
         Product product = new Product(driver);
         List<WebElement> allProducts = product.allProducts;
-        final List<String> PRODUCT_IMAGE_SRCs = new ArrayList<String>(allProducts.size());
-        for (int index = 0; index < allProducts.size(); index++) {
-            PRODUCT_IMAGE_SRCs.add(product.images.get(index).getAttribute("src"));
-        }
         int numberOfProducts = allProducts.size();
+        final List<String> PRODUCT_IMAGE_SRCs = new ArrayList<String>(allProducts.size());
+        final List<String> PRODUCT_TITLES = new ArrayList<String>(allProducts.size());
+        final List<String> PRODUCT_MRPs = new ArrayList<String>(allProducts.size());
+        for (int index = 0; index < numberOfProducts; index++) {
+            PRODUCT_IMAGE_SRCs.add(product.images.get(index).getAttribute("src"));
+            PRODUCT_TITLES.add(product.titles.get(index).getText());
+            PRODUCT_MRPs.add(product.MRPs.get(index).getText());
+        }
         product.addAllProductsToCart(cartButton, wait);
         Assert.assertTrue(cartButton.cartQuantity.getText().equals(Integer.toString(numberOfProducts)));
 
@@ -90,9 +94,6 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         Assert.assertEquals(cart.cartItems.size(), numberOfProducts);
 
         // setup for the next test were we verify all features of a cart item
-        List<WebElement> cartItemNumbers = cart.itemNumbers;
-        List<WebElement> cartItemTitles = cart.itemTitles;
-        List<WebElement> cartItemMRPs = cart.itemMRPs;
         List<WebElement> cartItemsStockStatus = cart.allItemsStockStatus;
         List<WebElement> cartItemsProductTotals = cart.allItemProductTotals;
         List<WebElement> cartItemBuyNowButtons = cart.allItemBuyNowButtons;
@@ -102,7 +103,16 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         for (int index = 0; index < numberOfProducts; index++) {
             Assert.assertTrue(
                 cart.images.get(index).getAttribute("src")
-                .equalsIgnoreCase(PRODUCT_IMAGE_SRCs.get(index))
+                    .equalsIgnoreCase(PRODUCT_IMAGE_SRCs.get(index))
+            );
+            Assert.assertTrue(
+                cart.titles.get(index).getText()
+                    .equalsIgnoreCase(PRODUCT_TITLES.get(index))
+            );
+            String MRP = cart.MRPs.get(index).getText();
+            Assert.assertTrue(
+                MRP.substring(MRP.indexOf("$"))
+                    .equalsIgnoreCase(PRODUCT_MRPs.get(index))
             );
         }
         /*

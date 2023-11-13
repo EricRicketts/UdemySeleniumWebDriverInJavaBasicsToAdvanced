@@ -22,10 +22,10 @@ public class Product extends AbstractComponent {
     public List<WebElement> images;
 
     @FindBy(how = How.CSS, using = ".card-body b")
-    public List<WebElement> productTitles;
+    public List<WebElement> titles;
 
     @FindBy(how = How.CSS, using =".card-body .text-muted")
-    public List<WebElement> productMRPs;
+    public List<WebElement> MRPs;
 
     public void addAllProductsToCart(CartButton cartButton, WebDriverWait wait) {
         for (int index = 0; index < this.allProducts.size(); index++) {
