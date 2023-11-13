@@ -19,7 +19,7 @@ public class Product extends AbstractComponent {
     public List<WebElement> allProducts;
 
     @FindBy(how = How.CSS, using = ".card-img-top")
-    public List<WebElement> productImages;
+    public List<WebElement> images;
 
     @FindBy(how = How.CSS, using = ".card-body b")
     public List<WebElement> productTitles;

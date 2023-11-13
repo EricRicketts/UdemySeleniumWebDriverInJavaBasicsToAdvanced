@@ -18,7 +18,7 @@ public class Cart {
     public List<WebElement> cartItems;
 
     @FindBy(how = How.CSS, using = ".cartSection > .itemImg")
-    public List<WebElement> itemImages;
+    public List<WebElement> images;
 
     @FindBy(how = How.CSS, using = ".cartSection > .itemNumber")
     public List<WebElement> itemNumbers;

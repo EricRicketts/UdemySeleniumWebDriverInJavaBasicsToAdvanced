@@ -1,5 +1,6 @@
 package org.example;
 
+import com.google.common.collect.ImmutableList;
 import org.example.Cart;
 import com.google.common.collect.Range;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -70,8 +71,11 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         // cycle through the products and add them to the cart
         CartButton cartButton = new CartButton(driver);
         Product product = new Product(driver);
-
         List<WebElement> allProducts = product.allProducts;
+        final List<String> PRODUCT_IMAGE_SRCs = new ArrayList<String>(allProducts.size());
+        for (int index = 0; index < allProducts.size(); index++) {
+            PRODUCT_IMAGE_SRCs.add(product.images.get(index).getAttribute("src"));
+        }
         int numberOfProducts = allProducts.size();
         product.addAllProductsToCart(cartButton, wait);
         Assert.assertTrue(cartButton.cartQuantity.getText().equals(Integer.toString(numberOfProducts)));
@@ -83,11 +87,9 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         cart.navigateToMyCartPage(cartButton, wait);
 
         // assert the number in my cart is the same as the total number of products
-        Assert.assertEquals(cart.allItemBuyNowButtons.size(), numberOfProducts);
+        Assert.assertEquals(cart.cartItems.size(), numberOfProducts);
 
-        /*
         // setup for the next test were we verify all features of a cart item
-        List<WebElement> cartItemImages = cart.itemImages;
         List<WebElement> cartItemNumbers = cart.itemNumbers;
         List<WebElement> cartItemTitles = cart.itemTitles;
         List<WebElement> cartItemMRPs = cart.itemMRPs;
@@ -97,27 +99,13 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         List<WebElement> cartItemTrashIcons = cart.allItemTrashIcons;
 
         // verify everything about each item, image, item number, minimum retail price, if in stock, actual price
-        for (int index = 0; index < numberOfCartItems; index++) {
-            Assert.assertTrue(cartItemImages.get(index).getAttribute("src").contains("https://"));
-            Assert.assertTrue(cartItemNumbers.get(index).getText().startsWith("#626"));
-//            Assert.assertTrue(productTitles.get(index).equalsIgnoreCase(cartItemTitles.get(index).getText()));
-            // need to isolate the MRP price from the MyCart item
-            WebElement cartItemMRP = cartItemMRPs.get(index);
-            String entireCartItemMRPText = cartItemMRP.getText();
-            int lastIndexOfMRPText = entireCartItemMRPText.indexOf("P");
-            String cartItemMRPText = entireCartItemMRPText.substring(lastIndexOfMRPText + 2);
-            // new compare the productMRP to the cart item MRP
-//            Assert.assertEquals(productMRPs.get(index), cartItemMRPText);
-            Assert.assertTrue(cartItemsStockStatus.get(index).getText().equalsIgnoreCase("in stock"));
-            // assert the product totals begin with a '$' and consist only of digits
-            Pattern pattern = Pattern.compile("\\$\\s\\d+");
-            Matcher matcher = pattern.matcher(cartItemsProductTotals.get(index).getText());
-            Assert.assertTrue(matcher.find());
-            Assert.assertTrue(cartItemBuyNowButtons.get(index).getText().toLowerCase().trim().contains("buy now"));
-            String trashIconClass = cartItemTrashIcons.get(index).getAttribute("class");
-            Assert.assertTrue(trashIconClass.contains("fa-trash-o"));
+        for (int index = 0; index < numberOfProducts; index++) {
+            Assert.assertTrue(
+                cart.images.get(index).getAttribute("src")
+                .equalsIgnoreCase(PRODUCT_IMAGE_SRCs.get(index))
+            );
         }
-
+        /*
         // verify the total purchase amount adds up to the sum of the product prices
         String totalPriceText = null;
         int calculatedTotalPrice = 0;
