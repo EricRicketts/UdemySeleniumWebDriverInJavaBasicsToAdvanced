@@ -95,7 +95,6 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
         // setup for the next test were we verify all features of a cart item
         List<WebElement> cartItemsProductTotals = cart.allItemProductTotals;
-        List<WebElement> cartItemTrashIcons = cart.allItemTrashIcons;
 
         // verify everything about each item, image, item number, minimum retail price, if in stock, actual price
         for (int index = 0; index < numberOfProducts; index++) {
@@ -114,6 +113,9 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
             );
             Assert.assertTrue(
                 cart.buyNowButtons.get(index).getText().toLowerCase().contains("buy now")
+            );
+            Assert.assertTrue(
+                cart.trashIcons.get(index).getAttribute("class").equals("fa fa-trash-o")
             );
         }
         /*

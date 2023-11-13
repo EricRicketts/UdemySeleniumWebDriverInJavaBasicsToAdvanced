@@ -39,7 +39,7 @@ public class Cart {
     public List<WebElement> buyNowButtons;
 
     @FindBy(how = How.CSS, using = ".cartSection i")
-    public List<WebElement> allItemTrashIcons;
+    public List<WebElement> trashIcons;
 
     @FindBy(how = How.CSS, using = ".totalRow:nth-of-type(2) .value")
     public WebElement totalPrice;
