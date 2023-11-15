@@ -115,6 +115,10 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 cart.titles.get(index).getText()
                     .equalsIgnoreCase(PRODUCT_TITLES.get(index))
             );
+            Assert.assertTrue(
+                cart.titles.get(index).getText()
+                        .equalsIgnoreCase(productAttributes.getProductTitles().get(index))
+            );
             String MRP = cart.MRPs.get(index).getText();
             Assert.assertTrue(
                 MRP.substring(MRP.indexOf("$"))
