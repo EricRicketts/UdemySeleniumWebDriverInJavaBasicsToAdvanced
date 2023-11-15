@@ -26,14 +26,11 @@ public class Cart {
     @FindBy(how = How.CSS, using = ".cartSection > p:nth-of-type(2)")
     public List<WebElement> MRPs;
 
-    @FindBy(how = How.CSS, using = ".cartSection > .stockStatus")
-    public List<WebElement> allItemsStockStatus;
-
     @FindBy(how = How.XPATH, using = "//button[contains(text(),'Checkout')]")
     public WebElement checkoutButton;
 
     @FindBy(how = How.CSS, using = ".prodTotal > p")
-    public List<WebElement> allItemProductTotals;
+    public List<WebElement> individualItemTotals;
 
     @FindBy(how = How.CSS, using = ".cartSection .btn-primary")
     public List<WebElement> buyNowButtons;
@@ -47,11 +44,31 @@ public class Cart {
     @FindBy(how = How.CSS, using = "button[routerlink='/dashboard']")
     public WebElement continueShoppingButton;
 
+    private String parseValueFromCurrencyAndValue(String currencyAndValue) {
+        return currencyAndValue.substring(currencyAndValue.indexOf("$") + 1);
+    }
+
     public void navigateToMyCartPage(CartButton cartButton, WebDriverWait wait) {
         cartButton.button.click();
         wait.until(
             ExpectedConditions.textToBePresentInElementLocated(By.tagName("h1"), "My Cart")
         );
+    }
+
+    public int sumItemPrices() {
+        int totalItemPrices = 0;
+        for (int index = 0; index < individualItemTotals.size(); index++) {
+            String individualItemTotalString =
+                    individualItemTotals.get(index).getText().replaceAll("\\s+", "");
+            individualItemTotalString = parseValueFromCurrencyAndValue(individualItemTotalString);
+            totalItemPrices += Integer.parseInt(individualItemTotalString);
+        }
+        return totalItemPrices;
+    }
+
+    public int getTotalPrice() {
+        String totalPriceNoCurrencySymbol = parseValueFromCurrencyAndValue(totalPrice.getText());
+        return Integer.parseInt(totalPriceNoCurrencySymbol);
     }
 
     public Cart(WebDriver driver) {

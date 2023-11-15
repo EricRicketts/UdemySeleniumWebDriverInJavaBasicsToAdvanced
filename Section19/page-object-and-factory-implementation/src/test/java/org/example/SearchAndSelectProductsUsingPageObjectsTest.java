@@ -60,10 +60,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
     @Test
     public void testSearchAndSelectProductsUsingPageObjects() throws InterruptedException {
         // login
-        String productName = "ZARA COAT 3";
-        String creditCardNumber = "4542 9931 9292 2293";
         Login login = new Login(driver);
-
         ProductCatalog productCatalog = login.loginApplication(
                 "elmer.fudd@warnerbros.com",
                 "Bugs123@bunny"
@@ -74,24 +71,16 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         Product product = new Product(driver);
         List<WebElement> allProducts = product.allProducts;
         int numberOfProducts = allProducts.size();
-        // make a class which contains these cart item attributes
-        ProductAttributes productAttributes = new ProductAttributes(
-            product.images, product.titles, product.MRPs
-        );
-        final List<String> PRODUCT_IMAGE_SRCs = new ArrayList<String>(allProducts.size());
-        final List<String> PRODUCT_TITLES = new ArrayList<String>(allProducts.size());
-        final List<String> PRODUCT_MRPs = new ArrayList<String>(allProducts.size());
-        for (int index = 0; index < numberOfProducts; index++) {
-            PRODUCT_IMAGE_SRCs.add(product.images.get(index).getAttribute("src"));
-            PRODUCT_TITLES.add(product.titles.get(index).getText());
-            PRODUCT_MRPs.add(product.MRPs.get(index).getText());
-        }
+
         product.addAllProductsToCart(cartButton, wait);
         Assert.assertTrue(cartButton.cartQuantity.getText().equals(Integer.toString(numberOfProducts)));
 
         // go to the cart button and verify that all items purchased are included in your cart
-
-        // first navigate to my cart page
+        // store the essential product attributes for later comparison with my cart items
+        ProductAttributes productAttributes = new ProductAttributes(
+                product.images, product.titles, product.MRPs
+        );
+        // navigate to my cart page
         Cart cart = new Cart(driver);
         cart.navigateToMyCartPage(cartButton, wait);
 
@@ -99,31 +88,19 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         Assert.assertEquals(cart.cartItems.size(), numberOfProducts);
 
         // setup for the next test were we verify all features of a cart item
-        List<WebElement> cartItemsProductTotals = cart.allItemProductTotals;
+        List<WebElement> cartItemsProductTotals = cart.individualItemTotals;
 
-        // verify everything about each item, image, item number, minimum retail price, if in stock, actual price
+        // verify each item image, title, minimum retail price, buy now button, and trash button
         for (int index = 0; index < numberOfProducts; index++) {
-            Assert.assertTrue(
-                cart.images.get(index).getAttribute("src")
-                    .equalsIgnoreCase(PRODUCT_IMAGE_SRCs.get(index))
-            );
             Assert.assertTrue(
                 cart.images.get(index).getAttribute("src")
                         .equalsIgnoreCase(productAttributes.getProductImageSRCs().get(index))
             );
             Assert.assertTrue(
                 cart.titles.get(index).getText()
-                    .equalsIgnoreCase(PRODUCT_TITLES.get(index))
-            );
-            Assert.assertTrue(
-                cart.titles.get(index).getText()
                         .equalsIgnoreCase(productAttributes.getProductTitles().get(index))
             );
             String MRP = cart.MRPs.get(index).getText();
-            Assert.assertTrue(
-                MRP.substring(MRP.indexOf("$"))
-                    .equalsIgnoreCase(PRODUCT_MRPs.get(index))
-            );
             Assert.assertTrue(
                 MRP.substring(MRP.indexOf("$"))
                         .equalsIgnoreCase(productAttributes.getProductMRPs().get(index))
@@ -135,6 +112,9 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 cart.trashIcons.get(index).getAttribute("class").equals("fa fa-trash-o")
             );
         }
+
+        // before checking out verify the total price is the sum of each item price
+        Assert.assertEquals(cart.getTotalPrice(), cart.sumItemPrices());
         /*
         // verify the total purchase amount adds up to the sum of the product prices
         String totalPriceText = null;
