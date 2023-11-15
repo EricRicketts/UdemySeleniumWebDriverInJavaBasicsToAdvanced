@@ -125,6 +125,10 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                     .equalsIgnoreCase(PRODUCT_MRPs.get(index))
             );
             Assert.assertTrue(
+                MRP.substring(MRP.indexOf("$"))
+                        .equalsIgnoreCase(productAttributes.getProductMRPs().get(index))
+            );
+            Assert.assertTrue(
                 cart.buyNowButtons.get(index).getText().toLowerCase().contains("buy now")
             );
             Assert.assertTrue(
