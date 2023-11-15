@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.ProductAttributes;
 import com.google.common.collect.ImmutableList;
 import org.example.Cart;
 import com.google.common.collect.Range;
@@ -73,6 +74,10 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         Product product = new Product(driver);
         List<WebElement> allProducts = product.allProducts;
         int numberOfProducts = allProducts.size();
+        // make a class which contains these cart item attributes
+        ProductAttributes productAttributes = new ProductAttributes(
+            product.images, product.titles, product.MRPs
+        );
         final List<String> PRODUCT_IMAGE_SRCs = new ArrayList<String>(allProducts.size());
         final List<String> PRODUCT_TITLES = new ArrayList<String>(allProducts.size());
         final List<String> PRODUCT_MRPs = new ArrayList<String>(allProducts.size());
@@ -101,6 +106,10 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
             Assert.assertTrue(
                 cart.images.get(index).getAttribute("src")
                     .equalsIgnoreCase(PRODUCT_IMAGE_SRCs.get(index))
+            );
+            Assert.assertTrue(
+                cart.images.get(index).getAttribute("src")
+                        .equalsIgnoreCase(productAttributes.getProductImageSRCs().get(index))
             );
             Assert.assertTrue(
                 cart.titles.get(index).getText()
