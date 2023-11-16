@@ -17,7 +17,7 @@ public class Payment {
     @FindBy(how = How.CSS, using = ".actions .action__submit")
     WebElement placeOrderButton;
 
-    @FindBy(how = How.XPATH, using = "//input[@value='4542 9931 9292 2293']")
+    @FindBy(how = How.XPATH, using = "(//div[@class = 'field'])[1]//input")
     WebElement creditCardNumber;
 
     @FindBy(how = How.XPATH, using = "//div[contains(text(), 'Expiry Date')]/following-sibling::select[1]")
@@ -29,8 +29,8 @@ public class Payment {
     @FindBy(how = How.XPATH, using = "//div[contains(text(), 'CVV Code')]/following-sibling::input")
     WebElement CVVCode;
 
-    @FindBy(how = How.XPATH, using = "//div[contains(text(), 'Name on Card')]/following-sibling::input")
-    WebElement NameOnCard;
+    @FindBy(how = How.XPATH, using = "(//div[@class = 'field'])[2]")
+    WebElement nameOnCard;
 
     @FindBy(how = How.XPATH, using = "//input[@placeholder = 'Select Country']")
     WebElement selectCountry;

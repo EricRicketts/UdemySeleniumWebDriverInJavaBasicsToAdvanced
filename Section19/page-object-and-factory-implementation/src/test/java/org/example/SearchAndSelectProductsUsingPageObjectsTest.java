@@ -87,9 +87,6 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         // assert the number in my cart is the same as the total number of products
         Assert.assertEquals(cart.cartItems.size(), numberOfProducts);
 
-        // setup for the next test were we verify all features of a cart item
-        List<WebElement> cartItemsProductTotals = cart.individualItemTotals;
-
         // verify each item image, title, minimum retail price, buy now button, and trash button
         for (int index = 0; index < numberOfProducts; index++) {
             Assert.assertTrue(
@@ -115,6 +112,28 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
 
         // before checking out verify the total price is the sum of each item price
         Assert.assertEquals(cart.getTotalPrice(), cart.sumItemPrices());
+
+        // checkout in order to go to the payment page
+        WebElement checkoutButton = wait.until(
+                ExpectedConditions.elementToBeClickable(cart.checkoutButton)
+        );
+        Assert.assertNotNull(checkoutButton);
+        // in this case must use the Javascript executor to click the checkout button
+        JavascriptExecutor executor = (JavascriptExecutor) driver;
+        executor.executeScript("arguments[0].click()", checkoutButton);
+
+        // verify land on the payment page by asserting the active payment is credit card
+        WebElement creditCardPayment = wait.until(
+            ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".active"))
+        );
+        Assert.assertTrue(creditCardPayment.getText().equalsIgnoreCase("credit card"));
+
+        // verify the format of the credit card number and fill in and verify the name on the card
+        Payment payment = new Payment(driver);
+        String creditCardNumber = payment.creditCardNumber.getAttribute("value");
+        Pattern pattern = Pattern.compile("(\\d{4}\\s){3}\\d{4}");
+        Matcher matcher = pattern.matcher(creditCardNumber);
+        Assert.assertTrue(matcher.matches());
         /*
         // verify the total purchase amount adds up to the sum of the product prices
         String totalPriceText = null;
