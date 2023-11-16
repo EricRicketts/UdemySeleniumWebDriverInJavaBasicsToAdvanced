@@ -62,6 +62,8 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         // login
         String nameOnCreditCard = "Elmer Fudd";
         String CVVCodeEntry = "456";
+        String month = "10";
+        String day = "21";
         Login login = new Login(driver);
         ProductCatalog productCatalog = login.loginApplication(
                 "elmer.fudd@warnerbros.com",
@@ -139,6 +141,13 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         // fill in and verify CVV code
         payment.CVVCode.sendKeys(CVVCodeEntry);
         Assert.assertTrue(payment.CVVCode.getAttribute("value").equals(CVVCodeEntry));
+
+        // enter and verify credit card expiration date
+        Select expirationMonth = payment.setAndReturnExpirationMonth(month);
+        Select expirationDay = payment.setAndReturnExpirationDay(day);
+
+        Assert.assertTrue(expirationMonth.getFirstSelectedOption().getText().equalsIgnoreCase(month));
+        Assert.assertTrue(expirationDay.getFirstSelectedOption().getText().equalsIgnoreCase(day));
         /*
         // verify the total purchase amount adds up to the sum of the product prices
         String totalPriceText = null;
