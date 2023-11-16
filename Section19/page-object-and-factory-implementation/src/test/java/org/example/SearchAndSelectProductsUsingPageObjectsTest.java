@@ -64,6 +64,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         String CVVCodeEntry = "456";
         String month = "10";
         String day = "21";
+        String country = "United States";
         Login login = new Login(driver);
         ProductCatalog productCatalog = login.loginApplication(
                 "elmer.fudd@warnerbros.com",
@@ -150,13 +151,15 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         Assert.assertTrue(expirationDay.getFirstSelectedOption().getText().equalsIgnoreCase(day));
 
         // select and verify country
-        payment.selectCountry.sendKeys("United States");
+        payment.selectCountry.sendKeys(country);
         WebElement desiredCountry = wait.until(
                 ExpectedConditions.visibilityOf(payment.desiredCountry)
         );
         Assert.assertNotNull(desiredCountry);
         desiredCountry.click();
-        Assert.assertTrue(payment.selectCountry.getAttribute("value").equalsIgnoreCase("united states"));
+        Assert.assertTrue(
+                payment.selectCountry.getAttribute("value").equalsIgnoreCase(country)
+        );
         /*
         // verify the total purchase amount adds up to the sum of the product prices
         String totalPriceText = null;
