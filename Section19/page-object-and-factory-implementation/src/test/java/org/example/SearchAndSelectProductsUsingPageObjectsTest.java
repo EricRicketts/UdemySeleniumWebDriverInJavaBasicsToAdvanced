@@ -158,11 +158,8 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 payment.selectCountry.getAttribute("value").equalsIgnoreCase(country)
         );
 
-        // place order and verify on completed order page
-        payment.placeOrder.click();
-        WebElement orderComplete = wait.until(
-            ExpectedConditions.visibilityOf(driver.findElement(By.tagName("h1")))
-        );
+        // place order and verify landing on completed order page
+        WebElement orderComplete = payment.placeOrder(wait, driver);
         Assert.assertTrue(orderComplete.getText().trim().equalsIgnoreCase("thankyou for the order."));
     }
 }

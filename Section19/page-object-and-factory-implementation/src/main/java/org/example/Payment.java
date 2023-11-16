@@ -1,5 +1,6 @@
 package org.example;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -51,6 +52,14 @@ public class Payment {
         String creditCardNumber = this.creditCardNumber.getAttribute("value");
         Pattern pattern = Pattern.compile("(\\d{4}\\s){3}\\d{4}");
         return (Matcher) pattern.matcher(creditCardNumber);
+    }
+
+    public WebElement placeOrder(WebDriverWait wait, WebDriver driver) {
+        this.placeOrder.click();
+        WebElement orderComplete = wait.until(
+                ExpectedConditions.visibilityOf(driver.findElement(By.tagName("h1")))
+        );
+        return orderComplete;
     }
 
     public WebElement selectAndReturnCountry(String country, WebDriverWait wait) {
