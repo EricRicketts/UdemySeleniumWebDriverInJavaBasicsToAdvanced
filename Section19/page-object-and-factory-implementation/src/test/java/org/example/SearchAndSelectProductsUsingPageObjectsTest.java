@@ -158,88 +158,11 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
                 payment.selectCountry.getAttribute("value").equalsIgnoreCase(country)
         );
 
-        /*
-        payment.selectCountry.sendKeys(country);
-        WebElement desiredCountry = wait.until(
-                ExpectedConditions.visibilityOf(payment.desiredCountry)
-        );
-        Assert.assertNotNull(desiredCountry);
-
-        // verify the total purchase amount adds up to the sum of the product prices
-        String totalPriceText = null;
-        int calculatedTotalPrice = 0;
-        for (WebElement cartItemPrice : cartItemsProductTotals) {
-            String[] priceArray = cartItemPrice.getText().split("\\$");
-            String priceString = priceArray[1].trim();
-            int price = Integer.parseInt(priceString);
-            calculatedTotalPrice += price;
-        }
-        String calculatedTotalPriceText = "$".concat(String.valueOf(calculatedTotalPrice));
-        Assert.assertEquals(calculatedTotalPriceText, cart.totalPrice.getText());
-
-        // get the checkout button and checkout, we must first make sure it is visible
-        // note the checkout button was not clickable at the given coordinates
-        WebElement checkoutButton = wait.until(
-                ExpectedConditions.elementToBeClickable(cart.checkoutButton)
-        );
-        Assert.assertNotNull(checkoutButton);
-        JavascriptExecutor executor = (JavascriptExecutor) driver;
-        executor.executeScript("arguments[0].click()", checkoutButton);
-
-        // assert that I have landed on the payment page, assert on the title and the place order button
-        Payment payment = new Payment(driver);
-        WebElement paymentMethodTitle = wait.until(
-            ExpectedConditions.visibilityOf(payment.paymentMethodTitle)
-        );
-        Assert.assertNotNull(paymentMethodTitle);
-        WebElement placeOrderButton = wait.until(
-            ExpectedConditions.visibilityOf(payment.placeOrderButton)
-        );
-        Assert.assertNotNull(placeOrderButton);
-
-        // Assert the payment type is a credit card
-        Assert.assertTrue(payment.paymentType.getText().equalsIgnoreCase("credit card"));
-
-        // validate credit card number
-        Assert.assertEquals(
-            payment.creditCardNumber.getAttribute("value"), creditCardNumber
-        );
-
-        // Choose expiration month
-        String selectMonth = "10";
-        String selectDay = "21";
-        Select expirationMonth = new Select(payment.expirationMonth);
-        expirationMonth.selectByVisibleText(selectMonth);
-
-        // Choose expiration Day
-        Select expirationDay = new Select(payment.expirationDay);
-        expirationDay.selectByVisibleText(selectDay);
-
-        // verify the above values have been selected
-        Assert.assertEquals(expirationMonth.getFirstSelectedOption().getText(), selectMonth);
-        Assert.assertEquals(expirationDay.getFirstSelectedOption().getText(), selectDay);
-
-        // set CVV code and Name on Card, then verify both
-        String CVVCode = "456";
-        String nameOnCard = "Elmer Fudd";
-        payment.CVVCode.sendKeys(CVVCode);
-        payment.NameOnCard.sendKeys(nameOnCard);
-
-        // select and verify the desired country
-        payment.selectCountry.sendKeys("United States");
-        WebElement desiredCountry = wait.until(
-            ExpectedConditions.visibilityOf(payment.desiredCountry)
-        );
-        Assert.assertNotNull(desiredCountry);
-        desiredCountry.click();
-
         // place order and verify on completed order page
         payment.placeOrder.click();
         WebElement orderComplete = wait.until(
             ExpectedConditions.visibilityOf(driver.findElement(By.tagName("h1")))
         );
         Assert.assertTrue(orderComplete.getText().trim().equalsIgnoreCase("thankyou for the order."));
-
-         */
     }
 }
