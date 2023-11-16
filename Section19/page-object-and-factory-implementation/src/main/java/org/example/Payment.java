@@ -6,6 +6,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Payment {
 
     @FindBy(how = How.CSS, using = ".payment > .payment__title")
@@ -29,7 +32,7 @@ public class Payment {
     @FindBy(how = How.XPATH, using = "//div[contains(text(), 'CVV Code')]/following-sibling::input")
     WebElement CVVCode;
 
-    @FindBy(how = How.XPATH, using = "(//div[@class = 'field'])[2]")
+    @FindBy(how = How.XPATH, using = "(//div[@class = 'field'])[2]//input")
     WebElement nameOnCard;
 
     @FindBy(how = How.XPATH, using = "//input[@placeholder = 'Select Country']")
@@ -41,6 +44,11 @@ public class Payment {
     @FindBy(how = How.XPATH, using = "//div[contains(@class, 'actions')]//a[1]")
     WebElement placeOrder;
 
+    public Matcher getCreditCardMatcher() {
+        String creditCardNumber = this.creditCardNumber.getAttribute("value");
+        Pattern pattern = Pattern.compile("(\\d{4}\\s){3}\\d{4}");
+        return (Matcher) pattern.matcher(creditCardNumber);
+    }
     public Payment(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
