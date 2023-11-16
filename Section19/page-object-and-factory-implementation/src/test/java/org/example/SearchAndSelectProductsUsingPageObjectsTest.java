@@ -151,16 +151,20 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         Assert.assertTrue(expirationDay.getFirstSelectedOption().getText().equalsIgnoreCase(day));
 
         // select and verify country
-        payment.selectCountry.sendKeys(country);
-        WebElement desiredCountry = wait.until(
-                ExpectedConditions.visibilityOf(payment.desiredCountry)
-        );
+        WebElement desiredCountry = payment.selectAndReturnCountry(country, wait);
         Assert.assertNotNull(desiredCountry);
         desiredCountry.click();
         Assert.assertTrue(
                 payment.selectCountry.getAttribute("value").equalsIgnoreCase(country)
         );
+
         /*
+        payment.selectCountry.sendKeys(country);
+        WebElement desiredCountry = wait.until(
+                ExpectedConditions.visibilityOf(payment.desiredCountry)
+        );
+        Assert.assertNotNull(desiredCountry);
+
         // verify the total purchase amount adds up to the sum of the product prices
         String totalPriceText = null;
         int calculatedTotalPrice = 0;

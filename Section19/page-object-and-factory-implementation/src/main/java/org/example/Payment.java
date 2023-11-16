@@ -5,7 +5,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,6 +51,14 @@ public class Payment {
         String creditCardNumber = this.creditCardNumber.getAttribute("value");
         Pattern pattern = Pattern.compile("(\\d{4}\\s){3}\\d{4}");
         return (Matcher) pattern.matcher(creditCardNumber);
+    }
+
+    public WebElement selectAndReturnCountry(String country, WebDriverWait wait) {
+        this.selectCountry.sendKeys(country);
+        WebElement desiredCountry = wait.until(
+                ExpectedConditions.visibilityOf(this.desiredCountry)
+        );
+        return desiredCountry;
     }
 
     public Select setAndReturnExpirationDay(String day) {
