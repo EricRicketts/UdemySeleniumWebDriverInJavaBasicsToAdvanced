@@ -61,6 +61,7 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
     public void testSearchAndSelectProductsUsingPageObjects() throws InterruptedException {
         // login
         String nameOnCreditCard = "Elmer Fudd";
+        String CVVCodeEntry = "456";
         Login login = new Login(driver);
         ProductCatalog productCatalog = login.loginApplication(
                 "elmer.fudd@warnerbros.com",
@@ -134,6 +135,10 @@ public class SearchAndSelectProductsUsingPageObjectsTest {
         Assert.assertTrue(payment.getCreditCardMatcher().matches());
         payment.nameOnCard.sendKeys(nameOnCreditCard);
         Assert.assertTrue(payment.nameOnCard.getAttribute("value").equalsIgnoreCase(nameOnCreditCard));
+
+        // fill in and verify CVV code
+        payment.CVVCode.sendKeys(CVVCodeEntry);
+        Assert.assertTrue(payment.CVVCode.getAttribute("value").equals(CVVCodeEntry));
         /*
         // verify the total purchase amount adds up to the sum of the product prices
         String totalPriceText = null;
